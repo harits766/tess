@@ -3,7 +3,8 @@
 Pakai:  python -I ekspor_dashboard.py <folder hasil> <folder keluaran>
 
 Keluaran:
-  stok_beras.json   satu baris per tingkat x wilayah x bulan x komponen (median, p05, p95; juta ton)
+  stok_beras.json   satu baris per tingkat x wilayah x bulan x komponen (median, p05, p95; juta ton);
+                    provinsi hanya total, BULOG, swasta
   stok_ringkas.json validasi titik survei, uji sensitivitas, pembanding neraca Bapanas, parameter utama
 """
 import json
@@ -22,6 +23,8 @@ def main(hasil, out):
     os.makedirs(out, exist_ok=True)
     R = pd.read_csv(os.path.join(hasil, 'posterior_penuh.csv'))
     R['pulau'] = R.pulau.fillna('')
+    # tingkat provinsi: cukup total, BULOG, swasta (rincian swasta per provinsi ada di Excel)
+    R = R[(R.tingkat != 'provinsi') | R.komponen.isin(['total', 'bulog', 'swasta'])]
     R['id'] = R.tingkat + '|' + R.wilayah + '|' + R.periode + '|' + R.komponen
     rows = [{'id': r.id, 'tingkat': r.tingkat, 'wilayah': r.wilayah, 'pulau': r.pulau, 'periode': r.periode,
              'komponen': r.komponen, 'median': round(r.median_juta_ton, 4), 'p05': round(r.p05, 4),
