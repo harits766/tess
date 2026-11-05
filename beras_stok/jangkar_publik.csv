@@ -1,0 +1,23 @@
+jenis,periode,nilai_juta_ton,sumber,catatan,url
+survei_bps_scbn,2022-06,9.71,BPS Survei Cadangan Beras Nasional 2022,"RT 6,6; BULOG 1,11; pedagang 1,04; penggilingan 0,69; horeka 0,28",https://www.fortuneidn.com/news/eko-wahyudi/stok-beras-nasional-mencapai-9-71-juta-ton-ini-persebarannya
+survei_bapanas,2022-12,4.06,Survei Stok Beras Akhir Tahun (SSBAT) Bapanas-BPS,posisi 31 Des 2022,https://insight.kontan.co.id/news/pergeseran-stok-beras-di-masyarakat
+survei_bapanas,2023-12,4.13,Survei Stok Beras Akhir Tahun (SSBAT) Bapanas-BPS,"posisi 31 Des 2023; RT 66,34%, BULOG 19,6%, pedagang 6,74%; 477 kab/kota",https://insight.kontan.co.id/news/pergeseran-stok-beras-di-masyarakat
+bulog_publik,2023-03,0.245,BULOG,per 31 Maret 2023,https://ekonomi.bisnis.com/read/20230403/12/1643196/menipis-stok-beras-bulog-245233-ton-per-31-maret-2023
+bulog_publik,2023-12,1.26,BULOG,per 20 Desember 2023,https://ekonomi.bisnis.com/read/20231221/12/1726067/bulog-pastikan-stok-beras-aman-hingga-juni-2024
+bulog_publik,2024-12,2.0,BULOG / Menko Pangan,"2,07 per 10 Des; perkiraan akhir tahun 1,95",https://jabar.antaranews.com/berita/561697/menko-pangan-sebut-stok-beras-nasional-capai-tertinggi-dalam-5-tahun
+bulog_publik,2025-01,1.94,BULOG,per 4 Februari 2025,https://ekonomi.bisnis.com/read/20250204/12/1836714/bulog-stok-beras-ri-capai-194-juta-ton-4-februari-2025
+bulog_publik,2025-05,4.0,BULOG,awal Juni 2025,https://www.bulog.co.id/2025/06/03/stok-beras-tembus-4-juta-ton-tertinggi-sejak-bulog-berdiri/
+bulog_publik,2025-11,3.8,BULOG,per 20 November 2025,https://pasardana.id/news/2025/11/21/antisipasi-over-stock-bulog-buka-peluang-buat-ekspor-beras/
+bulog_publik,2025-12,3.53,Bapanas,"perkiraan akhir 2025 (3,5 per 22 Des)",https://periskop.id/ekonomi/20251222/bapanas-stok-beras-aman-hingga-ramadan
+bulog_publik,2026-03,4.3,Bapanas,Maret 2026,https://www.antaranews.com/berita/5500930/bapanas-stok-beras-43-juta-ton-ketahanan-pangan-ri-hadapi-geopolitik
+bulog_publik,2026-06,5.4,BULOG,"rekor Juni 2026 (5,18 per 2 Juli)",https://nasional.kontan.co.id/news/bulog-serap-32-juta-ton-beras-stok-tembus-rekor-54-juta-ton
+bulog_publik,2026-09,4.6,BULOG / Bapanas,"4,5-4,8 akhir Sep-awal Okt 2026",https://www.rctiplus.com/news/detail/terkini/5475938/bulog-pastikan-stok-beras-4-6-juta-ton-siap-jaga-pasokan-hingga-akhir-tahun
+impor,2022-H2,0.3,BPS (perkiraan),"impor 2022 0,43 juta ton, sebagian besar akhir tahun; dibagi rata Jul-Des",
+impor,2023,3.06,BPS,dibagi rata per bulan,
+impor,2024,4.52,BPS,dibagi rata per bulan,https://www.cnbcindonesia.com/news/20250116085359-4-603570/impor-beras-ri-sepanjang-2024-tembus-452-juta-ton-ini-pemasoknya
+impor,2025,0.0,BPS / Bapanas,tidak ada impor beras konsumsi,
+impor,2026,0.0,BPS / Bapanas,tidak ada impor beras konsumsi,
+konsumsi_bapanas,2026,2.591,Bapanas neraca 2026,"juta ton per bulan, termasuk non rumah tangga",https://www.antaranews.com/berita/5331646/bapanas-ri-swasembada-beras-stok-awal-2026-capai-12529-juta-ton?page=all
+neraca_bapanas,2024-12,8.4,Bapanas,carry over 2024 (pembanding; tidak dipakai untuk fit),https://ekonomi.republika.co.id/berita/t77bui423/stok-beras-nasional-aman-bapanas-proyeksikan-125-juta-ton-di-akhir-2025
+neraca_bapanas,2025-12,12.529,Bapanas,stok awal 2026 (pembanding; tidak dipakai untuk fit),https://www.antaranews.com/berita/5331646/bapanas-ri-swasembada-beras-stok-awal-2026-capai-12529-juta-ton?page=all
+neraca_bapanas,2026-09,17.9,hitungan neraca,"12,53 + produksi Jan-Sep 28,71 - konsumsi 23,32 (pembanding)",
