@@ -33,6 +33,9 @@
   plus stok total provinsi ≥ 0.
 - Guncangan proses provinsi dibuat berjumlah nol (arus tak termodel), σ prior HalfNormal(0,05).
 - INATRADE pedagang diagregasi per pulau; per provinsi membuat posterior bimodal (pelapor berganti-ganti).
+- Pengaruh INATRADE (stok nasional akhir Sep 2026; dasar 14,2): tanpa INATRADE 15,1; baris Non PAW saja 13,4;
+  baris PAW saja 16,4. Non PAW = Provinsi Perusahaan = Provinsi Penyaluran; PAW = beda provinsi (antar provinsi).
+  BULOG tidak berubah (4,62–4,65). Opsi: `inatrade_panel.py ... nonpaw|paw`, `model_stok.py --tanpa inatrade,bulog_inatrade`.
 - max(·,0) di defisit/surplus dihaluskan (softplus); noise BULOG tetap 5% — keduanya untuk menghilangkan divergensi.
 
 ## Akses data

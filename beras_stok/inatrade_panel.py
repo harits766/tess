@@ -1,6 +1,6 @@
 """Panel beras INATRADE per provinsi per bulan + matriks arus antar provinsi.
 
-Pakai:  python -I inatrade_panel.py <file Non_PAW_dari_nol.xlsm> <folder keluaran>
+Pakai:  python -I inatrade_panel.py <file Non_PAW_dari_nol.xlsm> <folder keluaran> [semua|nonpaw|paw]
 
 Langkah:
 1. Ambil semua baris Jenis Komoditi = Beras dari sheet "2024-2026" (PAW + Non PAW).
@@ -24,7 +24,8 @@ AMBANG_KG = 100
 Q = ['Pengadaan', 'Penyaluran', 'Stok Awal', 'Stok Akhir']
 
 
-def baca(path):
+def baca(path, baris='semua'):
+    """baris: 'semua', 'nonpaw' (Provinsi Perusahaan = Provinsi Penyaluran) atau 'paw' (berbeda)."""
     S = pd.read_excel(path, sheet_name='2024-2026', dtype=object)
     B = S[S['Jenis Komoditi'].map(U) == 'BERAS'].copy().reset_index(drop=True)
     B['kode'] = B['Nama Perusahaan'].astype(str).str.strip().str.zfill(5)
@@ -35,7 +36,12 @@ def baca(path):
     B['prov_asal'] = B['Asal Pengadaan'].map(normprov)
     for c in Q + ['Rincian Pengadaan', 'Rincian Penyaluran', 'Harga Jual']:
         B[c] = B[c].map(a0)
-    return B.dropna(subset=['periode'])
+    B = B.dropna(subset=['periode'])
+    if baris == 'nonpaw':
+        B = B[B['prov_tujuan'] == B['prov']]
+    elif baris == 'paw':
+        B = B[(B['prov_tujuan'] != '') & (B['prov_tujuan'] != B['prov'])]
+    return B.reset_index(drop=True)
 
 
 def laporan(B):
@@ -83,9 +89,9 @@ def arus(B, L):
     return jual, beli
 
 
-def main(path, out):
+def main(path, out, baris='semua'):
     os.makedirs(out, exist_ok=True)
-    B = baca(path)
+    B = baca(path, baris)
     L = laporan(B)
     P = panel(L)
     jual, beli = arus(B, L)
@@ -100,4 +106,4 @@ def main(path, out):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else 'semua')

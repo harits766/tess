@@ -93,7 +93,7 @@ import urllib.request
 # Kolom: skenario, tingkat, wilayah, pulau, periode, komponen, median, p05, p95 (juta ton, akhir bulan).
 # Skenario "dasar" berisi nasional, pulau dan 38 provinsi; skenario lain hanya nasional.
 HASIL_GZ_B64 = """
-H4sIAN4h8WoC/6y9y7Ist5EtOO+v4KhG59Lwfgw3r46xKJKnZCSPldXwtJVMLSuJkpXELuu/b8CX546FjMhIIPJOtEVKWIkA3B3+
+H4sIAN0o8WoC/6y9y7Ist5EtOO+v4KhG59Lwfgw3r46xKJKnZCSPldXwtJVMLSuJkpXELuu/b8CX546FjMhIIPJOtEVKWIkA3B3+
 9n/81x9//fLff/7bh3/++dc//deXf374nz//5cv/9+X/+fD33/7y5bcPf/9j+9/+848f/utvf/373379468f/vrH//zzl18//N3E
 D3+v8f/6zy//+PLfH/7+33/7f//86z/+/OHtf3/81w8///bXL//8439/+eCMC//L2A///Ns/v/zlg/naBp/bHxODaX9cKlPrHa2P
 jtZna2fW+/f1ztcoMKXD+JT9zPrwvt63nxSY2H8/xJRn1sdtfQxZPtz6vr7Eqf2nbb2PfaELWD+5/7x9fzXy/TWFvt75NLO+bOtL
@@ -1970,7 +1970,8 @@ AMBANG_KG = 100
 Q = ['Pengadaan', 'Penyaluran', 'Stok Awal', 'Stok Akhir']
 
 
-def inatrade_baca(path):
+def inatrade_baca(path, baris='semua'):
+    """baris: 'semua', 'nonpaw' (Provinsi Perusahaan = Provinsi Penyaluran) atau 'paw' (berbeda)."""
     S = pd.read_excel(path, sheet_name='2024-2026', dtype=object)
     B = S[S['Jenis Komoditi'].map(U) == 'BERAS'].copy().reset_index(drop=True)
     B['kode'] = B['Nama Perusahaan'].astype(str).str.strip().str.zfill(5)
@@ -1981,7 +1982,12 @@ def inatrade_baca(path):
     B['prov_asal'] = B['Asal Pengadaan'].map(normprov)
     for c in Q + ['Rincian Pengadaan', 'Rincian Penyaluran', 'Harga Jual']:
         B[c] = B[c].map(a0)
-    return B.dropna(subset=['periode'])
+    B = B.dropna(subset=['periode'])
+    if baris == 'nonpaw':
+        B = B[B['prov_tujuan'] == B['prov']]
+    elif baris == 'paw':
+        B = B[(B['prov_tujuan'] != '') & (B['prov_tujuan'] != B['prov'])]
+    return B.reset_index(drop=True)
 
 
 def inatrade_laporan(B):
@@ -2029,9 +2035,9 @@ def inatrade_arus(B, L):
     return jual, beli
 
 
-def jalankan_inatrade(path, out):
+def jalankan_inatrade(path, out, baris='semua'):
     os.makedirs(out, exist_ok=True)
-    B = inatrade_baca(path)
+    B = inatrade_baca(path, baris)
     L = inatrade_laporan(B)
     P = inatrade_panel(L)
     jual, beli = inatrade_arus(B, L)
@@ -2218,7 +2224,7 @@ KOMP_SWASTA = ['rumah_tangga', 'penggilingan', 'pedagang', 'horeka']
 PANGSA_SURVEI = [0.796, 0.062, 0.104, 0.038]
 
 
-def siapkan(data, holdout=None):
+def siapkan(data, holdout=None, tanpa=()):
     bulan = pd.period_range(AWAL, AKHIR, freq='M')
     per = [str(b) for b in bulan]
     T, N = len(per), len(PROV)
@@ -2282,7 +2288,7 @@ def siapkan(data, holdout=None):
             bulog.append((it[r.periode], r.nilai_juta_ton * 1e6, 0))
     L = pd.read_csv(os.path.join(data, 'laporan.csv'), dtype={'kode': str})
     Lb = L[L.bulog].groupby('periode')['sk'].sum()
-    for b, v in Lb.items():
+    for b, v in Lb.items() if 'bulog_inatrade' not in tanpa else []:
         # Sep 2026: stok akhir turun ke 2,2 juta ton karena "penyaluran" 3,1 juta ton yang bukan transaksi
         # pasar (lihat catatan sesi) -> tidak dipakai.
         if b in it and b != '2026-09' and v > 0:
@@ -2494,13 +2500,13 @@ def model_main(argv=None):
     ap.add_argument('--positif', default='pulau', choices=['provinsi', 'pulau', 'nasional'],
                     help='tingkat kendala stok swasta >= 0')
     ap.add_argument('--ringkas-saja', default=None, help='label posterior yang ringkasannya dihitung ulang')
-    ap.add_argument('--tanpa', default='', help='diagnostik: matikan komponen, mis. positif,inatrade')
+    ap.add_argument('--tanpa', default='', help='diagnostik: matikan komponen: positif, inatrade (indeks pedagang), bulog_inatrade (stok 00372), harga')
     A = ap.parse_args(argv)
     import arviz as az
     import pymc as pm
 
     os.makedirs(A.out, exist_ok=True)
-    D = siapkan(A.data, A.holdout)
+    D = siapkan(A.data, A.holdout, tuple(x for x in A.tanpa.split(',') if x))
     if A.ringkas_saja:  # hitung ulang ringkasan dari posterior_<label>.npz yang sudah ada
         z = np.load(os.path.join(A.out, f'posterior_{A.ringkas_saja}.npz'))
         ringkas(D, z, A.out, A.ringkas_saja)

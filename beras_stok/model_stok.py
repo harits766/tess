@@ -57,7 +57,7 @@ KOMP = ['rumah_tangga', 'penggilingan', 'pedagang', 'horeka']
 PANGSA_SURVEI = np.array([0.796, 0.062, 0.104, 0.038])
 
 
-def siapkan(data, holdout=None):
+def siapkan(data, holdout=None, tanpa=()):
     here = os.path.dirname(os.path.abspath(__file__))
     bulan = pd.period_range(AWAL, AKHIR, freq='M')
     per = [str(b) for b in bulan]
@@ -122,7 +122,7 @@ def siapkan(data, holdout=None):
             bulog.append((it[r.periode], r.nilai_juta_ton * 1e6, 0))
     L = pd.read_csv(os.path.join(data, 'laporan.csv'), dtype={'kode': str})
     Lb = L[L.bulog].groupby('periode')['sk'].sum()
-    for b, v in Lb.items():
+    for b, v in Lb.items() if 'bulog_inatrade' not in tanpa else []:
         # Sep 2026: stok akhir turun ke 2,2 juta ton karena "penyaluran" 3,1 juta ton yang bukan transaksi
         # pasar (lihat catatan sesi) -> tidak dipakai.
         if b in it and b != '2026-09' and v > 0:
@@ -334,13 +334,13 @@ def main():
     ap.add_argument('--positif', default='pulau', choices=['provinsi', 'pulau', 'nasional'],
                     help='tingkat kendala stok swasta >= 0')
     ap.add_argument('--ringkas-saja', default=None, help='label posterior yang ringkasannya dihitung ulang')
-    ap.add_argument('--tanpa', default='', help='diagnostik: matikan komponen, mis. positif,inatrade')
+    ap.add_argument('--tanpa', default='', help='diagnostik: matikan komponen: positif, inatrade (indeks pedagang), bulog_inatrade (stok 00372), harga')
     A = ap.parse_args()
     import arviz as az
     import pymc as pm
 
     os.makedirs(A.out, exist_ok=True)
-    D = siapkan(A.data, A.holdout)
+    D = siapkan(A.data, A.holdout, tuple(x for x in A.tanpa.split(',') if x))
     if A.ringkas_saja:  # hitung ulang ringkasan dari posterior_<label>.npz yang sudah ada
         z = np.load(os.path.join(A.out, f'posterior_{A.ringkas_saja}.npz'))
         ringkas(D, z, A.out, A.ringkas_saja)
