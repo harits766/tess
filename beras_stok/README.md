@@ -4,6 +4,9 @@ Estimasi stok beras total (rumah tangga, penggilingan, pedagang, BULOG, horeka) 
 Jan 2024 – Sep 2026, dengan model Bayesian state-space (PyMC). Hasil per provinsi dijumlah per pulau dan nasional.
 Model berjalan dari akhir Juni 2022 supaya tiga titik survei stok (Jun 2022, Des 2022, Des 2023) ikut dipakai.
 
+## Satu file
+`stok_beras_satu_file.py` memuat semua kode di bawah plus hasil posterior yang sudah dihitung. `python stok_beras_satu_file.py` langsung menampilkan hasil (hanya pustaka standar, <1 detik); `--excel`, `--csv`, `--grafik` menulis tabel/grafik; `--jalankan-ulang <xlsm>` menjalankan seluruh pipeline.
+
 ## Langkah
 
 ```bash
