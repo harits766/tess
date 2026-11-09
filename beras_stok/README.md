@@ -6,6 +6,7 @@ Model berjalan dari akhir Juni 2022 supaya tiga titik survei stok (Jun 2022, Des
 
 ## Satu file
 `stok_beras_satu_file.py` memuat semua kode di bawah plus hasil posterior yang sudah dihitung. `python stok_beras_satu_file.py` langsung menampilkan hasil (hanya pustaka standar, <1 detik); `--excel`, `--csv`, `--grafik` menulis tabel/grafik; `--jalankan-ulang <xlsm>` menjalankan seluruh pipeline.
+`stok_beras.ipynb` berisi hal yang sama sebagai notebook, sudah dijalankan (tabel dan grafik tersimpan).
 
 ## Langkah
 

@@ -93,7 +93,7 @@ import urllib.request
 # Kolom: skenario, tingkat, wilayah, pulau, periode, komponen, median, p05, p95 (juta ton, akhir bulan).
 # Skenario "dasar" berisi nasional, pulau dan 38 provinsi; skenario lain hanya nasional.
 HASIL_GZ_B64 = """
-H4sIAIsg8WoC/6y9y7Ist5EtOO+v4KhG59Lwfgw3r46xKJKnZCSPldXwtJVMLSuJkpXELuu/b8CX546FjMhIIPJOtEVKWIkA3B3+
+H4sIAN4h8WoC/6y9y7Ist5EtOO+v4KhG59Lwfgw3r46xKJKnZCSPldXwtJVMLSuJkpXELuu/b8CX546FjMhIIPJOtEVKWIkA3B3+
 9n/81x9//fLff/7bh3/++dc//deXf374nz//5cv/9+X/+fD33/7y5bcPf/9j+9/+848f/utvf/373379468f/vrH//zzl18//N3E
 D3+v8f/6zy//+PLfH/7+33/7f//86z/+/OHtf3/81w8///bXL//8439/+eCMC//L2A///Ns/v/zlg/naBp/bHxODaX9cKlPrHa2P
 jtZna2fW+/f1ztcoMKXD+JT9zPrwvt63nxSY2H8/xJRn1sdtfQxZPtz6vr7Eqf2nbb2PfaELWD+5/7x9fzXy/TWFvt75NLO+bOtL
