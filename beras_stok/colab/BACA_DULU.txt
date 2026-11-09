@@ -1,0 +1,9 @@
+Folder model stok beras untuk Google Colab
+
+1. Unggah seluruh folder beras_colab ke Google Drive (mis. MyDrive/beras_colab).
+2. Buka 01_gabung_data.ipynb di Colab -> Runtime -> Run all. Hasilnya folder data_gabungan/.
+   (Bila folder di tempat lain, ubah BASE di sel pertama.)
+3. Buka 02_model_stok_beras.ipynb -> Run all (20-40 menit di Colab). Hasilnya folder hasil/.
+
+data_raw/inatrade berisi data internal INATRADE: jangan dibagikan di luar tim.
+Kunci API BPS tidak diperlukan karena respons BPS sudah tersimpan di data_raw/bps/.

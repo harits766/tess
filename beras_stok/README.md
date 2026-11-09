@@ -8,6 +8,11 @@ Model berjalan dari akhir Juni 2022 supaya tiga titik survei stok (Jun 2022, Des
 `stok_beras_satu_file.py` memuat semua kode di bawah plus hasil posterior yang sudah dihitung. `python stok_beras_satu_file.py` langsung menampilkan hasil (hanya pustaka standar, <1 detik); `--excel`, `--csv`, `--grafik` menulis tabel/grafik; `--jalankan-ulang <xlsm>` menjalankan seluruh pipeline.
 `stok_beras.ipynb` berisi hal yang sama sebagai notebook, sudah dijalankan (tabel dan grafik tersimpan).
 
+## Colab
+`colab/01_gabung_data.ipynb` menggabungkan data mentah (INATRADE, respons WebAPI BPS, angka publik) menjadi satu
+panel `data_gabungan/panel_beras.csv`; `colab/02_model_stok_beras.ipynb` menjalankan model hanya dari panel itu.
+Keduanya dijalankan dari folder `beras_colab/` (data_raw + notebook) di Google Drive; data mentah tidak disimpan di repo.
+
 ## Langkah
 
 ```bash
