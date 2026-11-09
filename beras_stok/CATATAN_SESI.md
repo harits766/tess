@@ -19,7 +19,7 @@
 ## Hasil skenario dasar
 - Stok nasional akhir Sep 2026: **14,2 juta ton (11,3–18,6)**; BULOG 4,65 (4,29–5,04); swasta 9,6 (6,7–14,0).
 - Setara Sep 2025 (14,4), tetapi bergeser ke BULOG. Terendah tiap Jan–Feb, naik setelah panen Mar–Apr.
-- Susut 7,1% (4,3–9,9%); konsumsi total ≈ 1,41 × konsumsi RT Susenas (≈ 2,6 juta ton/bulan).
+- Susut 7,1% (4,3–9,3%); konsumsi total ≈ 1,41 × konsumsi RT Susenas (≈ 2,6 juta ton/bulan).
 - Survei SSBAT ≈ separuh level model (bias log −0,68); SCBN BPS Jun 2022 hampir tanpa bias.
 - Validasi: SSBAT Des 2022 disembunyikan → prediksi 4,40 (3,43–5,59) vs amatan 4,06.
 - Sensitivitas kendala "swasta ≥ 0": per pulau (dasar) 14,2 (11,3–18,6); nasional saja 14,2 (11,4–19,1);
