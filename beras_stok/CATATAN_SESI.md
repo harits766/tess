@@ -16,6 +16,14 @@
 - Dashboard: tab "Stok beras" (dataset `stok_beras` dan `stok_ringkas`, file JSON dari `ekspor_dashboard.py`).
 - Excel: `stok_beras_posterior.xlsx` dikirim ke pengguna (tidak disimpan di repo).
 
+## Status (sesi 3, 9 Nov 2026) — dashboard khusus beras
+- Dashboard baru **Monitor Stok Beras** https://claude.ai/artifact/6Fc8KdEq6vKPtz7feBpEz6 (8 halaman: ringkasan,
+  provinsi & pulau, kenapa angkanya begini, PAW vs Non PAW, uji & pembanding, prakiraan, metode & data, kode).
+  Data dari `dashboard_beras.py`; halaman di `dashboard/` (index.html + app.js). Tab lama di "Monitor Harga Non PAW" tetap.
+- Prakiraan (`prakiraan.py`): nasional Okt 13,6 (10,7–18,1), Nov 12,5 (9,5–17,0), Des 11,1 (8,1–15,7) juta ton;
+  cukup 4,1 bulan pada Des. Risiko tertinggi Des: Papua Tengah, Kepri, Riau, Babel. USDA hanya pembanding.
+- Fase 1 kedelai ditunda sampai dashboard beras disetujui.
+
 ## Hasil skenario dasar
 - Stok nasional akhir Sep 2026: **14,2 juta ton (11,3–18,6)**; BULOG 4,65 (4,29–5,04); swasta 9,6 (6,7–14,0).
 - Setara Sep 2025 (14,4), tetapi bergeser ke BULOG. Terendah tiap Jan–Feb, naik setelah panen Mar–Apr.

@@ -1,0 +1,787 @@
+<meta name="dash-one-writer">
+<style>
+#dash-root .sb { font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.sb h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0 0 var(--cds-gap-xs); }
+.sb h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-lg) 0 var(--cds-gap-sm); }
+.sb h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-xs); }
+.sb h4 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-md) 0 var(--cds-gap-xs); }
+.sb p, .sb li, .sb dd { line-height: 1.55; }
+.sb-lead { font-size: var(--cds-font-size-body); max-width: 78ch; margin: 0 0 var(--cds-gap-md); }
+.sb .sb-v, .sb .sb-num, .sb-big { font-variant-numeric: tabular-nums; }
+.sb-lead b, .sb-prose b, .sb-kpi b { font-weight: var(--cds-font-weight-medium); }
+.sb-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); margin: 0 0 var(--cds-gap-lg); }
+.sb-tab { font: inherit; font-size: var(--cds-font-size-body); background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) var(--cds-pad-md); color: var(--color-fg-muted); cursor: pointer; }
+.sb-tab:hover { color: var(--color-fg); }
+.sb-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); }
+.sb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); margin: 0 0 var(--cds-gap-md); }
+.sb-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; margin: 0 0 var(--cds-gap-md); }
+.sb-grid > .sb-card { margin: 0; }
+.sb-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0 0 var(--cds-gap-sm); }
+.sb-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)); gap: var(--cds-gap-md); margin: 0 0 var(--cds-gap-md); }
+.sb-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); }
+.sb-kpi .sb-lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
+.sb-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: calc(var(--cds-font-size-title) * 1.35); line-height: 1.15; margin: var(--cds-gap-xs) 0; }
+.sb-big small { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sb-kpi .sb-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
+.sb-naik { color: var(--color-ok); }
+.sb-turun { color: var(--color-bad); }
+.sb-chart { position: relative; min-height: 300px; }
+.sb-chart.sb-pendek { min-height: 200px; }
+.sb-svg { display: block; overflow: visible; }
+.sb-svg .sb-tick { fill: var(--color-fg-muted); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+.sb-svg .sb-lab { fill: var(--color-fg); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+.sb-svg .sb-end { font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); fill: var(--color-fg); font-variant-numeric: tabular-nums; }
+.sb-svg .sb-grid { stroke: var(--cds-chart-grid); stroke-width: 1; }
+.sb-svg .sb-axis { stroke: var(--cds-chart-axis); stroke-width: 1; }
+.sb-svg .sb-hover { stroke: var(--cds-chart-reference); stroke-width: 1; }
+.sb-svg .sb-line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.sb-svg .sb-putus { stroke-dasharray: 5 4; stroke-linecap: butt; }
+.sb-svg .sb-band { opacity: .16; stroke: none; }
+.sb-svg .sb-zona { fill: var(--cds-chart-grid); opacity: .45; }
+.sb-svg .sb-whisk { stroke-width: 3; stroke-linecap: round; opacity: .55; }
+.sb-tip { position: absolute; z-index: 2; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); pointer-events: none; min-width: 9rem; }
+.sb-tip-h { color: var(--cds-text-secondary); margin: 0 0 var(--cds-gap-xs); }
+.sb-tip-r { display: flex; align-items: center; gap: var(--cds-gap-xs); white-space: nowrap; }
+.sb-tip-r b { margin-left: auto; padding-left: var(--cds-pad-sm); font-variant-numeric: tabular-nums; font-weight: var(--cds-font-weight-medium); }
+.sb-sw { width: .6rem; height: .6rem; border-radius: 2px; display: inline-block; }
+.sb-gagal { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: inherit; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.sb-dot { width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+.sb-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: end; margin: 0 0 var(--cds-gap-md); }
+.sb-controls label { display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sb-btn { font: inherit; font-size: var(--cds-font-size-caption); background: var(--color-panel); color: var(--color-fg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; }
+.sb-btn:disabled { opacity: .5; cursor: default; }
+.sb-cari { font: inherit; font-size: var(--cds-font-size-caption); background: var(--color-bg); color: var(--color-fg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); margin: 0 0 var(--cds-gap-sm); width: min(100%, 18rem); }
+.sb-tablebox { max-height: 30rem; overflow: auto; }
+.sb table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+.sb th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-line); padding: var(--cds-pad-xs) var(--cds-pad-sm); position: sticky; top: 0; background: var(--color-panel); white-space: nowrap; }
+.sb td { border-bottom: 1px solid var(--color-border-line); padding: var(--cds-pad-xs) var(--cds-pad-sm); vertical-align: top; }
+.sb td.sb-num, .sb th.sb-num { text-align: right; white-space: nowrap; }
+.sb .sb-sort { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.sb th[aria-sort="ascending"] .sb-sort::after { content: " ↑"; }
+.sb th[aria-sort="descending"] .sb-sort::after { content: " ↓"; }
+.sb .sb-klik tbody tr { cursor: pointer; }
+.sb .sb-klik tbody tr:hover td { background: var(--color-bg); }
+.sb tr.sb-pilih td { background: var(--color-bg); font-weight: var(--cds-font-weight-medium); }
+.sb-cellbar { display: inline-block; width: 4rem; height: .5rem; background: var(--cds-chart-grid); border-radius: 2px; margin-right: var(--cds-gap-xs); vertical-align: middle; overflow: hidden; }
+.sb-cellbar span { display: block; height: 100%; background: var(--cds-chart-muted); }
+.sb-prose { max-width: 80ch; }
+.sb-prose ul, .sb-prose ol { padding-left: 1.2rem; margin: var(--cds-gap-xs) 0; }
+.sb-prose li { margin: 0 0 var(--cds-gap-xs); }
+.sb-rumus, .sb-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--cds-font-size-caption); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); overflow: auto; white-space: pre; line-height: 1.5; margin: var(--cds-gap-sm) 0; }
+.sb-code { max-height: 28rem; }
+.sb dl { display: grid; grid-template-columns: minmax(6rem, max-content) 1fr; gap: var(--cds-gap-xs) var(--cds-gap-md); margin: var(--cds-gap-sm) 0; font-size: var(--cds-font-size-caption); }
+.sb dt { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.sb dd { margin: 0; }
+.sb-saran { border-left: 3px solid var(--color-fg); padding-left: var(--cds-pad-md); }
+.sb details { margin: var(--cds-gap-md) 0 0; font-size: var(--cds-font-size-caption); }
+.sb summary { cursor: pointer; color: var(--color-fg-muted); }
+.sb [data-dash-source-state=empty] { color: transparent; }
+.sb [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+@media (max-width: 560px) { .sb dl { grid-template-columns: 1fr; } .sb-hide-n { display: none; } }
+</style>
+
+<div class="sb">
+<header>
+  <h1 id="judul">Monitor Stok Beras</h1>
+  <p class="sb-lead">Stok beras total nasional (rumah tangga, penggilingan, pedagang, horeka, BULOG) akhir September 2026 diperkirakan <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b> juta ton (rentang 90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b>), cukup untuk <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="cukup_bulan" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b> bulan konsumsi. Porsi BULOG <b class="sb-v dash-skeleton" data-draw="v" data-source="ringkas_nasional" data-field="bulog_porsi" data-row="0" data-fmt="pct">—</b> (setahun sebelumnya <b class="sb-v dash-skeleton" data-draw="v" data-source="ringkas_nasional" data-field="bulog_porsi_lalu" data-row="0" data-fmt="pct">—</b>). Musim paceklik menurunkannya menjadi <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b> juta ton pada akhir Desember 2026 (prakiraan).</p>
+</header>
+
+<nav class="sb-tabs" role="tablist" aria-label="Halaman">
+  <button class="sb-tab" role="tab" type="button" data-tab="ringkasan" aria-selected="true">Ringkasan</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="wilayah" aria-selected="false">Provinsi &amp; pulau</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="kenapa" aria-selected="false">Kenapa angkanya begini</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="paw" aria-selected="false">PAW vs Non PAW</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="uji" aria-selected="false">Uji &amp; pembanding</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="prakiraan" aria-selected="false">Prakiraan</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="metode" aria-selected="false">Metode &amp; data</button>
+  <button class="sb-tab" role="tab" type="button" data-tab="kode" aria-selected="false">Kode &amp; algoritma</button>
+</nav>
+
+<!-- ============ RINGKASAN ============ -->
+<section class="sb-page" id="ringkasan" role="tabpanel" aria-label="Ringkasan">
+  <div class="sb-kpis">
+    <div class="sb-kpi" id="kpi-total">
+      <p class="sb-lbl">Stok total, akhir Sep 2026</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b></p>
+      <p class="sb-sub"><b class="sb-v dash-skeleton" data-draw="delta" data-source="ringkas_nasional" data-field="total_selisih" data-row="0" data-fmt="s1">—</b> vs Sep 2025</p>
+    </div>
+    <div class="sb-kpi" id="kpi-bulog">
+      <p class="sb-lbl">BULOG</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-09|bulog" data-fmt="2">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-09|bulog" data-fmt="2">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-09|bulog" data-fmt="2">—</b></p>
+      <p class="sb-sub"><b class="sb-v dash-skeleton" data-draw="delta" data-source="ringkas_nasional" data-field="bulog_selisih" data-row="0" data-fmt="s1">—</b> vs Sep 2025</p>
+    </div>
+    <div class="sb-kpi" id="kpi-swasta">
+      <p class="sb-lbl">Di luar BULOG (swasta)</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-09|swasta" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-09|swasta" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-09|swasta" data-fmt="1">—</b></p>
+      <p class="sb-sub"><b class="sb-v dash-skeleton" data-draw="delta" data-source="ringkas_nasional" data-field="swasta_selisih" data-row="0" data-fmt="s1">—</b> vs Sep 2025</p>
+    </div>
+    <div class="sb-kpi" id="kpi-cukup">
+      <p class="sb-lbl">Cukup untuk</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="cukup_bulan" data-where="id=nasional|INDONESIA|2026-09|total" data-fmt="1">—</b> <small>bulan konsumsi</small></p>
+      <p class="sb-sub">stok ÷ konsumsi total sebulan</p>
+      <p class="sb-sub"><b class="sb-v dash-skeleton" data-draw="delta" data-source="ringkas_nasional" data-field="cukup_selisih" data-row="0" data-fmt="s1">—</b> bulan vs Sep 2025</p>
+    </div>
+    <div class="sb-kpi" id="kpi-des">
+      <p class="sb-lbl">Prakiraan akhir Des 2026</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b></p>
+      <p class="sb-sub"><b class="sb-v dash-skeleton" data-draw="delta" data-source="ringkas_nasional" data-field="des_selisih" data-row="0" data-fmt="s1">—</b> dari Sep 2026</p>
+    </div>
+  </div>
+
+  <div class="sb-card" id="kartu-nasional">
+    <h3>Stok nasional per bulan</h3>
+    <p class="sb-note">Juta ton. Garis = median, pita = rentang 90% stok total. Garis putus-putus di area abu-abu = prakiraan Okt–Des 2026. Stok terendah setiap Jan–Feb dan naik setelah panen raya Mar–Apr.</p>
+    <div class="sb-chart dash-skeleton" data-draw="g-nasional" data-source="stok"></div>
+  </div>
+  <div class="sb-grid">
+    <div class="sb-card" id="kartu-pulau">
+      <h3>Per pulau, akhir Sep 2026</h3>
+      <p class="sb-note">Juta ton; titik = median, garis = rentang 90%. Detail per provinsi di halaman Provinsi &amp; pulau.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-pulau" data-source="stok"></div>
+    </div>
+    <div class="sb-card" id="kartu-komponen">
+      <h3>Komponen nasional, akhir Sep 2026</h3>
+      <p class="sb-note">Juta ton. Rumah tangga terbesar; komponen swasta dibagi dengan pangsa survei sehingga rentangnya lebar.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-komponen" data-source="stok"></div>
+    </div>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-ingat">
+    <h3>Yang perlu diingat saat memakai angka ini</h3>
+    <ul>
+      <li><b>Nasional dan pulau</b> paling bisa dipegang; <b>provinsi</b> lebih tidak pasti karena arus beras antar provinsi tidak teramati langsung.</li>
+      <li>Level stok paling ditentukan oleh dua pilihan: <b>bias survei</b> dan <b>kendala stok swasta tidak negatif</b>. Penjelasannya di halaman Kenapa angkanya begini.</li>
+      <li>Laporan INATRADE (PAW dan Non PAW) menggeser angka, tetapi masih di dalam rentang. Halaman PAW vs Non PAW menunjukkan berapa besar.</li>
+      <li>BULOG per provinsi adalah <b>alokasi</b> (belum ada data stok kanwil), bukan angka gudang.</li>
+    </ul>
+  </div>
+  <details>
+    <summary>Arti istilah</summary>
+    <dl>
+      <dt>Median</dt><dd>Nilai tengah dari ribuan kemungkinan riwayat stok yang dihasilkan model; separuh kemungkinan di atasnya, separuh di bawahnya.</dd>
+      <dt>Rentang 90%</dt><dd>Persentil 5 sampai 95: model 90% yakin stok sebenarnya ada di rentang ini.</dd>
+      <dt>Swasta</dt><dd>Total dikurangi BULOG: rumah tangga, penggilingan, pedagang, horeka.</dd>
+      <dt>Cukup untuk</dt><dd>Stok dibagi konsumsi total sebulan (konsumsi rumah tangga Susenas × pengali konsumsi non rumah tangga dari model).</dd>
+      <dt>Prakiraan</dt><dd>Okt–Des 2026, diteruskan dari posterior stok akhir Sep 2026 tanpa fit ulang.</dd>
+    </dl>
+  </details>
+</section>
+
+<!-- ============ WILAYAH ============ -->
+<section class="sb-page" id="wilayah" role="tabpanel" aria-label="Provinsi dan pulau" hidden>
+  <div class="sb-controls">
+    <label>Bulan
+      <select class="dash-select" data-draw="pilih-periode" data-source="stok" aria-label="Bulan"></select>
+    </label>
+    <label>Komponen (tabel provinsi)
+      <select class="dash-select sb-komponen" aria-label="Komponen">
+        <option value="total">Total</option>
+        <option value="bulog">BULOG (alokasi)</option>
+        <option value="swasta">Swasta (di luar BULOG)</option>
+      </select>
+    </label>
+  </div>
+  <div class="sb-card" id="kartu-wilayah">
+    <h3>Stok per bulan: <span data-draw="wil-nama" data-source="stok">—</span></h3>
+    <p class="sb-note">Juta ton; pita = rentang 90% stok total; putus-putus = prakiraan. Klik baris di tabel provinsi atau pulau untuk mengganti wilayah.</p>
+    <p><button class="sb-btn sb-nasional" type="button">Kembali ke nasional</button></p>
+    <div class="sb-chart dash-skeleton" data-draw="g-wilayah" data-source="stok"></div>
+  </div>
+  <div class="sb-card" id="kartu-tabel-prov">
+    <h3>Per provinsi</h3>
+    <p class="sb-note">Juta ton pada bulan terpilih. P05–P95 = rentang 90%. "Cukup" = bulan konsumsi (hanya untuk komponen total). Klik judul kolom untuk mengurutkan.</p>
+    <input class="sb-cari" type="search" data-untuk="tb-prov" placeholder="Cari provinsi atau pulau" aria-label="Cari provinsi">
+    <div class="sb-tablebox">
+      <table class="sb-urut sb-klik" data-source="stok" data-row-key="id">
+        <thead><tr>
+          <th data-field="nama" aria-sort="none"><button class="sb-sort" type="button">Provinsi</button></th>
+          <th data-field="pulau" aria-sort="none"><button class="sb-sort" type="button">Pulau</button></th>
+          <th class="sb-num" data-field="median" aria-sort="none"><button class="sb-sort" type="button">Median</button></th>
+          <th class="sb-num" data-field="p05" aria-sort="none"><button class="sb-sort" type="button">P05</button></th>
+          <th class="sb-num" data-field="p95" aria-sort="none"><button class="sb-sort" type="button">P95</button></th>
+          <th class="sb-num" data-field="cukup_bulan" aria-sort="none"><button class="sb-sort" type="button">Cukup (bln)</button></th>
+        </tr></thead>
+        <tbody data-draw="tb-prov"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-tabel-pulau">
+    <h3>Per pulau dan komponen</h3>
+    <p class="sb-note">Median, juta ton, bulan terpilih. Komponen swasta (rumah tangga, penggilingan, pedagang, horeka) hanya dihitung per pulau dan nasional; untuk bulan prakiraan hanya total, BULOG dan swasta.</p>
+    <div class="sb-tablebox">
+      <table class="sb-klik" data-source="komponen_pulau" data-row-key="periode,wilayah">
+        <thead><tr>
+          <th data-field="nama">Wilayah</th>
+          <th class="sb-num" data-field="total">Total</th>
+          <th class="sb-num" data-field="bulog">BULOG</th>
+          <th class="sb-num" data-field="swasta">Swasta</th>
+          <th class="sb-num" data-field="rumah_tangga">Rumah tangga</th>
+          <th class="sb-num" data-field="penggilingan">Penggilingan</th>
+          <th class="sb-num" data-field="pedagang">Pedagang</th>
+          <th class="sb-num" data-field="horeka">Horeka</th>
+        </tr></thead>
+        <tbody data-draw="tb-pulau"></tbody>
+      </table>
+    </div>
+  </div>
+  <details>
+    <summary>Kenapa angka provinsi lebih lebar dari pulau</summary>
+    <ul>
+      <li>Model tahu produksi dan konsumsi tiap provinsi, tetapi tidak tahu berapa beras yang benar-benar dikirim antar provinsi setiap bulan. Arus ini dimodelkan dari defisit dan surplus struktural plus guncangan acak yang berjumlah nol secara nasional, sehingga ketidakpastiannya saling meniadakan di tingkat pulau dan nasional, tetapi tidak di provinsi.</li>
+      <li>Komponen BULOG per provinsi dibagi dengan pangsa Dirichlet (campuran pangsa produksi dan konsumsi), karena belum ada stok per kanwil.</li>
+      <li>Laporan INATRADE dipakai per pulau, bukan per provinsi: pelapor per provinsi berganti-ganti dan membuat hasil bimodal.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ============ KENAPA ============ -->
+<section class="sb-page" id="kenapa" role="tabpanel" aria-label="Kenapa angkanya begini" hidden>
+  <p class="sb-lead">Stok adalah sisa: stok awal + produksi setelah susut + impor − konsumsi. Jembatan di bawah menelusuri angka nasional dari akhir Des 2023 ke akhir Sep 2026; tiap batang adalah median komponen neraca.</p>
+  <div class="sb-card" id="kartu-jembatan">
+    <h3>Dari stok Des 2023 ke stok Sep 2026</h3>
+    <p class="sb-note">Juta ton. Batang pertama dan terakhir = stok; di antaranya tambahan (produksi, impor) dan pengurangan (konsumsi), masing-masing dengan warnanya sendiri. "Selisih lain" = sisa pembulatan median dan guncangan proses.</p>
+    <div class="sb-chart dash-skeleton" data-draw="g-jembatan" data-source="jembatan"></div>
+  </div>
+  <div class="sb-grid">
+    <div class="sb-card sb-prose" id="alasan-1">
+      <h3>1. Produksi melebihi konsumsi sejak 2025</h3>
+      <p>Pada 2025 produksi setelah susut <b class="sb-v dash-skeleton" data-draw="v" data-source="jembatan" data-field="nilai" data-where="id=2025|Produksi setelah susut" data-fmt="1">—</b> juta ton, konsumsi <b class="sb-v dash-skeleton" data-draw="v" data-source="jembatan" data-field="nilai" data-where="id=2025|Konsumsi" data-fmt="1">—</b>, impor <b class="sb-v dash-skeleton" data-draw="v" data-source="jembatan" data-field="nilai" data-where="id=2025|Impor" data-fmt="1">—</b>: surplus <b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="surplus_2025" data-row="0" data-fmt="s1">—</b> juta ton. Pada Jan–Sep 2026 surplusnya <b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="surplus_2026" data-row="0" data-fmt="s1">—</b> juta ton. Pada 2024 produksi lebih kecil dari konsumsi (<b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="neraca_2024" data-row="0" data-fmt="s1">—</b>) dan ditutup impor <b class="sb-v dash-skeleton" data-draw="v" data-source="jembatan" data-field="nilai" data-where="id=2024|Impor" data-fmt="1">—</b> juta ton.</p>
+    </div>
+    <div class="sb-card sb-prose" id="alasan-2">
+      <h3>2. Konsumsi total lebih besar dari konsumsi rumah tangga</h3>
+      <p>Susenas hanya mencatat konsumsi rumah tangga. Model memperkirakan konsumsi total (termasuk horeka, industri, pakan, tercecer) sebesar <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="mean" data-where="id=log_1_plus_nu" data-fmt="2">—</b> × konsumsi rumah tangga (rentang <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="p05" data-where="id=log_1_plus_nu" data-fmt="2">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="p95" data-where="id=log_1_plus_nu" data-fmt="2">—</b>), sekitar <b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="konsumsi_bulanan_2026" data-row="0" data-fmt="2">—</b> juta ton per bulan pada 2026. Prior-nya ditarik ke angka konsumsi Bapanas.</p>
+    </div>
+    <div class="sb-card sb-prose" id="alasan-3">
+      <h3>3. Susut</h3>
+      <p>Susut pascapanen sampai beras <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="mean" data-where="id=susut" data-fmt="1">—</b>% dari produksi (rentang <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="p05" data-where="id=susut" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="p95" data-where="id=susut" data-fmt="1">—</b>%). Setiap satu poin persen susut setara sekitar <b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="per_poin_susut" data-row="0" data-fmt="2">—</b> juta ton beras per tahun, jadi ketidakpastian susut menumpuk menjadi rentang yang melebar dari bulan ke bulan.</p>
+    </div>
+    <div class="sb-card sb-prose" id="alasan-4">
+      <h3>4. Level diikat oleh survei, masing-masing dengan bias</h3>
+      <p>Neraca hanya menentukan <i>perubahan</i> stok; <i>level</i> ditentukan survei stok. Survei SSBAT Bapanas-BPS mencatat sekitar <b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="ssbat_rasio" data-row="0" data-fmt="pct">—</b> dari level model (bias log <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="mean" data-where="id=bias_survei[0]" data-fmt="2">—</b>), sedangkan SCBN BPS Jun 2022 hampir tanpa bias (<b class="sb-v dash-skeleton" data-draw="v" data-source="turunan" data-field="scbn_rasio" data-row="0" data-fmt="pct">—</b>). Dua titik SSBAT berbias sama, jadi keduanya terutama mengikat perubahan, sementara SCBN mengikat level.</p>
+    </div>
+    <div class="sb-card sb-prose" id="alasan-5">
+      <h3>5. Kendala stok swasta tidak negatif</h3>
+      <p>Stok di luar BULOG tidak boleh negatif. Bila kendala dipasang per provinsi, stok nasional naik menjadi <b class="sb-v dash-skeleton" data-draw="v" data-source="uji" data-field="median" data-where="id=sensitivitas|Swasta ≥ 0 per provinsi" data-fmt="1">—</b> juta ton: arus antar provinsi tidak teramati, sehingga model terpaksa menambah stok di provinsi defisit. Dipasang per pulau (dasar) <b class="sb-v dash-skeleton" data-draw="v" data-source="uji" data-field="median" data-where="id=sensitivitas|Swasta ≥ 0 per pulau (dasar)" data-fmt="1">—</b>; nasional saja <b class="sb-v dash-skeleton" data-draw="v" data-source="uji" data-field="median" data-where="id=sensitivitas|Swasta ≥ 0 nasional saja" data-fmt="1">—</b>. Inilah pilihan model yang paling menggeser level.</p>
+    </div>
+    <div class="sb-card sb-prose" id="alasan-6">
+      <h3>6. Kenapa rentangnya lebar</h3>
+      <p>Hanya ada tiga survei stok, yang terakhir Des 2023. Sejak itu stok diteruskan dengan neraca, sehingga ketidakpastian susut, konsumsi dan guncangan bulanan (simpangan baku <b class="sb-v dash-skeleton" data-draw="v" data-source="parameter" data-field="mean" data-where="id=sigma_proses" data-fmt="3">—</b> × konsumsi bulanan provinsi) menumpuk. Survei stok baru adalah cara tercepat mempersempit rentang.</p>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-parameter">
+    <h3>Parameter yang diestimasi</h3>
+    <p class="sb-note">Rata-rata posterior dan rentang 90%. R-hat dekat 1 berarti empat rantai MCMC sepakat (konvergen).</p>
+    <div class="sb-tablebox">
+      <table data-source="parameter" data-row-key="id">
+        <thead><tr>
+          <th data-field="parameter">Parameter</th>
+          <th data-field="satuan">Satuan</th>
+          <th class="sb-num" data-field="mean">Rata-rata</th>
+          <th class="sb-num" data-field="p05">P05</th>
+          <th class="sb-num" data-field="p95">P95</th>
+          <th class="sb-num" data-field="r_hat">R-hat</th>
+        </tr></thead>
+        <tbody data-draw="tb-param"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-bayes">
+    <h3>Di mana bagian Bayesian-nya</h3>
+    <ol>
+      <li><b>Prior</b>: setiap besaran yang tidak diketahui (stok awal Jun 2022, susut, pengali konsumsi, bias tiap survei, arus antar provinsi, stok BULOG tiap bulan) diberi sebaran awal yang masuk akal, misalnya susut dibatasi di kisaran yang dilaporkan literatur.</li>
+      <li><b>Likelihood</b>: model menghitung riwayat stok bulanan tiap provinsi dari neraca, lalu menilai seberapa cocok riwayat itu dengan semua pengamatan: survei stok, stok BULOG, indeks stok pedagang INATRADE per pulau, dan harga penggilingan.</li>
+      <li><b>Posterior</b>: sampler NUTS (nutpie) menarik ribuan kombinasi parameter yang sekaligus masuk akal menurut prior dan cocok dengan data. Setiap tarikan adalah satu riwayat stok lengkap untuk 38 provinsi.</li>
+      <li><b>Ringkasan</b>: median dan persentil 5–95 dihitung per sel (provinsi × bulan × komponen). Pulau dan nasional dijumlah <i>per tarikan</i> dulu, baru diringkas, sehingga korelasi antar provinsi ikut terbawa.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ PAW ============ -->
+<section class="sb-page" id="paw" role="tabpanel" aria-label="PAW vs Non PAW" hidden>
+  <div class="sb-card sb-prose" id="kartu-definisi">
+    <h3>Apa itu PAW dan Non PAW di data INATRADE</h3>
+    <p>INATRADE adalah laporan distribusi perusahaan: pengadaan, penyaluran dan stok per bulan. Setiap baris punya <b>provinsi perusahaan</b> dan <b>provinsi penyaluran</b>.</p>
+    <ul>
+      <li><b>Non PAW</b>: provinsi perusahaan = provinsi penyaluran (distribusi di dalam provinsi).</li>
+      <li><b>PAW</b>: provinsi penyaluran berbeda (distribusi antar provinsi).</li>
+    </ul>
+    <p>Baris beras: <b class="sb-v dash-skeleton" data-draw="v" data-source="kualitas" data-field="nilai" data-where="id=00" data-fmt="txt">—</b>. Model memakai INATRADE di dua tempat: (1) stok akhir per perusahaan, diagregasi per pulau, sebagai <b>indeks stok pedagang</b> (Student-t dengan skala per pulau) dan (2) laporan BULOG (kode 00372) sebagai pengamatan kedua stok BULOG. Baris PAW dan Non PAW memuat stok perusahaan yang sama; memilih baris mengubah perusahaan-bulan mana yang masuk indeks.</p>
+    <p>Untuk mengukur pengaruhnya, model dijalankan empat kali: memakai keduanya (dasar), hanya baris Non PAW, hanya baris PAW, dan tanpa INATRADE sama sekali.</p>
+  </div>
+  <div class="sb-grid">
+    <div class="sb-card" id="kartu-varian">
+      <h3>Stok nasional akhir Sep 2026 per varian</h3>
+      <p class="sb-note">Juta ton; titik = median, garis = rentang 90%.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-varian" data-source="varian"></div>
+    </div>
+    <div class="sb-card" id="kartu-varian-waktu">
+      <h3>Stok nasional per bulan per varian</h3>
+      <p class="sb-note">Juta ton; pita = rentang 90% varian dasar.</p>
+      <div class="sb-chart dash-skeleton" data-draw="g-varian-waktu" data-source="varian"></div>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-varian-pulau">
+    <h3>Per pulau, akhir Sep 2026</h3>
+    <p class="sb-note">Median, juta ton, dan selisih dari varian dasar.</p>
+    <div class="sb-tablebox">
+      <table data-source="varian_pulau" data-row-key="wilayah">
+        <thead><tr>
+          <th data-field="wilayah">Wilayah</th>
+          <th class="sb-num" data-field="dasar">Keduanya (dasar)</th>
+          <th class="sb-num" data-field="non_paw">Non PAW saja</th>
+          <th class="sb-num" data-field="paw">PAW saja</th>
+          <th class="sb-num" data-field="tanpa_inatrade">Tanpa INATRADE</th>
+          <th class="sb-num" data-field="non_paw_persen">Non PAW vs dasar</th>
+          <th class="sb-num" data-field="paw_persen">PAW vs dasar</th>
+          <th class="sb-num" data-field="tanpa_persen">Tanpa vs dasar</th>
+        </tr></thead>
+        <tbody data-draw="tb-varian"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card sb-prose sb-saran" id="kartu-rekomendasi">
+    <h3>Mana yang sebaiknya dipakai</h3>
+    <h4>Nasional: pakai keduanya (dasar)</h4>
+    <p>Dibanding dasar, Non PAW saja menggeser stok nasional <b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="selisih" data-where="varian=Non PAW saja" data-fmt="s1">—</b> juta ton (<b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="persen" data-where="varian=Non PAW saja" data-fmt="spct">—</b>), PAW saja <b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="selisih" data-where="varian=PAW saja" data-fmt="s1">—</b> (<b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="persen" data-where="varian=PAW saja" data-fmt="spct">—</b>), tanpa INATRADE <b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="selisih" data-where="varian=Tanpa INATRADE" data-fmt="s1">—</b> (<b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="persen" data-where="varian=Tanpa INATRADE" data-fmt="spct">—</b>). Rata-rata selisih bulanan Non PAW saja <b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="rata_selisih_bulanan" data-where="varian=Non PAW saja" data-fmt="2">—</b> dan PAW saja <b class="sb-v dash-skeleton" data-draw="v" data-source="varian_ringkas" data-field="rata_selisih_bulanan" data-where="varian=PAW saja" data-fmt="2">—</b> juta ton. Semua median varian berada di dalam rentang 90% dasar. Memakai keduanya menjaga panel pelapor paling lengkap; memilih satu jenis baris membuang hampir separuh baris dan membuat komposisi pelapor berganti dari bulan ke bulan.</p>
+    <h4>Pulau: pakai keduanya, perhatikan pulau yang paling peka</h4>
+    <p>Pulau dengan pergeseran terbesar: <b data-draw="pulau-goyah" data-source="varian_pulau">—</b>. Di pulau dengan sedikit pelapor, pilihan baris INATRADE bisa menggeser angka lebih dari di tingkat nasional.</p>
+    <h4>Provinsi: angka neraca, bukan INATRADE langsung</h4>
+    <p>INATRADE tidak dipakai per provinsi (hasilnya bimodal). Angka provinsi = neraca produksi-konsumsi + arus antar provinsi yang dimodelkan + alokasi BULOG. Pakai untuk membandingkan dan memeringkat provinsi, dan baca rentangnya, bukan hanya median.</p>
+    <h4>Kenapa pengaruh INATRADE masih terbatas</h4>
+    <p>Cakupan: <b class="sb-v dash-skeleton" data-draw="v" data-source="kualitas" data-field="nilai" data-where="id=09" data-fmt="txt">—</b>. Pelapor: <b class="sb-v dash-skeleton" data-draw="v" data-source="kualitas" data-field="nilai" data-where="id=02" data-fmt="txt">—</b>. Provinsi: <b class="sb-v dash-skeleton" data-draw="v" data-source="kualitas" data-field="nilai" data-where="id=03" data-fmt="txt">—</b>. Pengaruhnya akan naik bila pelapor bertambah, terutama di provinsi pada tabel di bawah.</p>
+  </div>
+  <div class="sb-card" id="kartu-prioritas">
+    <h3>Di mana laporan tambahan paling mempersempit rentang</h3>
+    <p class="sb-note">Sepuluh provinsi dengan rentang 90% stok total terlebar (Sep 2026). Tujuh teratas menyumbang <b data-draw="porsi-top" data-source="lebar_interval">—</b> dari jumlah rentang semua provinsi. Wajib lapor INATRADE yang lebih lengkap atau survei stok kecil di provinsi ini paling banyak mengurangi ketidakpastian nasional.</p>
+    <div class="sb-tablebox">
+      <table data-source="lebar_interval" data-row-key="id">
+        <thead><tr>
+          <th data-field="nama">Provinsi</th>
+          <th data-field="pulau">Pulau</th>
+          <th class="sb-num" data-field="median">Median</th>
+          <th class="sb-num" data-field="lebar">Lebar rentang</th>
+          <th class="sb-num" data-field="lebar_relatif">Lebar ÷ median</th>
+          <th class="sb-num" data-field="porsi_lebar">Porsi dari total</th>
+        </tr></thead>
+        <tbody data-draw="tb-lebar"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UJI ============ -->
+<section class="sb-page" id="uji" role="tabpanel" aria-label="Uji dan pembanding" hidden>
+  <div class="sb-grid">
+    <div class="sb-card" id="kartu-validasi">
+      <h3>Prediksi model untuk angka survei</h3>
+      <p class="sb-note">Belah ketupat = amatan survei (juta ton); titik dan garis = prediksi model (level model × bias survei) dan rentang 90%. Survei SSBAT Des 2022 disembunyikan saat model dijalankan (holdout), lalu dibandingkan.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-validasi" data-source="uji"></div>
+    </div>
+    <div class="sb-card" id="kartu-sensitif">
+      <h3>Sensitivitas: di mana kendala swasta ≥ 0 dipasang</h3>
+      <p class="sb-note">Stok nasional akhir Sep 2026, juta ton.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-sensitif" data-source="uji"></div>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-tabel-uji">
+    <h3>Tabel uji</h3>
+    <div class="sb-tablebox">
+      <table data-source="uji" data-row-key="id">
+        <thead><tr>
+          <th data-field="uji">Uji</th>
+          <th data-field="periode">Bulan</th>
+          <th class="sb-num" data-field="amatan">Amatan</th>
+          <th class="sb-num" data-field="median">Median model</th>
+          <th class="sb-num" data-field="p05">P05</th>
+          <th class="sb-num" data-field="p95">P95</th>
+        </tr></thead>
+        <tbody data-draw="tb-uji"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-banding">
+    <h3>Model dibanding angka lain</h3>
+    <p class="sb-note">Juta ton. Kotak = neraca Bapanas, segitiga = USDA PSD (stok akhir tahun), belah ketupat = survei stok. Pembanding tidak dipakai untuk fit.</p>
+    <div class="sb-chart dash-skeleton" data-draw="g-banding" data-source="stok pembanding"></div>
+  </div>
+  <div class="sb-card" id="kartu-tabel-banding">
+    <h3>Tabel pembanding</h3>
+    <div class="sb-tablebox">
+      <table data-source="banding" data-row-key="id">
+        <thead><tr>
+          <th data-field="sumber">Sumber</th>
+          <th data-field="periode">Bulan</th>
+          <th class="sb-num" data-field="nilai">Angka sumber</th>
+          <th class="sb-num" data-field="model">Model (median)</th>
+          <th class="sb-num" data-field="rasio">Sumber ÷ model</th>
+          <th data-field="catatan">Catatan</th>
+        </tr></thead>
+        <tbody data-draw="tb-banding"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-baca-uji">
+    <h3>Cara membaca uji dan pembanding</h3>
+    <ul>
+      <li><b>Holdout</b>: survei Des 2022 disembunyikan; prediksi model untuk survei itu tetap memuat angka amatannya. Ini uji paling jujur yang bisa dilakukan dengan tiga titik survei.</li>
+      <li><b>Neraca Bapanas</b> tidak mengurangi susut dan memakai konsumsi lebih rendah, sehingga cenderung menjadi batas atas.</li>
+      <li><b>USDA PSD</b> memakai konsumsi yang lebih tinggi (lihat kolom catatan) dan tahun pemasaran, sehingga stok akhirnya lebih rendah. Model berada di antara keduanya.</li>
+      <li><b>Belum dilakukan</b>: backtest bergulir (melatih sampai bulan t, menebak t+1..t+3) dan pemeriksaan prediktif posterior per sumber. Keduanya ada di rencana berikutnya.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PRAKIRAAN ============ -->
+<section class="sb-page" id="prakiraan" role="tabpanel" aria-label="Prakiraan" hidden>
+  <div class="sb-kpis">
+    <div class="sb-kpi" id="kpi-okt">
+      <p class="sb-lbl">Akhir Okt 2026</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-10|total" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-10|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-10|total" data-fmt="1">—</b></p>
+      <p class="sb-sub">cukup <b class="sb-v dash-skeleton" data-draw="v" data-source="risiko" data-field="cukup_bulan" data-where="id=INDONESIA|2026-10" data-fmt="1">—</b> bulan</p>
+    </div>
+    <div class="sb-kpi" id="kpi-nov">
+      <p class="sb-lbl">Akhir Nov 2026</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-11|total" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-11|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-11|total" data-fmt="1">—</b></p>
+      <p class="sb-sub">cukup <b class="sb-v dash-skeleton" data-draw="v" data-source="risiko" data-field="cukup_bulan" data-where="id=INDONESIA|2026-11" data-fmt="1">—</b> bulan</p>
+    </div>
+    <div class="sb-kpi" id="kpi-des2">
+      <p class="sb-lbl">Akhir Des 2026</p>
+      <p class="sb-big"><b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="median" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b> <small>juta ton</small></p>
+      <p class="sb-sub">90%: <b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p05" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b>–<b class="sb-v dash-skeleton" data-draw="v" data-source="stok" data-field="p95" data-where="id=nasional|INDONESIA|2026-12|total" data-fmt="1">—</b></p>
+      <p class="sb-sub">cukup <b class="sb-v dash-skeleton" data-draw="v" data-source="risiko" data-field="cukup_bulan" data-where="id=INDONESIA|2026-12" data-fmt="1">—</b> bulan</p>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-prakiraan">
+    <h3>Stok nasional sampai Desember 2026</h3>
+    <p class="sb-note">Juta ton; area abu-abu = prakiraan. Pita = rentang 90% stok total; rentang BULOG melebar cepat karena tidak ada rencana pengadaan/penyaluran BULOG di model.</p>
+    <div class="sb-chart dash-skeleton" data-draw="g-prakiraan" data-source="stok"></div>
+  </div>
+  <div class="sb-controls">
+    <label>Bulan prakiraan
+      <select class="dash-select sb-bulan" aria-label="Bulan prakiraan">
+        <option value="2026-10">Okt 2026</option>
+        <option value="2026-11">Nov 2026</option>
+        <option value="2026-12">Des 2026</option>
+      </select>
+    </label>
+  </div>
+  <div class="sb-grid">
+    <div class="sb-card" id="kartu-risiko">
+      <h3>Risiko per provinsi, <span data-draw="bulan-nama">—</span></h3>
+      <p class="sb-note">Peluang stok provinsi di bawah satu bulan konsumsinya, dari ribuan simulasi. Tertinggi: <span data-draw="top-risiko" data-source="risiko">—</span>. Provinsi defisit bergantung pada kiriman antar provinsi, yang paling tidak pasti di model.</p>
+      <input class="sb-cari" type="search" data-untuk="tb-risiko" placeholder="Cari provinsi atau pulau" aria-label="Cari provinsi">
+      <div class="sb-tablebox">
+        <table class="sb-urut" data-source="risiko" data-row-key="id">
+          <thead><tr>
+            <th data-field="nama" aria-sort="none"><button class="sb-sort" type="button">Provinsi</button></th>
+            <th data-field="pulau" aria-sort="none"><button class="sb-sort" type="button">Pulau</button></th>
+            <th class="sb-num" data-field="cukup_bulan" aria-sort="none"><button class="sb-sort" type="button">Cukup (bln)</button></th>
+            <th class="sb-num" data-field="peluang_kurang_1_bulan" aria-sort="descending"><button class="sb-sort" type="button">Peluang &lt; 1 bln</button></th>
+          </tr></thead>
+          <tbody data-draw="tb-risiko"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sb-card" id="kartu-pulau-pra">
+      <h3>Per pulau, bulan prakiraan terpilih</h3>
+      <p class="sb-note">Juta ton; titik = median, garis = rentang 90%.</p>
+      <div class="sb-chart sb-pendek dash-skeleton" data-draw="g-pulau-pra" data-source="stok"></div>
+    </div>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-asumsi">
+    <h3>Cara prakiraan dibuat</h3>
+    <p>Setiap tarikan posterior stok akhir Sep 2026 diteruskan tiga bulan dengan neraca yang sama seperti model, tanpa fit ulang:</p>
+    <ul>
+      <li><b>Produksi</b> Okt–Nov: angka potensi KSA BPS 2026; Desember: produksi Des 2025 dikali faktor acak (belum ada angka KSA).</li>
+      <li><b>Susut dan pengali konsumsi</b>: diambil dari tiap tarikan posterior, plus simpangan tahunan.</li>
+      <li><b>Impor</b>: nol (tidak ada impor beras konsumsi 2025–2026).</li>
+      <li><b>Arus antar provinsi</b>: rumus model dengan faktor penerimaan acak per provinsi dan guncangan proses dari posterior.</li>
+      <li><b>BULOG</b>: acak berjalan tanpa tren, sehingga rentangnya melebar. Rencana penyaluran SPHP/bansos dan pengadaan BULOG akan sangat mempersempitnya.</li>
+    </ul>
+    <p>Prakiraan belum di-backtest. Nilai pengaturan simulasinya ada di potongan kode berikut (berkas <code>prakiraan.py</code>):</p>
+<pre class="sb-code">BULAN = ['2026-10', '2026-11', '2026-12']
+SIGMA_PROSES, SIGMA_BULOG, TAU_THETA, SD_DEV, SD_DES = 0.042, 0.24, 0.04, 0.03, 0.15</pre>
+  </div>
+</section>
+
+<!-- ============ METODE ============ -->
+<section class="sb-page" id="metode" role="tabpanel" aria-label="Metode dan data" hidden>
+  <div class="sb-card sb-prose" id="kartu-metode">
+    <h3>Metode dalam satu paragraf</h3>
+    <p>Model <b>ruang-keadaan (state-space) Bayesian hierarkis</b>. Keadaan yang tidak teramati adalah stok beras total tiap provinsi tiap bulan, Jul 2022 sampai Sep 2026 (38 provinsi). Stok bergerak menurut neraca bulanan: produksi setelah susut, impor, konsumsi, arus antar provinsi dan guncangan. Pengamatan yang berisik (survei stok, stok BULOG, INATRADE, harga) dihubungkan ke keadaan lewat persamaan pengamatan yang masing-masing punya bias dan galat sendiri. Semua parameter diestimasi bersama dengan MCMC (NUTS), sehingga ketidakpastian tiap sumber ikut terbawa ke angka provinsi, pulau dan nasional.</p>
+  </div>
+  <div class="sb-card" id="kartu-rumus">
+    <h3>Persamaan keadaan (neraca)</h3>
+<pre class="sb-rumus">X[p,t] = X[p,t-1] + (1 − s)·P[p,t] + I[t]·w[p] − (1 + ν[y(t)])·C[p,t]
+         + θ[p]·D[p]·g[t] − K[p]·m[p,t] + e[p,t]</pre>
+    <dl>
+      <dt>X[p,t]</dt><dd>stok total provinsi p akhir bulan t (laten)</dd>
+      <dt>P[p,t]</dt><dd>produksi beras = padi GKG BPS × faktor konversi; 2022–2024 tahunan dipecah dengan pola bulanan 2025</dd>
+      <dt>s</dt><dd>susut/kehilangan pascapanen (diestimasi)</dd>
+      <dt>I[t]·w[p]</dt><dd>impor bulanan dibagi menurut pangsa konsumsi provinsi</dd>
+      <dt>C[p,t], ν</dt><dd>konsumsi rumah tangga Susenas × penduduk; (1+ν) = pengali konsumsi non rumah tangga, boleh menyimpang per tahun</dd>
+      <dt>θ[p]·D[p]·g[t]</dt><dd>kiriman masuk ke provinsi defisit struktural D[p]; θ hierarkis ≈ 1; g[t] = musim panen gabungan provinsi asal</dd>
+      <dt>K[p]·m[p,t]</dt><dd>kiriman keluar dari provinsi surplus, sebanding surplusnya, mengikuti musim panennya; jumlah masuk = jumlah keluar tiap bulan</dd>
+      <dt>e[p,t]</dt><dd>guncangan proses (arus tak termodel), dibuat berjumlah nol antar provinsi</dd>
+    </dl>
+    <p class="sb-note">Bentuk ini adalah persamaan neraca persediaan (stock-flow / commodity balance) yang ditulis sebagai model ruang-keadaan, seperti di Durbin &amp; Koopman dan neraca bahan makanan FAO.</p>
+  </div>
+  <div class="sb-grid">
+    <div class="sb-card sb-prose" id="kartu-pengamatan">
+      <h3>Persamaan pengamatan</h3>
+      <ul>
+        <li><b>Survei stok total</b> (SCBN BPS Jun 2022; SSBAT Des 2022 dan Des 2023): log amatan = log stok nasional + bias sumber + galat.</li>
+        <li><b>Stok BULOG</b> (angka publik sebagai acuan; laporan INATRADE 00372 dengan bias sendiri): log amatan = log BULOG + bias + galat.</li>
+        <li><b>INATRADE pedagang</b>: log stok per perusahaan pelapor per pulau = skala pulau + log stok swasta pulau + galat Student-t (tahan pencilan).</li>
+        <li><b>Harga penggilingan medium</b>: perubahan log 12 bulan = konstanta + β × perubahan log 12 bulan stok nasional + galat.</li>
+      </ul>
+    </div>
+    <div class="sb-card sb-prose" id="kartu-kendala">
+      <h3>Komponen dan kendala</h3>
+      <ul>
+        <li><b>BULOG</b>: stok nasional laten (acak berjalan log), dibagi ke provinsi dengan pangsa Dirichlet.</li>
+        <li><b>Swasta</b> = total − BULOG, dibagi ke rumah tangga, penggilingan, pedagang, horeka dengan pangsa Dirichlet dari survei Jun 2022 dan akhir 2023.</li>
+        <li><b>Kendala lunak</b>: stok total tiap provinsi ≥ 0 dan stok swasta tiap pulau ≥ 0 (penalti kuadrat bila dilanggar).</li>
+        <li><b>Penghalusan</b>: max(·, 0) pada defisit/surplus diganti softplus agar gradien sampler tidak patah.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-prior">
+    <h3>Prior</h3>
+    <p class="sb-note">Sebaran awal tiap parameter, persis seperti di kode <code>model_stok.py</code>.</p>
+<pre class="sb-code">s = pm.Deterministic('susut', 0.025 + 0.075 * pm.Beta('susut_b', 2, 2))
+lognu = pm.Normal('log_1_plus_nu', nu_mu, 0.1)
+dnu = pm.Normal('dev_tahunan_nu', 0, D.get('sd_tahunan', 0.03), shape=len(D['tahun']))
+sigma = pm.HalfNormal('sigma_proses', 0.05)
+X0n = pm.LogNormal('stok_awal_nasional', np.log(8e6), 0.5)
+sh0 = pm.Dirichlet('pangsa_awal', 20 * N * a0)
+tau_th = pm.HalfNormal('tau_theta', 0.1)
+theta = pt.exp(tau_th * pm.Normal('eta_theta', 0, 1, shape=N))
+z = pm.Normal('z', 0, 1, shape=(N, T))
+sB = pm.HalfNormal('sigma_bulog', 0.15)
+lB0 = pm.Normal('log_bulog_awal', np.log(1.1e6), 0.3)
+zB = pm.Normal('zB', 0, 1, shape=T)
+bias_b = pt.stack([0.0, pm.Normal('bias_bulog_inatrade', 0, 0.1)])
+wB = pm.Dirichlet('pangsa_bulog', 5 * N * a0)
+pm.Dirichlet('pangsa_komponen', 30 * PANGSA_SURVEI)
+bias_s = pm.Normal('bias_survei', 0, 0.25, shape=2)  # 0 = SSBAT Bapanas-BPS, 1 = SCBN BPS 2022
+mu_a = pm.Normal('mu_a', -8, 3)
+tau_a = pm.HalfNormal('tau_a', 1)
+a = mu_a + tau_a * pm.Normal('eta_a', 0, 1, shape=Gp.shape[0])
+sd_i = pm.HalfNormal('sd_inatrade', 0.5)
+c = pm.Normal('c_harga', 0.05, 0.1)
+beta = pm.Normal('beta_harga', -0.1, 0.1)
+sd_h = pm.HalfNormal('sd_harga', 0.1)</pre>
+  </div>
+  <div class="sb-card" id="kartu-sumber">
+    <h3>Data yang dipakai</h3>
+    <div class="sb-tablebox">
+      <table data-source="sumber" data-row-key="id">
+        <thead><tr>
+          <th data-field="data">Data</th>
+          <th data-field="isi">Isi</th>
+          <th data-field="cakupan">Cakupan</th>
+          <th data-field="akses">Akses</th>
+          <th data-field="dipakai_untuk">Dipakai untuk</th>
+        </tr></thead>
+        <tbody data-draw="tb-sumber"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card" id="kartu-kualitas">
+    <h3>Kualitas data INATRADE beras</h3>
+    <p class="sb-note">Koreksi yang dilakukan sebelum model: satuan kg → ton, BULOG dipisah, laporan dengan neraca tidak cocok diberi bobot lebih kecil lewat galat Student-t.</p>
+    <div class="sb-tablebox">
+      <table data-source="kualitas" data-row-key="id">
+        <thead><tr>
+          <th data-field="indikator">Indikator</th>
+          <th data-field="nilai">Nilai</th>
+        </tr></thead>
+        <tbody data-draw="tb-kualitas"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-rujukan">
+    <h3>Rujukan</h3>
+    <ul>
+      <li>Durbin, J. &amp; Koopman, S. J. — <i>Time Series Analysis by State Space Methods</i> (Oxford University Press, edisi ke-2, 2012): kerangka model ruang-keadaan.</li>
+      <li>Gelman, A. dkk. — <i>Bayesian Data Analysis</i> (edisi ke-3, 2013): prior, model hierarkis, pemeriksaan posterior.</li>
+      <li>Hoffman, M. D. &amp; Gelman, A. (2014) — The No-U-Turn Sampler, <i>Journal of Machine Learning Research</i> 15: algoritma NUTS.</li>
+      <li>Abril-Pla, O. dkk. (2023) — PyMC: a modern and comprehensive probabilistic programming framework in Python, <i>PeerJ Computer Science</i>.</li>
+      <li>FAO — <i>Food Balance Sheets: A Handbook</i> (2001): identitas neraca pasokan-penggunaan dan perubahan stok.</li>
+      <li>BPS &amp; Bapanas — Survei Stok Beras Akhir Tahun (SSBAT) dan Survei Cadangan Beras Nasional (SCBN): jangkar level stok.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ KODE ============ -->
+<section class="sb-page" id="kode" role="tabpanel" aria-label="Kode dan algoritma" hidden>
+  <div class="sb-card sb-prose" id="kartu-berkas">
+    <h3>Berkas di folder <code>beras_stok/</code></h3>
+    <dl>
+      <dt>inatrade_panel.py</dt><dd>membaca INATRADE beras, koreksi kg → ton, memisah BULOG (00372), pilihan baris semua / Non PAW / PAW, panel stok per perusahaan, matriks arus asal → tujuan</dd>
+      <dt>ambil_bps.py</dt><dd>WebAPI BPS: produksi padi bulanan dan tahunan, konsumsi Susenas per kab/kota, penduduk, harga penggilingan (kunci dari env var)</dd>
+      <dt>jangkar_publik.csv</dt><dd>angka publik dengan sumbernya: survei stok, stok BULOG, impor, konsumsi dan neraca Bapanas</dd>
+      <dt>model_stok.py</dt><dd>menyiapkan data, membangun model PyMC, sampling, ringkasan posterior, validasi</dd>
+      <dt>prakiraan.py</dt><dd>prakiraan Okt–Des 2026 dari posterior dan tabel risiko provinsi</dd>
+      <dt>tabel_excel.py</dt><dd>tabel Excel posterior per provinsi, pulau, nasional</dd>
+      <dt>dashboard_beras.py</dt><dd>menulis file data dashboard ini dari hasil model</dd>
+      <dt>stok_beras_satu_file.py, stok_beras.ipynb</dt><dd>versi satu file dan notebook dengan hasil tersimpan</dd>
+    </dl>
+  </div>
+  <div class="sb-card sb-prose" id="kartu-algoritma">
+    <h3>Algoritma, langkah demi langkah</h3>
+    <ol>
+      <li><b>Bersihkan INATRADE</b>: satukan baris per perusahaan × bulan × subkomoditas, koreksi laporan yang tertulis dalam kg, pisahkan BULOG, pilih baris (semua / Non PAW / PAW), agregasi stok per pulau.</li>
+      <li><b>Bangun neraca per provinsi</b>: produksi bulanan (KSA), konsumsi rumah tangga (Susenas × penduduk), impor, musim panen tiap provinsi, defisit/surplus struktural.</li>
+      <li><b>Tulis model generatif</b> di PyMC: prior → riwayat stok semua provinsi (jumlah kumulatif neraca) → komponen BULOG/swasta → persamaan pengamatan → kendala lunak.</li>
+      <li><b>Sampling</b> dengan NUTS (nutpie, matriks massa low-rank, target acceptance tinggi), 4 rantai. Periksa divergensi dan R-hat.</li>
+      <li><b>Ringkas</b> per tarikan: jumlahkan provinsi ke pulau dan nasional, bagi komponen, lalu hitung median dan persentil 5–95.</li>
+      <li><b>Uji</b>: sembunyikan survei Des 2022 dan jalankan ulang (holdout); ulangi dengan kendala di tingkat lain (sensitivitas); jalankan varian INATRADE.</li>
+      <li><b>Prakiraan</b>: teruskan setiap tarikan stok Sep 2026 tiga bulan dengan neraca yang sama, hitung peluang stok &lt; 1 bulan konsumsi per provinsi.</li>
+    </ol>
+  </div>
+  <div class="sb-card" id="kartu-jalan">
+    <h3>Urutan menjalankan</h3>
+<pre class="sb-code">python -I beras_stok/inatrade_panel.py Non_PAW_dari_nol.xlsm data            # panel INATRADE (semua baris)
+python -I beras_stok/inatrade_panel.py Non_PAW_dari_nol.xlsm data_np nonpaw  # varian Non PAW saja
+python -I beras_stok/inatrade_panel.py Non_PAW_dari_nol.xlsm data_paw paw    # varian PAW saja
+BPS_API_KEY=... python -I beras_stok/ambil_bps.py cache data                 # produksi, konsumsi, penduduk, harga
+python -I beras_stok/model_stok.py data hasil                                # skenario dasar
+python -I beras_stok/model_stok.py data hasil --holdout 2022-12              # validasi holdout
+python -I beras_stok/model_stok.py data hasil --positif provinsi             # sensitivitas
+python -I beras_stok/model_stok.py data hasil --tanpa inatrade,bulog_inatrade # varian tanpa INATRADE
+python -I beras_stok/prakiraan.py data hasil                                 # prakiraan Okt-Des 2026
+python -I beras_stok/tabel_excel.py hasil hasil/stok_beras_posterior.xlsx    # tabel Excel
+python -I beras_stok/dashboard_beras.py data hasil varian dash               # file data dashboard</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-neraca">
+    <h3>Inti model: neraca dan arus antar provinsi</h3>
+    <p class="sb-note">Dari <code>model_stok.py</code>, fungsi <code>bangun()</code>. Riwayat stok = stok awal + jumlah kumulatif perubahan bulanan <code>d</code>.</p>
+<pre class="sb-code">tau_th = pm.HalfNormal('tau_theta', 0.1)
+theta = pt.exp(tau_th * pm.Normal('eta_theta', 0, 1, shape=N))
+neto = D['pbar'] * (1 - s) + D['imp'].mean() * D['wcons'] - cbar * fnu
+k = 0.05 * cbar  # max(x, 0) dihaluskan (softplus) supaya gradien tidak patah saat neraca berganti tanda
+masuk = theta * k * pt.softplus(-neto / k)
+surplus = k * pt.softplus(neto / k)
+shs = surplus / surplus.sum()
+keluar = masuk.sum() * shs  # tiap provinsi surplus mengirim sebanding surplusnya
+# kiriman mengikuti musim panen provinsi asal; penerimaan mengikuti musim gabungan asal
+# (rata-rata tertimbang), sehingga jumlah masuk = jumlah keluar di setiap bulan
+ma = 0.5 + 0.5 * D['musim_prov']
+g = pt.dot(shs, ma)
+z = pm.Normal('z', 0, 1, shape=(N, T))
+e = sigma * cbar[:, None] * z
+e = e - (cbar / cbar.sum())[:, None] * e.sum(axis=0)[None, :]  # guncangan = arus tak termodel, jumlah 0
+d = (prod * (1 - s) + D['imp'][None, :] * D['wcons'][:, None] - cons * fnu_t[None, :]
+     + masuk[:, None] * g[None, :] - keluar[:, None] * ma + e)
+X = pt.concatenate([X0[:, None], X0[:, None] + pt.cumsum(d, axis=1)], axis=1)
+X = pm.Deterministic('stok', X)</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-komponen">
+    <h3>BULOG, swasta dan kendala tidak negatif</h3>
+<pre class="sb-code"># BULOG nasional
+sB = pm.HalfNormal('sigma_bulog', 0.15)
+lB0 = pm.Normal('log_bulog_awal', np.log(1.1e6), 0.3)
+zB = pm.Normal('zB', 0, 1, shape=T)
+lB = pt.concatenate([lB0[None], lB0 + pt.cumsum(sB * zB)])
+B = pm.Deterministic('bulog', pt.exp(lB))
+bt, bv, bs = map(np.array, zip(*D['bulog']))
+bias_b = pt.stack([0.0, pm.Normal('bias_bulog_inatrade', 0, 0.1)])
+pm.Normal('obs_bulog', lB[bt] + bias_b[bs], 0.05, observed=np.log(bv))  # noise angka stok BULOG ~5%
+
+# pangsa BULOG per provinsi: tidak ada data kanwil, prior = campuran pangsa produksi &amp; konsumsi
+wB = pm.Dirichlet('pangsa_bulog', 5 * N * a0)
+swasta = X - B[None, :] * wB[:, None]
+if 'positif' not in D.get('tanpa', ()):
+    # stok swasta tidak boleh negatif. Diterapkan per kelompok (pulau secara baku): di tingkat provinsi
+    # model arus terlalu kasar sehingga kendala per provinsi justru memaksa level nasional naik.
+    G = D['grup_positif']
+    sg, cg = pt.dot(G, swasta), G @ cbar
+    neg = pt.maximum(-sg, 0) / (0.3 * cg[:, None])
+    pm.Potential('swasta_positif', -0.5 * pt.sum(neg ** 2))
+    # stok total tiap provinsi tidak negatif (kendala fisik; lebih lemah dari swasta &gt;= 0 per provinsi)
+    negp = pt.maximum(-X, 0) / (0.3 * cbar[:, None])
+    pm.Potential('total_provinsi_positif', -0.5 * pt.sum(negp ** 2))</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-amatan">
+    <h3>Persamaan pengamatan</h3>
+<pre class="sb-code"># survei stok total
+st = np.array([x[0] for x in D['surv'] if x[3]])
+sv = np.array([x[1] for x in D['surv'] if x[3]])
+ss = np.array([0 if x[2] == 'survei_bapanas' else 1 for x in D['surv'] if x[3]])
+bias_s = pm.Normal('bias_survei', 0, 0.25, shape=2)  # 0 = SSBAT Bapanas-BPS, 1 = SCBN BPS 2022
+pm.Normal('obs_survei', pt.log(Xn[st]) + bias_s[ss], 0.05, observed=np.log(sv))
+
+# INATRADE pedagang
+pi_, ti_, yi = D['inat'] if 'inatrade' not in D.get('tanpa', ()) else (D['inat'][0][:1], D['inat'][1][:1], D['inat'][2][:1])
+Gp = grup('pulau')
+swp = pt.dot(Gp, swasta)  # stok swasta per pulau
+mu_a = pm.Normal('mu_a', -8, 3)
+tau_a = pm.HalfNormal('tau_a', 1)
+a = mu_a + tau_a * pm.Normal('eta_a', 0, 1, shape=Gp.shape[0])
+sd_i = pm.HalfNormal('sd_inatrade', 0.5)
+cg = Gp @ cbar
+lsw = pt.log(0.2 * cg[pi_] * pt.softplus(swp[pi_, ti_] / (0.2 * cg[pi_])))
+pm.StudentT('obs_inatrade', nu=4, mu=a[pi_] + lsw, sigma=sd_i, observed=yi)
+
+# harga
+H = D['harga'] if 'harga' not in D.get('tanpa', ()) else D['harga'][:1]
+c = pm.Normal('c_harga', 0.05, 0.1)
+beta = pm.Normal('beta_harga', -0.1, 0.1)
+sd_h = pm.HalfNormal('sd_harga', 0.1)
+h1, h0 = H[:, 0].astype(int), H[:, 1].astype(int)
+pm.Normal('obs_harga', c + beta * (pt.log(Xn[h1]) - pt.log(Xn[h0])), sd_h, observed=H[:, 2])</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-sampel">
+    <h3>Sampling</h3>
+<pre class="sb-code">with m:
+    try:
+        import nutpie  # noqa: F401  (adaptasi matriks massa lebih baik untuk posterior berkorelasi)
+        kw = dict(nuts_sampler='nutpie', nuts_sampler_kwargs={'low_rank_modified_mass_matrix': True,
+                                                              'target_accept': 0.95})
+    except ImportError:
+        kw = dict(target_accept=0.95)
+    idata = pm.sample(A.draws, tune=A.tune, chains=A.chains, cores=A.chains, random_seed=A.seed,
+                      progressbar=False, **kw)</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-prakiraan">
+    <h3>Prakiraan satu bulan ke depan</h3>
+    <p class="sb-note">Dari <code>prakiraan.py</code>: rumus yang sama dengan model, diterapkan pada setiap tarikan posterior.</p>
+<pre class="sb-code">for j, b in enumerate(BULAN):
+    P = np.tile(prod_f[:, j], (S, 1))
+    if b == '2026-12':
+        P = P * np.exp(rng.normal(0, SD_DES, (S, 1)))
+    neto = pbar[None, :] * (1 - s[:, None]) + D['imp'].mean() * D['wcons'][None, :] - cbar[None, :] * fnu[:, None]
+    k = 0.05 * cbar[None, :]
+    theta = np.exp(rng.normal(0, TAU_THETA, (S, N)))
+    masuk = theta * k * np.logaddexp(0, -neto / k)
+    surplus = k * np.logaddexp(0, neto / k)
+    shs = surplus / surplus.sum(axis=1, keepdims=True)
+    keluar = masuk.sum(axis=1, keepdims=True) * shs
+    ma = 0.5 + 0.5 * P / pmean[None, :]
+    g = (shs * ma).sum(axis=1, keepdims=True)
+    e = SIGMA_PROSES * cbar[None, :] * rng.standard_normal((S, N))
+    e = e - (cbar / cbar.sum())[None, :] * e.sum(axis=1, keepdims=True)
+    d = P * (1 - s[:, None]) - cons26[None, :] * fnu[:, None] + masuk * g - keluar * ma + e
+    Xm = np.clip(Xm + d, 0, None)
+    lB = lB + rng.normal(0, SIGMA_BULOG, S)
+    rows_x.append(Xm.copy())
+    rows_b.append(np.exp(lB))</pre>
+  </div>
+  <div class="sb-card" id="kartu-kode-inatrade">
+    <h3>Memilih baris PAW / Non PAW</h3>
+    <p class="sb-note">Dari <code>inatrade_panel.py</code>.</p>
+<pre class="sb-code">if baris == 'nonpaw':
+    B = B[B['prov_tujuan'] == B['prov']]
+elif baris == 'paw':
+    B = B[(B['prov_tujuan'] != '') &amp; (B['prov_tujuan'] != B['prov'])]</pre>
+  </div>
+</section>
+</div>
+<script src="app.js"></script>

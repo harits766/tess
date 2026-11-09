@@ -19,6 +19,8 @@ python -I beras_stok/model_stok.py <data> <hasil> --positif provinsi       # uji
 python -I beras_stok/model_stok.py <data> <hasil> --positif nasional       # uji sensitivitas
 python -I beras_stok/tabel_excel.py <hasil> <hasil>/stok_beras_posterior.xlsx
 python -I beras_stok/diagnostik.py <data> <hasil>                          # korelasi (diagnostik saja)
+python -I beras_stok/prakiraan.py <data> <hasil>                           # prakiraan Okt–Des 2026 + risiko provinsi
+python -I beras_stok/dashboard_beras.py <data> <hasil> <folder varian> <keluaran>  # file data dashboard Monitor Stok Beras
 ```
 File data mentah dan hasil tidak disimpan di repo. Kunci BPS hanya dibaca dari env var `BPS_API_KEY`.
 
@@ -33,6 +35,11 @@ File data mentah dan hasil tidak disimpan di repo. Kunci BPS hanya dibaca dari e
 - `model_stok.py` — model (lihat docstring untuk persamaannya), ringkasan posterior, validasi.
 - `tabel_excel.py` — tabel Excel posterior (nasional, pulau, provinsi; median dan interval 90% per komponen).
 - `diagnostik.py` — korelasi perubahan bulanan tanpa pola musim antara INATRADE dan posterior (diagnostik).
+- `prakiraan.py` — prakiraan Okt–Des 2026: setiap tarikan posterior stok Sep 2026 diteruskan dengan neraca model
+  (KSA Okt–Nov, Des = Des 2025 × faktor acak, impor 0, BULOG acak berjalan); menulis `prakiraan.csv` dan
+  `risiko_provinsi.csv` (bulan cukup, peluang stok < 1 bulan konsumsi). Belum di-backtest.
+- `dashboard_beras.py` — menulis JSON untuk dashboard "Monitor Stok Beras" (stok, varian INATRADE, uji, parameter,
+  pembanding, jembatan neraca, risiko, sumber, kualitas). Halaman dashboard ada di `dashboard/`.
 
 ## Inti model
 - **Keadaan:** stok_t = stok_{t-1} + produksi×(1−susut) + impor − konsumsi RT×(1+ν) + masuk − keluar + guncangan.
