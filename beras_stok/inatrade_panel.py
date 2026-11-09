@@ -24,10 +24,11 @@ AMBANG_KG = 100
 Q = ['Pengadaan', 'Penyaluran', 'Stok Awal', 'Stok Akhir']
 
 
-def baca(path, baris='semua'):
-    """baris: 'semua', 'nonpaw' (Provinsi Perusahaan = Provinsi Penyaluran) atau 'paw' (berbeda)."""
+def baca(path, baris='semua', komoditi='BERAS'):
+    """baris: 'semua', 'nonpaw' (Provinsi Perusahaan = Provinsi Penyaluran) atau 'paw' (berbeda).
+    komoditi: isi kolom Jenis Komoditi (huruf besar), mis. 'KEDELAI BAHAN BAKU TEMPE DAN TAHU'."""
     S = pd.read_excel(path, sheet_name='2024-2026', dtype=object)
-    B = S[S['Jenis Komoditi'].map(U) == 'BERAS'].copy().reset_index(drop=True)
+    B = S[S['Jenis Komoditi'].map(U) == komoditi].copy().reset_index(drop=True)
     B['kode'] = B['Nama Perusahaan'].astype(str).str.strip().str.zfill(5)
     B['periode'] = [periode(b, t) for b, t in zip(B['Bulan'], B['Tahun'])]
     B['sub'] = B['Sub Komoditi'].astype(str).str.strip()
