@@ -24,6 +24,11 @@
   cukup 4,1 bulan pada Des. Risiko tertinggi Des: Papua Tengah, Kepri, Riau, Babel. USDA hanya pembanding.
 - Fase 1 kedelai ditunda sampai dashboard beras disetujui.
 
+## Status (sesi 4, 10 Nov 2026)
+- Ringkasan lintas topik (kedelai, Colab, pelaporan distribusi Binpas, rancangan stok + distribusi) ada di
+  `../SERAH_TERIMA.md`. Temuan: produksi beras BPS sudah memperhitungkan susut -> parameter "susut" sebaiknya
+  dinamai "selisih tak tercatat"; konsumsi total BPS 2024 (29,80 juta ton) cocok dengan model (29,79).
+
 ## Hasil skenario dasar
 - Stok nasional akhir Sep 2026: **14,2 juta ton (11,3–18,6)**; BULOG 4,65 (4,29–5,04); swasta 9,6 (6,7–14,0).
 - Setara Sep 2025 (14,4), tetapi bergeser ke BULOG. Terendah tiap Jan–Feb, naik setelah panen Mar–Apr.

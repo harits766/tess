@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box} body{margin:0;background:#fff;font-family:"Helvetica Neue",Arial,sans-serif;color:#13324a}
+.wrap{width:1400px;padding:26px 30px}
+h1{font-size:20px;margin:0 0 4px}.sub{font-size:13px;color:#4a6478;margin:0 0 16px}
+.dummy{display:inline-block;background:#fff4e6;color:#b35400;border:1px solid #f0b37e;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px;margin-left:8px}
+.row{display:flex;gap:24px;align-items:flex-start}
+.st{font-size:13px;font-weight:700;color:#1f5f7a;margin:0 0 8px;text-transform:uppercase;letter-spacing:.04em}
+.pill{display:inline-block;background:#000;color:#fff;font-size:11px;border-radius:12px;padding:3px 12px;margin-left:12px;position:relative;top:9px}
+.card{background:#1f5f7a;color:#fff;border-radius:10px;padding:18px 18px 16px;width:360px}
+.card h2{font-size:17px;margin:0 0 2px;text-decoration:underline}.per{font-size:11px;opacity:.85;margin-bottom:10px}
+.line{font-size:13px;margin:4px 0}
+.rank{display:flex;gap:10px;margin-top:12px;border-top:1px solid rgba(255,255,255,.35);padding-top:10px}
+.rank div{flex:1;background:rgba(255,255,255,.12);border-radius:6px;padding:7px 9px}
+.rk{font-size:11px;opacity:.9}.rv{font-size:22px;font-weight:700}.rv small{font-size:12px;font-weight:400;opacity:.85}
+.panel{flex:1;background:#d7ebf6;border-radius:10px;padding:16px 18px}
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.chip{font-size:12px;padding:4px 10px;border-radius:12px;background:#fff;border:1px solid #9fb8c8}
+.chip.on{background:#1f5f7a;color:#fff;border-color:#1f5f7a}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:8px;overflow:hidden}
+th{background:#1f5f7a;color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid #e3edf3;white-space:nowrap}td.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.me td{background:#fff4e6;font-weight:700}
+.sb{display:inline-block;height:9px;background:#1f5f7a;border-radius:2px;vertical-align:middle;margin-right:6px}
+.warn{color:#b35400;font-weight:700}
+.note{font-size:11.5px;color:#4a6478;margin-top:10px;line-height:1.5}
+.how{margin-top:14px;font-size:12px;color:#30506a;line-height:1.55;background:#f3f8fb;border-radius:8px;padding:10px 12px;width:360px}
+.how b{color:#13324a}
+</style></head><body><div class="wrap">
+<h1>Mockup skor peringkat barang masuk dan keluar per provinsi <span class="dummy">ANGKA DUMMY, BUKAN DATA</span></h1>
+<p class="sub">Dari laporan distribusi antarprovinsi (PAW) distributor bapokting · Sumber: Dit. Binpas</p>
+<div class="row">
+<div>
+<p class="st">1. Tambahan di kartu</p>
+<span class="pill">Sumber: Dit. Binpas</span>
+<div class="card">
+<h2>Pelaporan Distribusi Bapokting</h2>
+<div class="per">Riau · rata-rata Jul–Sep 2026</div>
+<div class="line">Masuk: <b>12</b> distributor · <b>4</b> provinsi · <b>7</b> komoditas</div>
+<div class="line">Keluar: <b>1</b> distributor · <b>1</b> provinsi · <b>1</b> komoditas</div>
+<div class="rank"><div><div class="rk">Peringkat masuk</div><div class="rv">14 <small>dari 38</small></div></div><div><div class="rk">Peringkat keluar</div><div class="rv">9 <small>dari 12</small></div></div></div>
+</div>
+<div class="how"><b>Cara skor dihitung</b><br>
+1. Tiap komponen diubah ke persentil 0–100 antar provinsi.<br>
+2. Skor = rata-rata komponen: distributor, provinsi mitra, komoditas (volume menyusul setelah satuan divalidasi).<br>
+3. Rata-rata 3 bulan agar tidak naik-turun karena pelapor tidak rutin.<br>
+4. <span class="warn">Rentan</span> = &gt; 60% pasokan dari 1 provinsi asal.</div>
+</div>
+<div class="panel">
+<p class="st">2. Halaman peringkat (diklik dari kartu)</p>
+<div class="bar"><span class="chip on">Barang masuk</span><span class="chip">Barang keluar</span><span class="chip">Periode: Jul–Sep 2026 ▾</span><span class="chip">Komoditas: Semua bapokting ▾</span><span class="chip">Pulau: Semua ▾</span></div>
+<table>
+<tr><th>#</th><th>Provinsi</th><th>Skor 0–100</th><th style="text-align:right">Distributor</th><th style="text-align:right">Provinsi asal</th><th style="text-align:right">Komoditas</th><th style="text-align:right">Porsi asal terbesar</th><th>Catatan</th></tr>
+<tr><td>1</td><td>Provinsi A</td><td><span class="sb" style="width:92px"></span>92</td><td class="n">36</td><td class="n">7</td><td class="n">8</td><td class="n">35%</td><td></td></tr>
+<tr><td>2</td><td>Provinsi B</td><td><span class="sb" style="width:88px"></span>88</td><td class="n">30</td><td class="n">8</td><td class="n">7</td><td class="n">30%</td><td></td></tr>
+<tr><td>3</td><td>Provinsi C</td><td><span class="sb" style="width:81px"></span>81</td><td class="n">28</td><td class="n">5</td><td class="n">8</td><td class="n">45%</td><td></td></tr>
+<tr><td>4</td><td>Provinsi D</td><td><span class="sb" style="width:77px"></span>77</td><td class="n">25</td><td class="n">6</td><td class="n">7</td><td class="n">40%</td><td></td></tr>
+<tr><td colspan="8" style="text-align:center;color:#8aa0b0">⋯</td></tr>
+<tr class="me"><td>14</td><td>Riau</td><td><span class="sb" style="width:58px;background:#e8590c"></span>58</td><td class="n">12</td><td class="n">4</td><td class="n">7</td><td class="n">65%</td><td class="warn">Rentan</td></tr>
+<tr><td colspan="8" style="text-align:center;color:#8aa0b0">⋯</td></tr>
+<tr><td>36</td><td>Provinsi X</td><td><span class="sb" style="width:12px"></span>12</td><td class="n">3</td><td class="n">1</td><td class="n">3</td><td class="n">100%</td><td class="warn">Rentan</td></tr>
+<tr><td>37</td><td>Provinsi Y</td><td><span class="sb" style="width:9px"></span>9</td><td class="n">2</td><td class="n">1</td><td class="n">2</td><td class="n">100%</td><td class="warn">Rentan</td></tr>
+<tr><td>38</td><td>Provinsi Z</td><td><span class="sb" style="width:5px"></span>5</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">100%</td><td class="warn">Rentan</td></tr>
+</table>
+<p class="note">Skor menggambarkan keterhubungan pasokan berdasarkan laporan distributor, bukan kinerja provinsi. Tab "Barang keluar" memakai provinsi kedudukan perusahaan pengirim, jadi provinsi tempat kantor pusat distributor akan cenderung di atas.</p>
+</div>
+</div></div></body></html>
