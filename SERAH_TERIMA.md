@@ -1,7 +1,7 @@
 # Serah terima sesi: stok & distribusi bapokting (Dit. Binpas, Kemendag)
 
 Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CATATAN_SESI.md`,
-`beras_stok/README.md`, `stok_komoditas/README.md`.
+`beras_stok/README.md`, `stok_komoditas/README.md`, `binpas/RANCANGAN_INATRADE.md`, `binpas/ambang_ujian.md`.
 
 ## Pengguna dan cara kerja
 - Harits, Dit. Bina Pasar Dalam Negeri (Binpas) Kemendag; atasan yang sering dibalas lewat WA: Bu Fitria.
@@ -80,9 +80,45 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 - PDF Poldis beras 2024/2025 bisa diunduh lewat WebAPI BPS (endpoint `view/.../model/publication/.../id/<pub_id>`;
   id 2025 f7bd40cb4779162e89bf2eda, 2024 a688dbac2f627b8b2f5b3b87).
 
+## 5. Sesi 5 (10 Nov 2026): arah kajian + rancangan penguatan INATRADE — diskusi saja, BELUM ADA YANG DIJALANKAN
+- Rincian lengkap: `binpas/RANCANGAN_INATRADE.md`; ambang lolos ujian: `binpas/ambang_ujian.md` (belum dikunci).
+- Keputusan: fokus kajian **distribusi**; **harga** jadi sensor utama (PIHPS/SP2KP, data lengkap); **stok dibekukan**
+  (model beras tetap untuk tren). Bayesian masih relevan untuk stok, tapi tidak menyelesaikan keterwakilan INATRADE.
+- Rancangan model gabungan stok–arus–harga (perluasan `beras_stok/model_stok.py`) dan penguatan INATRADE: identitas
+  stok lunak (Stok Awal ≠ Stok Akhir bulan lalu dimodelkan dengan laju susut v), isian lubang (regresi panel, QRF,
+  CatBoost, MRP), ragam, bobot pelapor, rekonsiliasi, penggabung, kalibrasi konformal; 79 kombinasi per komoditas,
+  penyaringan bertahap 50 -> 200 -> 500 ulangan; blok penyetelan Jan 2024–Jun 2025, kalibrasi Jul–Des 2025,
+  ujian akhir Jan–Sep 2026.
+- Pengguna diminta mengirim WA usulan ambang ke Bu Fitria; tanggapan beliau dicatat di `binpas/ambang_ujian.md`
+  dan file itu di-commit (dikunci) SEBELUM ujian pertama.
+- Fakta dari data di sesi ini:
+  - BULOG (00372) di INATRADE: rincian penyaluran/pengadaan per provinsi (38 provinsi) sejak Sep 2025, hanya 8 bulan
+    (2025-09..12, 2026-05, -06, -08, -09). Stok akhir hanya nasional (perusahaan tercatat di DKI).
+  - Stok akhir BULOG Sep 2026 di INATRADE 2,18 juta ton vs publik 4,6 -> laporan Sep kemungkinan belum lengkap.
+  - Tidak ada data INATRADE sebelum Jan 2024 (konfirmasi pengguna).
+  - Cakupan INATRADE "±0,03%" dari pengguna; belum dihitung ulang.
+- Pertanyaan terbuka: ada kolom ciri perusahaan di INATRADE? (79 vs 78 kombinasi); PIHPS/SP2KP bisa diambil
+  otomatis?; rujukan jurnal di rancangan belum dicek ulang.
+- Lingkungan: `BPS_API_KEY` ada sebagai env var; PyMC/nutpie mungkin perlu dipasang ulang; catboost dan quantile
+  forest baru perlu kalau R5/R6 dijalankan.
+
 ## Langkah berikut yang masih terbuka
+0. **Pertama:** Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
+   bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
+   (±2–4 jam; tanya dulu).
 1. Ganti nama "susut" -> "selisih tak tercatat" di kode, dokumen, dashboard.
 2. Validasi satuan semua komoditas INATRADE (bandingkan dengan konsumsi provinsi) sebelum tonase ditampilkan.
 3. Ekstrak tabel provinsi Poldis 2024/2025; bandingkan arah PAW INATRADE dengan BPS.
 4. Backtest bergulir model beras + pemeriksaan prediktif posterior (±3–4 jam komputasi; tanya dulu).
 5. Kedelai: prakiraan, perbaiki varian PAW, holdout USDA.
+
+## Pesan pembuka sesi baru (unggah juga file INATRADE)
+```
+Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
+Baca dulu SERAH_TERIMA.md, lalu binpas/RANCANGAN_INATRADE.md, binpas/ambang_ujian.md,
+beras_stok/CATATAN_SESI.md, dan stok_komoditas/README.md.
+File INATRADE terlampir. Ikuti aturan di bagian "Pengguna dan cara kerja".
+Tanggapan Bu Fitria soal ambang: <isi: setuju / ada perubahan ...>.
+Tugas sekarang: <isi tugasnya, mis. jalankan Tahap 0 (profil kehadiran pelapor INATRADE)>.
+Kabari dulu sebelum menjalankan apa pun yang > 10 menit.
+```
