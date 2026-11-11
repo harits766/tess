@@ -81,7 +81,7 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   id 2025 f7bd40cb4779162e89bf2eda, 2024 a688dbac2f627b8b2f5b3b87).
 
 ## 5. Sesi 5 (10 Nov 2026): arah kajian + rancangan penguatan INATRADE — diskusi saja, BELUM ADA YANG DIJALANKAN
-- Rincian lengkap: `binpas/RANCANGAN_INATRADE.md`; ambang lolos ujian: `binpas/ambang_ujian.md` (belum dikunci).
+- Rincian lengkap: `binpas/RANCANGAN_INATRADE.md`; ambang lolos ujian: `binpas/ambang_ujian.md` (dikunci di sesi 6).
 - Keputusan: fokus kajian **distribusi**; **harga** jadi sensor utama (PIHPS/SP2KP, data lengkap); **stok dibekukan**
   (model beras tetap untuk tren). Bayesian masih relevan untuk stok, tapi tidak menyelesaikan keterwakilan INATRADE.
 - Rancangan model gabungan stok–arus–harga (perluasan `beras_stok/model_stok.py`) dan penguatan INATRADE: identitas
@@ -102,6 +102,17 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 - Lingkungan: `BPS_API_KEY` ada sebagai env var; PyMC/nutpie mungkin perlu dipasang ulang; catboost dan quantile
   forest baru perlu kalau R5/R6 dijalankan.
 
+## 6. Sesi 6 (11 Nov 2026): penjelasan metodologi + AMBANG DIKUNCI — belum ada yang dijalankan
+- Bu Fitria menyetujui 4 perbaikan ambang: pembanding P\* (terbaik dari A, A + bobot 3, A + bobot 5) diberi sebaran
+  galat empiris; gerbang "lebih baik" juga mensyaratkan MAE median tidak lebih buruk; cakupan memakai selang Wilson
+  dengan n efektif (lantai 80%); konsistensi lewat bootstrap per blok bulan. `binpas/ambang_ujian.md` DIKUNCI.
+- Koreksi rancangan: bobot presisi tidak dipakai untuk menjumlah ton.
+- Usulan terbuka: strata wajib-hitung perusahaan besar (belum diputuskan pengguna); Tahap 0 ditambah ukuran
+  konsentrasi (pangsa 5 terbesar, Herfindahl) per komoditas × pulau.
+- Perkiraan hasil (tebakan, belum diuji): isian pulau/nasional lumayan mungkin lolos; provinsi kemungkinan
+  "belum bisa diputuskan"; keterwakilan (Poldis 2025) dan model gabungan kemungkinan belum lolos.
+- Pengguna: **jangan jalankan apa pun dulu** sampai diminta.
+
 ## Langkah berikut yang masih terbuka
 0. **Pertama:** Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
@@ -118,7 +129,6 @@ Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-mo
 Baca dulu SERAH_TERIMA.md, lalu binpas/RANCANGAN_INATRADE.md, binpas/ambang_ujian.md,
 beras_stok/CATATAN_SESI.md, dan stok_komoditas/README.md.
 File INATRADE terlampir. Ikuti aturan di bagian "Pengguna dan cara kerja".
-Tanggapan Bu Fitria soal ambang: <isi: setuju / ada perubahan ...>.
 Tugas sekarang: <isi tugasnya, mis. jalankan Tahap 0 (profil kehadiran pelapor INATRADE)>.
 Kabari dulu sebelum menjalankan apa pun yang > 10 menit.
 ```

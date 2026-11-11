@@ -1,7 +1,7 @@
 # Rancangan: distribusi + harga + stok, dan penguatan data INATRADE
 
 Disusun di sesi 5 (10 Nov 2026) lewat diskusi dengan pengguna. **Belum ada yang dijalankan.**
-Ambang lolos ujian ada di `ambang_ujian.md` (belum dikunci, menunggu tanggapan Bu Fitria).
+Ambang lolos ujian ada di `ambang_ujian.md` (DIKUNCI 11 Nov 2026, disetujui Bu Fitria).
 
 ## 1. Keputusan arah
 - **Fokus kajian: distribusi.** Alasannya: data milik Binpas sendiri (INATRADE), sesuai mandat, langsung jadi produk
@@ -69,9 +69,13 @@ Pembukti langsung hanya survei kecil acak (opsional, di luar analisis).
 - **Ragam:** dari simpangan terhadap perusahaan sejenis / ragam prediksi regresi; lubang tengah σ²·k(h−k)/h, lubang
   akhir σ²·k. Dipakai sebagai bobot presisi, interpolasi berganda (±20 isian, aturan Rubin) untuk hasil turunan tak
   lurus, dan galat tambahan di model. **Angka isian tidak pernah dianggap data asli.**
-- **Bobot:** bobot pelapor (aktif ÷ melapor per komoditas × pulau × ukuran, dibatasi 3 atau 5) × bobot presisi ×
-  (bobot semu dari jumlah usaha BPS atau kalibrasi ke pangsa Pola Distribusi, bila lolos). Kalibrasi ke total BPS
-  tidak dipakai (bobot ekstrem).
+- **Bobot:** bobot pelapor (aktif ÷ melapor per komoditas × pulau × ukuran, dibatasi 3 atau 5) × (bobot semu dari
+  jumlah usaha BPS atau kalibrasi ke pangsa Pola Distribusi, bila lolos). Kalibrasi ke total BPS tidak dipakai
+  (bobot ekstrem). **Koreksi sesi 6:** bobot presisi (1/ragam) TIDAK dipakai saat menjumlah ton (membuat total
+  kekecilan); hanya untuk mengestimasi indeks/pertumbuhan kelompok, menggabungkan sumber/metode, dan di model.
+  Total = Σ laporan asli + Σ isian + (bobot pelapor − 1) × bagian tak terisi; ketidakpastian masuk ke rentang.
+  Usulan terbuka (belum diputuskan pengguna): strata wajib-hitung untuk perusahaan besar (kumulatif ±80% volume per
+  komoditas × pulau, ditetapkan dari blok penyetelan) tanpa bobot pelapor.
 - **Memeras informasi:** panel per perusahaan, rasio (bulan persediaan, pangsa tujuan, margin Harga Jual vs PIHPS),
   pinjam antarkomoditas/antarwaktu, rekonstruksi jaringan, INATRADE sebagai sensor dini, kunci neraca.
 
@@ -98,7 +102,8 @@ Pembukti langsung hanya survei kecil acak (opsional, di luar analisis).
   hapus yang sama (berpasangan). A (asli) selalu ikut; di tingkat perusahaan pembandingnya "sama seperti bulan lalu".
 - Blok waktu: penyetelan Jan 2024–Jun 2025, kalibrasi Jul–Des 2025 (konformal, koreksi bias), ujian akhir
   Jan–Sep 2026 (sekali jalan).
-- Ukuran: CRPS (penentu peringkat), MAE, cakupan 90%, bias, arah perubahan, kemulusan. Gerbang di `ambang_ujian.md`.
+- Ukuran: CRPS (penentu peringkat), MAE, cakupan 90%, bias, arah perubahan, kemulusan. Gerbang di `ambang_ujian.md`;
+  pembanding = P\* (terbaik dari A, A + bobot 3, A + bobot 5), diberi sebaran galat empiris.
 - Tangga klaim (ditetapkan di awal): provinsi -> pulau -> nasional; bulanan -> triwulanan. Laporkan tingkat terhalus
   yang lolos. Hitung daya uji dulu; kalau kurang, status "belum bisa diputuskan".
 - Ujian tambahan bobot semu / kalibrasi pangsa / rekonstruksi jaringan: sembunyikan Pola Distribusi BPS 2025, harus
