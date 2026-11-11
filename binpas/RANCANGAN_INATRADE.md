@@ -11,7 +11,7 @@ Ambang lolos ujian ada di `ambang_ujian.md` (DIKUNCI 11 Nov 2026, disetujui Bu F
 - **Stok dibekukan.** Model beras yang ada tetap dipakai untuk tren dan sinyal rawan; tanpa SSBAT 2024–2025 dan
   stok BULOG per kanwil, level 2024–2026 tidak bisa divalidasi. Kerja lanjutan stok dibuka lagi kalau data datang.
 - **Bayesian** masih relevan untuk stok (menggabungkan sumber berbias, rentang jujur, prakiraan berupa peluang),
-  tapi tidak menyelesaikan masalah keterwakilan INATRADE (±0,03%; angka dari pengguna, belum dihitung ulang).
+  tapi tidak menyelesaikan masalah keterwakilan INATRADE (±0,03% = jumlah usaha KBLI 46 yang melapor, dari pengguna; cakupan menurut volume belum dihitung).
   Pembaruan posterior memperbaiki galat acak, bukan galat sistematis. Yang menyelesaikan adalah patokan luar (BPS).
 - Shrinkage (provinsi -> pulau) hanya untuk meredam noise. Untuk struktur arus, tarik ke matriks BPS, bukan ke pulau.
 

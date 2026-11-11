@@ -96,7 +96,8 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
     (2025-09..12, 2026-05, -06, -08, -09). Stok akhir hanya nasional (perusahaan tercatat di DKI).
   - Stok akhir BULOG Sep 2026 di INATRADE 2,18 juta ton vs publik 4,6 -> laporan Sep kemungkinan belum lengkap.
   - Tidak ada data INATRADE sebelum Jan 2024 (konfirmasi pengguna).
-  - Cakupan INATRADE "±0,03%" dari pengguna; belum dihitung ulang.
+  - Cakupan INATRADE "±0,03%" = jumlah usaha KBLI 46 (perdagangan besar, semua barang) yang melapor (dari pengguna).
+    Ini cakupan menurut JUMLAH usaha, bukan volume; cakupan volume per komoditas belum dihitung (usul: Tahap 0).
 - Pertanyaan terbuka: ada kolom ciri perusahaan di INATRADE? (79 vs 78 kombinasi); PIHPS/SP2KP bisa diambil
   otomatis?; rujukan jurnal di rancangan belum dicek ulang.
 - Lingkungan: `BPS_API_KEY` ada sebagai env var; PyMC/nutpie mungkin perlu dipasang ulang; catboost dan quantile
