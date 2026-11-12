@@ -121,8 +121,18 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 - 12 Nov 2026: pengguna menyetujui lima angka bagian 7 dan aturan cakupan ±30% (skala bulanan bila cakupan volume per
   pulau bergeser > ±30%); dikunci di bagian 7.2. Pengguna meminta Tahap 0 dijalankan.
 
+## 7. Tahap 0 SUDAH DIJALANKAN (12 Nov 2026) — rincian di `binpas/HASIL_TAHAP0.md`, skrip `binpas/tahap0.py`
+- 315 kode perusahaan, 9.479 laporan, 16 komoditas; pelapor beras 91. Patahan Okt–Nov 2024 (pelapor beras 11–15 -> ±50).
+- Cakupan volume pedagang beras ±1,5–3% (penyaluran ÷ konsumsi RT); bergeser > 30% antara 2024 dan 2026.
+- Sel hampir lengkap sedikit (beras pulau: 10 pada 90%, 16 pada 85% di blok penyetelan); tingkat pulau hanya bermakna
+  untuk Jawa dan Sumatera. Identitas dalam bulan 100% tepat; antarbulan beras 76% tepat, 12% ekstrem.
+- Aturan 7.2 yang terpicu: ambang sel 85%; strata wajib-hitung; cakupan bulanan sebagai skala M3.
+- Menunggu keputusan pengguna (HASIL_TAHAP0.md bagian 8): kunci jawaban dari laporan yang ada (bukan hanya sel hampir
+  lengkap), definisi aktif +3 bulan, wilayah Jawa/Sumatera/lainnya, perlakuan laporan berkepala ganda (jumlah vs maks).
+- Belum: korelasi Harga Jual vs PIHPS (data PIHPS belum diambil), cakupan volume komoditas selain beras, cek BULOG.
+
 ## Langkah berikut yang masih terbuka
-0. **Pertama:** Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
+0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
    (±2–4 jam; tanya dulu).
 1. Ganti nama "susut" -> "selisih tak tercatat" di kode, dokumen, dashboard.
