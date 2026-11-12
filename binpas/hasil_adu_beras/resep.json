@@ -1,0 +1,55 @@
+{
+ "ident": "I0",
+ "metode": "B",
+ "batas": 99,
+ "add": [
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 0.5,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "B",
+   99,
+   [
+    "tdist"
+   ],
+   null,
+   0.5,
+   0
+  ],
+  [
+   "I0",
+   "R5",
+   99,
+   [
+    "tdist"
+   ],
+   null,
+   0.5,
+   0
+  ],
+  [
+   "I0",
+   "R7",
+   99,
+   [
+    "tdist"
+   ],
+   null,
+   0.5,
+   0
+  ]
+ ],
+ "penggabung": "I0|B|99|tdist|None|0.5|0",
+ "koreksi": "tanpa",
+ "pstar": "A5",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-12 09:22:45"
+}

@@ -135,7 +135,7 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   Jawa/Sumatera/Pulau lain, laporan berkepala ganda dijumlah. Dikunci di RANCANGAN bagian 7.8–7.9.
 - Belum: korelasi Harga Jual vs PIHPS (data PIHPS belum diambil), cakupan volume komoditas selain beras, cek BULOG.
 
-## 8. Kode adu versi beras — SUDAH DITULIS, baru uji kode; penyetelan penuh BELUM dijalankan (12 Nov 2026)
+## 8. Kode adu versi beras — SUDAH DITULIS (12 Nov 2026); penyetelan penuh sudah dijalankan di sesi 7, lihat bagian 9
 **Berkas:** `binpas/adu_metode.py` (data, pola hapus, metode isian B, C, R1–R4, R5 QRF, R6a/b/c CatBoost, R7 MRP),
 `binpas/adu_versi.py` (soal ujian, skor, tahap 1a–5, penggabung, konformal, gerbang, kalibrasi, U1),
 notebook Colab `binpas/colab/03_tahap0.ipynb`, `04_adu_versi_beras.ipynb`, `BACA_DULU.txt`, `buat_paket.sh`.
@@ -184,6 +184,20 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   pengguna; susun ulang dengan `bash binpas/colab/buat_paket.sh <xlsm> <bps_out> <cache json> <hasil_tahap0> <tujuan>`.
 - WA ke Bu Fitria soal "CRPS dihitung dalam skala log (persen)" belum dikonfirmasi terkirim.
 
+## 9. Penyetelan penuh beras SUDAH DIJALANKAN (12 Nov 2026, sesi 7) — rincian di `binpas/HASIL_ADU_BERAS.md`
+- ±1 jam 21 menit (4 CPU), keluar 0. Keluaran penting di `binpas/hasil_adu_beras/` (resep, status, log, gerbang,
+  `tahap4_penuh.pkl.xz`). Blok kalibrasi dan ujian BELUM disentuh; `kalibrasi` dan `ujian` (U1) BELUM dijalankan.
+- Resep: I0, isian B (interpolasi/laporan terakhir, semua lubang diisi), tambahan tdist, tanpa bobot pelapor,
+  ragam 0,5×, tanpa rekonsiliasi, tanpa penggabung, koreksi "tanpa"; P\* = A5.
+- Gerbang penyetelan, wilayah (target utama): CRPS 0,019 vs 0,236 (−92%), konsisten, bias +0,1%, arah 94% -> lolos;
+  cakupan 81,0% (Wilson 65,7–90,5%) -> "belum bisa diputuskan". Provinsi: cakupan 77,4% -> gagal. Nasional: cakupan
+  80,6% -> belum bisa diputuskan.
+- Perlu keputusan pengguna sebelum U1: rentang terlalu sempit (cakupan wilayah Jan–Jun 2025 76% untuk "tanpa",
+  92,8% untuk konformal dengan CRPS 0,0163 vs 0,0149); fallback gerbang belum otomatis; seed turunan memakai `hash()`
+  teks (tidak persis terulang antarjalan).
+- Melanjutkan: salin `binpas/hasil_adu_beras/*` ke folder keluaran, `xz -dk tahap4_penuh.pkl.xz`, lalu `kalibrasi`,
+  lalu `ujian`. TANYA DULU sebelum keduanya.
+
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
@@ -200,8 +214,8 @@ Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-mo
 Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–8), lalu binpas/RANCANGAN_INATRADE.md
 (bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
+Baca juga bagian 9 dan binpas/HASIL_ADU_BERAS.md (penyetelan penuh sudah selesai; resep dan gerbang ada di sana).
 Tugas sekarang: siapkan lingkungan (pip install catboost quantile-forest statsmodels; ambil data BPS dengan
-beras_stok/ambil_bps.py), lalu jalankan `python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> <bps_out>`
-(adu versi beras penuh, ±0,5–1,5 jam). Sesudah selesai laporkan resep dan gerbangnya, lalu TANYA DULU sebelum
-kalibrasi dan ujian akhir (U1 hanya sekali jalan). Jangan menjalankan hal lain tanpa diminta.
+beras_stok/ambil_bps.py), salin binpas/hasil_adu_beras/* ke folder keluaran dan pulihkan tahap4_penuh.pkl.xz.
+TANYA DULU sebelum kalibrasi dan ujian akhir (U1 hanya sekali jalan). Jangan menjalankan hal lain tanpa diminta.
 ```

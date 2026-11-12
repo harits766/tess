@@ -1,0 +1,144 @@
+== penyetelan 2026-11-12 08:01:42 | perusahaan 90, besar 14, wilayah [32, 43, 15] | pola hapus: h=[0.079 0.073], p_ekor=[0.201 0.09 ] | proses 4
+[1a identitas] 3 versi, 500 ulangan, 14 detik
+cfg
+I0|R2|99||3|1.0|0    0.0438
+I2|R2|99||3|1.0|0    0.0479
+I1|R2|99||3|1.0|0    0.0500
+-> identitas: I0; pembanding P* = A5
+[1b isian] 44 versi, 500 ulangan, 3062 detik
+cfg
+I0|R5|99||3|1.0|0     0.0229
+I0|B|99||3|1.0|0      0.0251
+I0|R5|6||3|1.0|0      0.0252
+I0|B|6||3|1.0|0       0.0272
+I0|R6a|99||3|1.0|0    0.0279
+I0|R6a|6||3|1.0|0     0.0300
+I0|C|99||3|1.0|0      0.0317
+I0|R6b|99||3|1.0|0    0.0321
+I0|R6c|99||3|1.0|0    0.0324
+I0|C|6||3|1.0|0       0.0339
+I0|R6b|6||3|1.0|0     0.0341
+I0|R6c|6||3|1.0|0     0.0343
+I0|R4|99||3|1.0|0     0.0433
+I0|R1|99||3|1.0|0     0.0436
+I0|R2|99||3|1.0|0     0.0439
+I0|R3|99||3|1.0|0     0.0441
+I0|R4|6||3|1.0|0      0.0456
+I0|R1|6||3|1.0|0      0.0458
+I0|R2|6||3|1.0|0      0.0462
+I0|R3|6||3|1.0|0      0.0463
+I0|R5|3||3|1.0|0      0.0554
+I0|B|3||3|1.0|0       0.0586
+I0|R6a|3||3|1.0|0     0.0617
+I0|C|3||3|1.0|0       0.0668
+I0|R6c|3||3|1.0|0     0.0678
+I0|R6b|3||3|1.0|0     0.0680
+I0|R5|2||3|1.0|0      0.0742
+I0|B|2||3|1.0|0       0.0748
+I0|R4|3||3|1.0|0      0.0762
+I0|R1|3||3|1.0|0      0.0770
+I0|R3|3||3|1.0|0      0.0772
+I0|R2|3||3|1.0|0      0.0774
+I0|R6a|2||3|1.0|0     0.0783
+I0|C|2||3|1.0|0       0.0804
+I0|R6b|2||3|1.0|0     0.0832
+I0|R6c|2||3|1.0|0     0.0836
+I0|R7|99||3|1.0|0     0.0899
+I0|R4|2||3|1.0|0      0.0913
+I0|R7|6||3|1.0|0      0.0917
+I0|R3|2||3|1.0|0      0.0924
+I0|R1|2||3|1.0|0      0.0926
+I0|R2|2||3|1.0|0      0.0930
+I0|R7|3||3|1.0|0      0.1049
+I0|R7|2||3|1.0|0      0.1174
+A5                    0.2237
+A3                    0.2237
+A                     0.2350
+-> isian: I0|B|99||3|1.0|0; juara keluarga: {'pohon': 'I0|R5|99||3|1.0|0', 'regresi': 'I0|B|99||3|1.0|0', 'survei': 'I0|R7|99||3|1.0|0'}
+[1c tambahan (satu per satu)] 7 versi, 50 ulangan, 3 detik
+[1c tambahan] 8 versi, 500 ulangan, 23 detik
+cfg
+I0|B|99|ciri+kalender+pola+tdist|3|1.0|0    0.0201
+I0|B|99|tdist|3|1.0|0                       0.0201
+I0|B|99|ragamkel|3|1.0|0                    0.0253
+I0|B|99|ciri|3|1.0|0                        0.0254
+I0|B|99|pola|3|1.0|0                        0.0255
+I0|B|99||3|1.0|0                            0.0260
+I0|B|99|luar|3|1.0|0                        0.0260
+I0|B|99|kalender|3|1.0|0                    0.0260
+A5                                          0.2357
+A3                                          0.2358
+A                                           0.2450
+-> tambahan: ('tdist',)
+[2 bobot x ragam] 12 versi, 500 ulangan, 22 detik
+cfg
+I0|B|99|tdist|3|0.5|0         0.0192
+I0|B|99|tdist|5|0.5|0         0.0192
+I0|B|99|tdist|None|0.5|0      0.0192
+I0|B|99|tdist|3|1.0|0         0.0204
+I0|B|99|tdist|5|1.0|0         0.0204
+I0|B|99|tdist|None|1.0|0      0.0204
+I0|B|99|tdist|5|2.0|0         0.0231
+I0|B|99|tdist|3|2.0|0         0.0231
+I0|B|99|tdist|None|2.0|0      0.0231
+I0|B|99|tdist|5|titik|0       0.0260
+I0|B|99|tdist|None|titik|0    0.0260
+I0|B|99|tdist|3|titik|0       0.0260
+A5                            0.2237
+A3                            0.2237
+A                             0.2350
+-> bobot None, ragam 0.5
+[3 rekonsiliasi] 2 versi, 500 ulangan, 11 detik
+cfg
+I0|B|99|tdist|None|0.5|0    0.0133
+I0|B|99|tdist|None|0.5|1    0.0151
+A5                          0.0944
+A3                          0.0944
+A                           0.0975
+-> rekonsiliasi: tanpa
+[4 penggabung] anggota: ['I0|B|99|tdist|None|0.5|0', 'I0|R5|99|tdist|None|0.5|0', 'I0|R7|99|tdist|None|0.5|0'], 1694 detik
+cfg
+I0|B|99|tdist|None|0.5|0     0.0189
+G:juri                       0.0196
+I0|R5|99|tdist|None|0.5|0    0.0217
+G:pool                       0.0277
+G:crps                       0.0370
+G:rata                       0.0370
+I0|R7|99|tdist|None|0.5|0    0.0911
+A5                           0.2357
+A3                           0.2358
+A                            0.2450
+-> penggabung: I0|B|99|tdist|None|0.5|0
+                        crps  cakupan90
+cfg                                    
+tanpa                 0.0149     0.7596
+konformal             0.0163     0.9279
+konformal+bias        0.0163     0.9279
+konformal+bias+halus  0.0170     0.9052
+A5                    0.1786     0.7397
+A3                    0.1788     0.7402
+A                     0.1868     0.7061
+-> koreksi: tanpa
+== GERBANG di blok penyetelan (prov / wil / nas)
+                            0          1         2
+tingkat                  prov        wil       nas
+sel_bulan                 128         75        33
+crps                 0.033761   0.018899  0.013296
+crps_pembanding       0.36691   0.235734  0.094429
+perbaikan            0.907987   0.919828  0.859196
+mae                  0.045245   0.025947  0.018217
+mae_pembanding       0.448804   0.264341  0.110816
+selisih_lo          -0.404882  -0.255575 -0.097891
+selisih_hi           -0.28535  -0.183386 -0.066516
+cakupan              0.773942     0.8101  0.805661
+n_efektif           99.806029  25.960352   14.4873
+wilson_lo            0.698369   0.656817  0.593369
+wilson_hi            0.835053   0.904839  0.921739
+bias                -0.000589   0.000873 -0.000525
+bias_pembanding     -0.119253  -0.118752   -0.0212
+L_lebih_baik             True       True      True
+L_konsisten              True       True      True
+L_cakupan               False       True      True
+cakupan_belum_bisa      False       True      True
+L_bias                   True       True      True
+arah                 0.911357   0.938232  0.926536
