@@ -237,6 +237,39 @@ Disepakati dengan pengguna lewat diskusi; belum ada yang dijalankan saat bagian 
   di bulan-bulan baru (atau komoditas yang hasil ujiannya belum dilihat, bukti lebih lemah); ambang tidak ikut diubah;
   maksimal 2 revisi per tahun; perbaikan bug objektif boleh dijalankan ulang dengan hasil sebelum/sesudah dilaporkan.
 
+### 7.8 Keputusan sesudah Tahap 0 (disetujui pengguna 12 Nov 2026, sebelum adu versi dijalankan)
+Berdasarkan profil data di `HASIL_TAHAP0.md`, bukan kinerja metode.
+- **Kunci jawaban ujian = laporan yang memang ada.** Populasi sel pada bulan t = perusahaan yang melapor di bulan t;
+  sebagian dihapus; target = total laporan asli sel itu. Sel hampir lengkap tidak lagi menjadi syarat (hanya dilaporkan).
+  Sel yang dinilai: sel-bulan dengan ≥ 1 laporan terhapus dan ≥ 3 perusahaan dalam populasi.
+- **Definisi aktif:** bulan pertama lapor s.d. 3 bulan sesudah laporan terakhir (dibatasi akhir data).
+- **Wilayah:** Jawa, Sumatera, dan "Pulau lain" (digabung). Tingkat: provinsi, wilayah, nasional.
+- **Laporan berkepala ganda dijumlah** (satu kode dapat memuat beberapa unit usaha).
+- Otomatis dari 7.2: ambang sel hampir lengkap 85% (hanya untuk pelaporan), strata wajib-hitung dipakai, cakupan bulanan
+  sebagai skala INATRADE di M3.
+
+### 7.9 Rincian pelaksanaan adu versi (ditetapkan sebelum dijalankan)
+- Peubah sasaran: penyaluran per perusahaan-bulan (jumlah semua subkomoditas), pedagang tanpa BULOG. Pengadaan diisi
+  dengan metode yang sama hanya untuk keperluan identitas stok.
+- Identitas: dalam bulan selalu tepat di data (Tahap 0), jadi 1a hanya soal antarbulan. I1/I2 memakai stok tetangga:
+  Σ_lubang (pengadaan − penyaluran) = Stok Akhir sebelum lubang berikutnya − Stok Awal sesudah lubang dimulai; isian
+  pengadaan dan penyaluran disesuaikan sebanding ragamnya (I1 penuh; I2 sebagian, dengan peluang "ekstrem" dan laju v
+  dari data latih). Lubang akhir tidak punya tetangga kanan -> identitas tidak berpengaruh.
+- Strata wajib-hitung (besar): perusahaan yang kumulatif membentuk 80% penyaluran per wilayah di blok penyetelan;
+  selalu diisi (berapa pun panjang lubang), tanpa bobot pelapor, efek perusahaan tidak ditarik ke kelompok; untuk R7
+  (tanpa efek perusahaan) strata besar memakai R2. Perusahaan yang baru muncul sesudah blok penyetelan = kecil.
+- Lubang lebih panjang dari batas (strata kecil) tidak diisi dan ditutup bobot pelapor per wilayah × strata kecil.
+  Pengaturan baku selama tahap 1a–1c: bobot batas 3, skala ragam 1×, tanpa rekonsiliasi, tanpa koreksi akhir.
+- Sebaran prediksi tiap sel dinyatakan pada 21 kuantil (0,025; 0,05; 0,10 … 0,90; 0,95; 0,975) dari log total;
+  CRPS = 2 × rata-rata pinball loss pada kuantil itu. Satuan penilaian = (tingkat, wilayah, bulan, jenis lubang).
+- Tiap ulangan memuat dua ragam soal dengan pola hapus sama untuk semua versi: lubang tengah (di dalam blok) dan lubang
+  akhir (data dipotong di satu bulan acak, sebagian perusahaan belum lapor).
+- R4 (musiman) dan "kalender" hanya teridentifikasi lemah (data efektif < 2 tahun); tetap diuji sesuai daftar.
+- R7 memakai regresi bertingkat (efek acak ukuran, wilayah, PAW, bulan) + poststratifikasi ke jumlah perusahaan populasi.
+- Rekonsiliasi: isian dibangun dari tingkat perusahaan sehingga tingkat provinsi/wilayah/nasional sudah koheren kecuali
+  bagian bobot pelapor; tahap 3 membandingkan bobot per tingkat (tanpa) dengan MinT-WLS (dengan).
+- B dan C (tanpa model): sebaran dari galat log metode itu sendiri pada lubang buatan di data latih.
+
 ## 6. Rujukan (sebagian dicek ulang di sesi 6; sisanya dari ingatan)
 - Bias seleksi: Meng (2018) AoAS 12(2); Elliott & Valliant (2017) Stat Sci 32(2); Chen, Li & Wu (2020) JASA 115(532);
   Kim, Park, Chen & Wu (2021) JRSS A 184(3).

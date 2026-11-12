@@ -127,8 +127,8 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 - Sel hampir lengkap sedikit (beras pulau: 10 pada 90%, 16 pada 85% di blok penyetelan); tingkat pulau hanya bermakna
   untuk Jawa dan Sumatera. Identitas dalam bulan 100% tepat; antarbulan beras 76% tepat, 12% ekstrem.
 - Aturan 7.2 yang terpicu: ambang sel 85%; strata wajib-hitung; cakupan bulanan sebagai skala M3.
-- Menunggu keputusan pengguna (HASIL_TAHAP0.md bagian 8): kunci jawaban dari laporan yang ada (bukan hanya sel hampir
-  lengkap), definisi aktif +3 bulan, wilayah Jawa/Sumatera/lainnya, perlakuan laporan berkepala ganda (jumlah vs maks).
+- Pengguna MENYETUJUI (12 Nov 2026): kunci jawaban dari laporan yang ada, definisi aktif +3 bulan, wilayah
+  Jawa/Sumatera/Pulau lain, laporan berkepala ganda dijumlah. Dikunci di RANCANGAN bagian 7.8–7.9.
 - Belum: korelasi Harga Jual vs PIHPS (data PIHPS belum diambil), cakupan volume komoditas selain beras, cek BULOG.
 
 ## Langkah berikut yang masih terbuka
