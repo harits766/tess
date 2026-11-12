@@ -1,0 +1,24 @@
+== ujian 2026-11-12 13:09:52 | perusahaan 90, besar 14, wilayah [32, 43, 15] | pola hapus: h=[0.079 0.073], p_ekor=[0.201 0.09 ] | proses 4
+== GERBANG U1 (prov / wil / nas); pembanding P* = A5
+                            0          1         2
+tingkat                  prov        wil       nas
+sel_bulan                 133         57        19
+crps                 0.043256   0.015769  0.010684
+crps_pembanding      0.244266   0.116237   0.04814
+perbaikan            0.822914   0.864337  0.778054
+mae                  0.058404   0.020525  0.014514
+mae_pembanding       0.301014   0.135233  0.055336
+selisih_lo          -0.227588  -0.133749 -0.043221
+selisih_hi           -0.17767  -0.075099 -0.030661
+cakupan              0.933167   0.978024  0.969291
+n_efektif           82.340913  30.055418   7.53153
+wilson_lo            0.872755   0.880798  0.692751
+wilson_hi            0.966015   0.996283  0.997742
+bias                 0.009083   0.000435  0.003426
+bias_pembanding     -0.109755   -0.04283 -0.012966
+L_lebih_baik             True       True      True
+L_konsisten              True       True      True
+L_cakupan                True       True      True
+cakupan_belum_bisa      False      False      True
+L_bias                   True       True      True
+arah                 0.931742    0.96244  0.978718

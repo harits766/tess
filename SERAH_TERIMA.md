@@ -186,7 +186,7 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 
 ## 9. Penyetelan penuh beras SUDAH DIJALANKAN (12 Nov 2026, sesi 7) — rincian di `binpas/HASIL_ADU_BERAS.md`
 - ±1 jam 21 menit (4 CPU), keluar 0. Keluaran penting di `binpas/hasil_adu_beras/` (resep, status, log, gerbang,
-  `tahap4_penuh.pkl.xz`). Blok kalibrasi dan ujian BELUM disentuh; `kalibrasi` dan `ujian` (U1) BELUM dijalankan.
+  `tahap4_penuh.pkl.xz`).
 - Resep: I0, isian B (interpolasi/laporan terakhir, semua lubang diisi), tambahan tdist, tanpa bobot pelapor,
   ragam 0,5×, tanpa rekonsiliasi, tanpa penggabung; P\* = A5. Koreksi akhir: peringkat 1 CRPS "tanpa" gagal gerbang
   cakupan (Jan–Jun 2025: wilayah 76%), **Bu Fitria memutuskan turun ke konformal** (12 Nov 2026); `resep.json` sudah diubah.
@@ -197,8 +197,18 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   nasional cakupan "belum bisa diputuskan". Rincian: `hasil_adu_beras/gerbang_opsi5.csv`, skrip `binpas/gerbang_opsi5.py`.
 - Catatan: seed turunan memakai `hash()` teks (tidak persis terulang antarjalan); `kalibrasi`/`ujian` ikut menjalankan
   R5 dan R7 yang tidak dipakai resep (±0,5 jam per langkah).
-- Melanjutkan: salin `binpas/hasil_adu_beras/*` ke folder keluaran, `xz -dk tahap4_penuh.pkl.xz`, lalu `kalibrasi`,
-  lalu `ujian`. TANYA DULU sebelum keduanya.
+
+## 10. Kalibrasi dan U1 beras SUDAH DIJALANKAN (12 Nov 2026, sesi 7) — U1 SUDAH TERPAKAI, jangan dijalankan lagi
+- Resep dikunci di commit `f6544a0` (anggota dipangkas ke B saja, koreksi konformal), lalu `kalibrasi` (7,5 detik) dan
+  `ujian` (18 detik). Rincian di `binpas/HASIL_ADU_BERAS.md`, berkas di `binpas/hasil_adu_beras/`.
+- **Wilayah-bulanan (target utama) LOLOS semua gerbang U1:** CRPS 0,016 vs P\* 0,116 (−86%), bias +0,04%, arah 96%,
+  cakupan 97,8% (Wilson 88,1–99,6%), CRPS −3% dibanding penyetelan.
+- Provinsi (7 provinsi ber-pelapor ≥ 3): lolos semua; CRPS +13% dibanding resep yang sama di penyetelan (+28% bila
+  acuannya angka seluruh blok tanpa koreksi; acuan tidak dirinci di ambang). Nasional: cakupan "belum bisa diputuskan".
+- Catatan: 6 dari 57 sel-bulan wilayah di U1 jatuh di Nov–Des 2025 (lubang akhir mundur ke blok kalibrasi); uji
+  kepekaan hanya 2026 memberi status gerbang yang sama (`binpas/peka_u1.py`). Rentang cenderung terlalu lebar.
+- Belum: skor tingkat perusahaan, triwulanan, CRPS ton, U2 (keterwakilan, Poldis 2025), U3 (model gabungan), komoditas
+  lain. Hasil U1 belum dilaporkan ke Bu Fitria (per akhir sesi 7).
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
@@ -213,11 +223,9 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–8), lalu binpas/RANCANGAN_INATRADE.md
+Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–10), lalu binpas/RANCANGAN_INATRADE.md
 (bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
-Baca juga bagian 9 dan binpas/HASIL_ADU_BERAS.md (penyetelan penuh sudah selesai; resep dan gerbang ada di sana).
-Tugas sekarang: siapkan lingkungan (pip install catboost quantile-forest statsmodels; ambil data BPS dengan
-beras_stok/ambil_bps.py), salin binpas/hasil_adu_beras/* ke folder keluaran dan pulihkan tahap4_penuh.pkl.xz.
-TANYA DULU sebelum kalibrasi dan ujian akhir (U1 hanya sekali jalan). Jangan menjalankan hal lain tanpa diminta.
+Baca juga bagian 9–10 dan binpas/HASIL_ADU_BERAS.md (penyetelan, kalibrasi, dan U1 beras sudah selesai; U1 tidak
+boleh dijalankan lagi). Jangan menjalankan apa pun tanpa diminta; tanya dulu tugas berikutnya.
 ```

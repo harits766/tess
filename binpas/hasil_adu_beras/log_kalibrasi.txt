@@ -1,0 +1,9 @@
+== kalibrasi 2026-11-12 13:09:36 | perusahaan 90, besar 14, wilayah [32, 43, 15] | pola hapus: h=[0.079 0.073], p_ekor=[0.201 0.09 ] | proses 4
+== KALIBRASI: bias dan pelebar Q per tingkat/jenis lubang
+             bias      n     Q50     Q80     Q90     Q95
+prov/tengah   0.0   34.0  0.0008  0.0084  0.0464  0.5248
+prov/akhir    0.0   55.0  0.0008  0.0053  0.0210  0.1220
+wil/tengah    0.0   39.0  0.0006  0.0046  0.0109  0.0300
+wil/akhir     0.0   24.0  0.0010  0.0066  0.0276  0.1593
+nas/tengah    0.0  141.0  0.0005  0.0046  0.0096  0.0226
+nas/akhir     0.0  141.0  0.0005  0.0046  0.0096  0.0226
