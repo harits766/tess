@@ -2,6 +2,8 @@
 
 Disusun di sesi 5 (10 Nov 2026) lewat diskusi dengan pengguna. **Belum ada yang dijalankan.**
 Ambang lolos ujian ada di `ambang_ujian.md` (DIKUNCI 11 Nov 2026, disetujui Bu Fitria).
+Spesifikasi teknis tambahan yang dikunci sebelum ujian ada di **bagian 7** (sesi 6, 12 Nov 2026); bila bertentangan
+dengan bagian 3–5, bagian 7 yang berlaku.
 
 ## 1. Keputusan arah
 - **Fokus kajian: distribusi.** Alasannya: data milik Binpas sendiri (INATRADE), sesuai mandat, langsung jadi produk
@@ -133,7 +135,105 @@ Tidak diklaim: ton per koridor provinsi–provinsi per bulan, ton stok per provi
 Yang menaikkan batas atas hanya data: perluasan wajib lapor INATRADE, lokasi gudang, SSBAT, stok BULOG per kanwil,
 survei kecil acak distributor (100–300, lewat Dinas, tahunan).
 
-## 6. Rujukan (ditulis dari ingatan, BELUM dicek ulang volume/halaman)
+## 7. Spesifikasi tambahan, DIKUNCI sebelum ujian (sesi 6, 12 Nov 2026)
+Disepakati dengan pengguna lewat diskusi; belum ada yang dijalankan saat bagian ini di-commit. Butir yang ditandai
+"sesudah Tahap 0" diputuskan memakai profil data saja (bukan kinerja metode), sebelum ujian pertama.
+
+### 7.1 Tahap 0 (tambahan)
+- Unduh ulang INATRADE terbaru sebelum mulai (laporan telat mengurangi lubang); catat tanggal unduhan dan hash file.
+- Konsentrasi per komoditas × pulau: pangsa 5 terbesar, Herfindahl.
+- Cakupan volume per komoditas × pulau × bulan: pengadaan pelapor ÷ (produksi + impor BPS), penyaluran pelapor ÷
+  konsumsi BPS; BULOG dipisah. (Angka "0,03%" = jumlah usaha KBLI 46 semua barang yang melapor, bukan volume.)
+- Validasi Harga Jual INATRADE: satuan, pisah kualitas (label subkomoditas), korelasi perubahan bulanan dengan PIHPS
+  di provinsi yang sama.
+
+### 7.2 Keputusan sesudah Tahap 0 (aturan ditetapkan sekarang)
+- Sel hampir lengkap: ≥ 90% pelapor aktif melapor. Bila di blok penyetelan tingkat pulau ada < 30 sel-bulan per
+  komoditas, ambang diturunkan ke 85% (sekali, untuk semua versi).
+- Strata wajib-hitung: dipakai bila pangsa 5 terbesar ≥ 50% di mayoritas pulau untuk komoditas itu. Isinya:
+  perusahaan yang kumulatif membentuk ±80% volume per komoditas × pulau (ditetapkan dari blok penyetelan), tanpa
+  bobot pelapor, isian dari riwayat sendiri (R2/R3 tanpa tarikan ke kelompok).
+- Urutan komoditas diuji: menurut cakupan volume dan jumlah sel hampir lengkap (beras tetap pertama).
+- Varian rantai harga (harga distributor) di M3: hanya bila validasi Harga Jual lolos (satuan wajar dan korelasi
+  perubahan bulanan dengan PIHPS ≥ 0,5); diputuskan sebelum U3.
+
+### 7.3 Target dan skor
+- Target UTAMA: indeks penyaluran/arus, tingkat pulau-bulanan. Provinsi dan stok = sekunder/eksploratif (tangga klaim
+  tetap berlaku untuk pelaporan).
+- CRPS dihitung dalam **skala log** (galat relatif), bobot sama per sel-bulan (tiap ulangan berbobot 1/R);
+  CRPS dalam ton dilaporkan sebagai pendamping. CRPS dari kuantil = 2 × rata-rata pinball loss.
+  (Definisi teknis pelengkap ambang; perlu diberitahukan ke Bu Fitria.)
+- Selain per komoditas, keputusan "metode bekerja" boleh memakai skor gabungan antarkomoditas bila sel per komoditas
+  kurang; hasil per komoditas tetap dilaporkan.
+- Bobot presisi tidak dipakai untuk menjumlah ton (lihat bagian 4).
+
+### 7.4 Blok penyetelan (cara adu versi)
+- Pola hapus dibuat dari profil kehadiran blok penyetelan saja (peluang mulai lubang dan sebaran panjang lubang per
+  ukuran × PAW/Non PAW × bulan).
+- Dua jenis lubang buatan: tengah (laporan sesudah lubang terlihat) dan akhir (data dipotong di bulan t).
+- Setiap ulangan: semua versi + pembanding menerima data yang sama tanpa nilai yang dihapus; model dilatih ulang
+  hanya dari data tersisa.
+- Penyaringan per tahap: semua pilihan × 50 ulangan → 10 teratas × 200 → 5 teratas × 500; tahap dengan ≤ 5 pilihan
+  langsung 500.
+- "Selisih tipis" = rentang 90% bootstrap per blok bulan dari selisih CRPS mencakup 0 → pilih versi lebih sederhana.
+- Penggabung (bobot CRPS, juri RF): bobot dipelajari out-of-fold per blok bulan.
+- Konformal mini untuk memilih koreksi di tahap 5: Q dan bias dari Jan–Des 2024, dinilai di Jan–Jun 2025.
+- R6 CatBoost, 3 set dikunci: (kedalaman 4, laju 0,05, 500 pohon), (6; 0,05; 1.000), (8; 0,03; 1.500); keluaran
+  MultiQuantile; fitur lubang akhir tidak memakai laporan sesudah lubang.
+- Seed acak dan versi pustaka dicatat.
+
+### 7.5 Pemenang, kalibrasi, dan ujian akhir
+- Yang dikunci adalah RESEP (identitas, isian, tambahan, bobot, ragam, rekonsiliasi, penggabung, jenis koreksi);
+  parameter diestimasi ulang tiap bulan dengan data sampai bulan itu (nilai yang dihapus tetap tidak terlihat).
+- Konformal resmi: skor s = max(log q_lo − log y, log y − log q_hi); n = jumlah sel-bulan; Q = kuantil
+  ⌈(n+1)·tingkat⌉/n; rentang [q_lo·e^(−Q), q_hi·e^(Q)]; dihitung per tingkat (provinsi/pulau/nasional) × jenis lubang
+  (tengah/akhir), kelompok < 20 sel-bulan memakai Q kelompok induk; di 4 tingkat rentang (50/80/90/95%), kuantil yang
+  tumpang-tindih diurutkan ulang.
+- Koreksi bias = median(log ŷ − log y), diterapkan sebelum skor konformal. Penghalusan = rata-rata bergerak 3 bulan
+  pada lebar rentang (log), titik tengah tidak diubah.
+- Awal Q dan bias dari blok kalibrasi Jul–Des 2025; selama U1 diperbarui bergulir tiap bulan (adaptive conformal,
+  Gibbs & Candès 2021) dengan aturan tetap: γ = 0,005, memakai sel-bulan yang sudah selesai dinilai.
+- Sel U1/U2/U3 dijalankan sekali; waktu jalan dan hasil dicatat.
+
+### 7.6 Model gabungan (M3)
+- Konvergensi: r-hat ≤ 1,01, ESS ≥ 400, tanpa divergensi (model beras sekarang r-hat 1,06 -> diperbaiki).
+- Selisih harga antarprovinsi TIDAK diberi likelihood terpisah (data eceran terhitung dua kali); pengaruh arus masuk
+  ke persamaan harga level: − θ_masuk·(arus masuk di atas biasa) + θ_keluar·(arus keluar di atas biasa); τ dari MPP
+  Poldis sebagai prior untuk (α_b − α_a).
+- Harga distributor (Harga Jual INATRADE) tidak masuk likelihood utama (tingkat berbeda, kualitas belum tervalidasi);
+  dipakai untuk margin = log PIHPS eceran − log Harga Jual (sinyal; > persentil 95 = "perlu dicek").
+- Prior (lemah): log F̄[a,b] ~ N(log gravitasi-naif, 1,5) (F_naif ∝ surplus_a × defisit_b ÷ jarak); σ_ω ~ HN(0,2);
+  musim ~ N(κ·musim panen asal, σ_m), κ ~ N(1; 0,3), σ_m ~ HN(0,1); η: ρ ~ Beta(4,2), σ_η ~ HN(0,2);
+  α hierarki prov→pulau→nas, α_nas ~ N(log median harga; 0,3), τ ~ HN(0,1); γ jalan acak σ_γ ~ HN(0,02);
+  β_nas ~ N(−0,1; 0,1), β_pulau ~ N(β_nas, 0,05); δ ~ N(0; 0,1) (SPHP distandarkan); u: ρ_u ~ Beta(5,2),
+  σ_u ~ HN(0,03); θ ~ HN(0,5); bias SP2KP ~ N(0; 0,05), PIHPS jangkar; σ_obs ~ HN(0,02); bulan persediaan
+  c ~ N(0,1), λ ~ N(1; 0,3), σ_c ~ HN(0,3); INATRADE arus σ_I ~ HN(0,5); BPS arus jangkar tanpa bias,
+  σ_BPS ~ HN(0,3). Prior model beras yang ada dipertahankan.
+- Prior predictive wajar bila: stok nasional 95% di ±3–40 juta ton; harga 0,5–2× teramati; arus koridor ≤ produksi;
+  stok +10% → harga 0 s.d. −3%.
+- Komponen Bayesian lain (untuk pemenang): R3/R7 penuh, 20 isian = tarikan posterior predictive; I2 = campuran
+  tepat/wajar/ekstrem, logit v ~ N(μ_v, τ_v), μ_v ~ N(logit 0,02; 1), τ_v ~ HN(0,5), σ_ε ~ HN(0,1),
+  σ_besar ~ HN(1), π ~ Dirichlet(1,1,1).
+- Harga: target beras medium eceran per provinsi (median bulanan dari harian); prakiraan h = 1, 2 dengan simulasi
+  maju dari posterior (produksi = angka potensi KSA, impor rata-rata/rencana, SPHP rencana atau 0).
+- Peluang lonjakan = P(harga t+h naik > 5%) dan P(harga t+h > HET). Status ketat bila P(bulan persediaan <
+  persentil 25 historis provinsi) ≥ 60%, longgar bila P(> persentil 75) ≥ 60%, selain itu normal.
+- U3 simulasi waktu nyata: titik awal bergulir Des 2025–Agu 2026, hanya data sampai titik awal, laporan INATRADE
+  bulan titik awal dibuat tak lengkap meniru keterlambatan (pola lubang akhir); CRPS log harga. Pembanding tambahan
+  (dilaporkan, bukan gerbang): harga bulan lalu, musiman naif. Gagal U3 -> model tanpa INATRADE; INATRADE cukup
+  jadi kartu tercatat.
+
+### 7.7 Keluaran, jejak, dan revisi
+- Setiap angka keluaran menyimpan: komposisi asli/isian/bobot, metode isian, status sementara/final, Q konformal,
+  versi data (tanggal unduh, hash), commit kode, seed. Tabel internal kontribusi per perusahaan (volume, ragam);
+  publik: kelompok < 3 perusahaan digabung.
+- Label rekomendasi: "sinyal untuk prioritas pemantauan, bukan ukuran dampak kebijakan"; tidak ada klaim sebab-akibat
+  SPHP, dosis, atau tindakan ke perusahaan berdasar angka isian.
+- Revisi sesudah hasil keluar: hasil versi 1 tetap dilaporkan; versi 2 di-commit sebelum data barunya dilihat dan diuji
+  di bulan-bulan baru (atau komoditas yang hasil ujiannya belum dilihat, bukti lebih lemah); ambang tidak ikut diubah;
+  maksimal 2 revisi per tahun; perbaikan bug objektif boleh dijalankan ulang dengan hasil sebelum/sesudah dilaporkan.
+
+## 6. Rujukan (sebagian dicek ulang di sesi 6; sisanya dari ingatan)
 - Bias seleksi: Meng (2018) AoAS 12(2); Elliott & Valliant (2017) Stat Sci 32(2); Chen, Li & Wu (2020) JASA 115(532);
   Kim, Park, Chen & Wu (2021) JRSS A 184(3).
 - Shrinkage/SAE: Fay & Herriot (1979) JASA 74(366); Efron & Morris (1975) JASA 70(350); Rao & Molina (2015).

@@ -113,6 +113,11 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 - Perkiraan hasil (tebakan, belum diuji): isian pulau/nasional lumayan mungkin lolos; provinsi kemungkinan
   "belum bisa diputuskan"; keterwakilan (Poldis 2025) dan model gabungan kemungkinan belum lolos.
 - Pengguna: **jangan jalankan apa pun dulu** sampai diminta.
+- 12 Nov 2026: semua usulan teknis sesi 6 DIKUNCI di `binpas/RANCANGAN_INATRADE.md` bagian 7 (Tahap 0 tambahan:
+  cakupan volume, konsentrasi, validasi Harga Jual; target utama arus pulau-bulanan; CRPS skala log; cara adu versi;
+  resep dikunci + parameter diperbarui bulanan; konformal adaptif; prior M3; definisi lonjakan/status; U3 waktu nyata;
+  jejak keluaran; aturan revisi). **Perlu diberitahukan ke Bu Fitria: CRPS dihitung dalam skala log (persen).**
+- Kode untuk Tahap 0, adu versi, dan ujian BELUM ADA; notebook Colab yang ada hanya model stok beras lama.
 
 ## Langkah berikut yang masih terbuka
 0. **Pertama:** Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
