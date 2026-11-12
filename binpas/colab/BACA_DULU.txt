@@ -1,0 +1,30 @@
+Paket Colab: penguatan data INATRADE (Dit. Binpas) - disusun 12 Nov 2026
+
+CARA PAKAI
+1. Unggah seluruh folder "inatrade_colab" ke Google Drive: MyDrive/inatrade_colab
+   (bila di tempat lain, ubah BASE di sel pertama tiap notebook).
+2. Buka notebook di Google Colab:
+   03_tahap0.ipynb            profil data (kurang dari 1 menit)
+   04_adu_versi_beras.ipynb   coba -> penyetelan (1-3 jam) -> kalibrasi -> ujian akhir U1 (sekali jalan)
+3. Model stok beras lama ada di folder beras_colab (01_gabung_data.ipynb, 02_model_stok_beras.ipynb;
+   unggah folder itu ke MyDrive/beras_colab; lihat BACA_DULU.txt di dalamnya).
+
+ISI FOLDER
+  binpas/        kode (tahap0.py, adu_metode.py, adu_versi.py) + rancangan, ambang yang dikunci, hasil Tahap 0
+  beras_stok/    kode model stok beras + util.py, ambil_bps.py, jangkar_publik.csv (dipakai Tahap 0)
+  data/inatrade/ Non_PAW_dari_nol.xlsm (INTERNAL)
+  data/bps/      tabel BPS siap pakai (produksi, konsumsi, harga penggilingan)
+  data/bps_cache/ respons WebAPI BPS apa adanya
+  hasil_tahap0/  keluaran Tahap 0 dari sesi 12 Nov 2026 (laporan.csv dan perusahaan.csv = data per perusahaan, INTERNAL)
+  beras_colab/   paket model stok beras (notebook + data_raw)
+
+STATUS SAAT PAKET DIBUAT
+  - Tahap 0 sudah dijalankan (binpas/HASIL_TAHAP0.md).
+  - Kode adu versi baru diuji dengan sedikit ulangan di blok penyetelan (uji kode). Penyetelan penuh, kalibrasi, dan
+    ujian akhir BELUM pernah dijalankan.
+  - Ambang lolos sudah dikunci (binpas/ambang_ujian.md). Jangan diubah.
+
+ATURAN
+  - Ujian akhir U1 hanya sekali jalan. Jangan ubah kode/resep/ambang setelah melihat hasil kalibrasi atau ujian.
+  - Data INATRADE internal: jangan bagikan folder ini di luar tim.
+  - Kunci API BPS (bila ingin ambil ulang data) disimpan di Colab Secrets, jangan ditulis di notebook.

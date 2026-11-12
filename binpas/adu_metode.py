@@ -4,12 +4,15 @@ Semua metode mengembalikan tarikan (jumlah sasaran x S) dalam satuan asli (ton) 
 Dipakai oleh adu_versi.py; tidak dijalankan sendiri.
 """
 import os
+import re
 import warnings
 
 import numpy as np
 import pandas as pd
 
 import tahap0 as T0
+
+warnings.filterwarnings('ignore', category=RuntimeWarning)
 
 S_TARIK = 200
 KUANTIL = np.array([0.025, 0.05] + [round(0.1 + 0.05 * i, 2) for i in range(17)] + [0.95, 0.975])
@@ -368,6 +371,8 @@ def isi_reg(metode, D, Yv, ti, tt, rng, add):
 
 
 # ---------------------------------------------------------------- pohon: R5 QRF, R6 CatBoost
+# dilatih pada 7 kuantil lalu diinterpolasi ke 21 kuantil (21 kuantil langsung 17x lebih lambat)
+CB_ALPHA = [0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975]
 CB_SET = {'R6a': (4, 0.05, 500), 'R6b': (6, 0.05, 1000), 'R6c': (8, 0.03, 1500)}
 
 
@@ -435,10 +440,15 @@ def _model(metode, X, y, seed):
         return lambda Z: m.predict(Z, quantiles=list(KUANTIL))
     from catboost import CatBoostRegressor
     d, lr, it = CB_SET[metode]
-    m = CatBoostRegressor(loss_function='MultiQuantile:alpha=' + ','.join(str(q) for q in KUANTIL), depth=d,
-                          learning_rate=lr, iterations=it, verbose=0, thread_count=1, random_seed=seed)
+    m = CatBoostRegressor(loss_function='MultiQuantile:alpha=' + ','.join(str(q) for q in CB_ALPHA), depth=d,
+                          learning_rate=lr, iterations=it, border_count=32, verbose=0, thread_count=1, random_seed=seed,
+                          allow_writing_files=False)
     m.fit(X, y)
-    return lambda Z: m.predict(Z)
+
+    def pred(Z):
+        q7 = np.sort(m.predict(Z), axis=1)
+        return np.stack([np.interp(KUANTIL, CB_ALPHA, r) for r in q7])
+    return pred
 
 
 def isi_pohon(metode, D, P, Yv, tmax, ti, tt, rng, add, hanya_akhir):
@@ -480,11 +490,13 @@ def isi_mrp(D, Yv, ti, tt, rng, add):
             warnings.simplefilter('ignore')
             vc = {k: f'0 + C({k})' for k in ('wu', 'paw', 't', 'wt')}
             r = smf.mixedlm('y ~ 1', df, groups='satu', vc_formula=vc).fit(reml=True, method='lbfgs', maxiter=60)
+        if not r.converged:
+            raise RuntimeError('REML tidak konvergen')
         mu0, sd = float(r.fe_params.iloc[0]), float(np.sqrt(r.scale))
-        for nama, v in r.random_effects[1].items():
-            k, lv = nama.split('[')[0], nama.split('[')[1].rstrip(']')
-            k = k.replace('C(', '').replace(')', '')
-            fx[k][int(float(lv.split('.')[-1] if '.' in lv and not lv.replace('.', '').isdigit() else lv))] = float(v)
+        for nm, v in r.random_effects[1].items():
+            mt = re.match(r'^(\w+)\[C\(\w+\)\[(-?\d+)\]\]$', nm)
+            if mt:
+                fx[mt.group(1)][int(mt.group(2))] = float(v)
     except Exception:  # cadangan: penarikan empiris berurutan
         res = df.y - mu0
         for k in ('wu', 'paw', 't', 'wt'):

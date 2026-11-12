@@ -19,6 +19,8 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
+import warnings
+warnings.filterwarnings('ignore')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import adu_metode as AM  # noqa: E402
 
@@ -34,6 +36,8 @@ TINGKAT = ['prov', 'wil', 'nas']
 UTAMA = 'wil'
 MIN_POP = 3
 PEMBANDING = ['A', 'A3', 'A5']
+GAMMA = 0.005
+PROSES = max(1, min(4, os.cpu_count() or 1))
 D = P = None
 
 
@@ -249,7 +253,8 @@ def ulangan(arg):
 KOL = ['cfg', 'rep', 'soal', 'jenis', 'tingkat', 'w', 't', 'benar', 'nhapus'] + QC
 
 
-def jalankan(configs, blok, seeds, proses=4):
+def jalankan(configs, blok, seeds, proses=None):
+    proses = proses or PROSES
     args = [(s, blok, configs) for s in seeds]
     if proses > 1 and len(args) > 1:
         with Pool(proses) as pool:
@@ -425,7 +430,7 @@ def _kuantil_bobot(x, w, p):
     return x[o][min(np.searchsorted(c, p), len(x) - 1)]
 
 
-def param_koreksi(cal, bias=True):
+def param_koreksi(cal, bias=True, alpha=None):
     """Bias (median galat) dan pelebar Q per (tingkat, jenis) di 4 tingkat rentang; n = jumlah sel-bulan."""
     out = {}
     cal = cal.copy()
@@ -444,7 +449,8 @@ def param_koreksi(cal, bias=True):
         Q = {}
         for lv, (lo, hi) in PASANG.items():
             s = np.maximum(q[:, lo] - y, y - q[:, hi])
-            Q[lv] = _kuantil_bobot(s, g.bw.values, min(math.ceil((n + 1) * lv) / n, 1.0))
+            lv_pakai = 1 - alpha[(tk, jn, lv)] if alpha else lv
+            Q[lv] = _kuantil_bobot(s, g.bw.values, float(np.clip(math.ceil((n + 1) * lv_pakai) / n, 0.0, 1.0)))
         out[(tk, jn)] = dict(b=float(b), Q=Q, n=int(n))
     return out
 
@@ -541,87 +547,120 @@ TAMBAHAN = ['kalender', 'ragamkel', 'tdist', 'pola', 'ciri', 'luar']
 
 
 def penyetelan(out, skala, catat, metode=M_URUT):
+    """Tahap 1a-5 di blok penyetelan. Tiap tahap yang selesai dicatat di status.json, sehingga bila sesi terputus
+    cukup dijalankan ulang: tahap yang sudah selesai dilewati."""
     blok = 'penyetelan'
-    simpan = lambda df, nm: df.drop(columns=QC).to_csv(os.path.join(out, nm + '.csv'), index=False)
-    resep = {}
+    fs = os.path.join(out, 'status.json')
+    st = json.load(open(fs)) if os.path.exists(fs) else {}
+    if st and st.get('skala') != list(skala):
+        sys.exit('status.json berasal dari skala ulangan lain; pakai folder keluaran baru.')
+    st['skala'] = list(skala)
+
+    def simpan(df, nm):
+        df.drop(columns=QC).to_csv(os.path.join(out, nm + '.csv'), index=False)
+
+    def selesai(**kw):
+        st.update(kw)
+        json.dump(st, open(fs, 'w'), indent=1)
+
     # 1a identitas (metode baku R2, semua lubang diisi)
-    K = [cfg(ident=i) for i in ('I0', 'I1', 'I2')]
-    df = saring(K, blok, skala, catat, '1a identitas')
-    p, pr = pilih(lengkap(df, [nama(k) for k in K]), [nama(k) for k in K], {nama(k): j for j, k in enumerate(K)})
-    ident = p.split('|')[0]
-    catat(pr.round(4).to_string()); catat(f'-> identitas: {ident}')
-    simpan(df, 'tahap1a')
-    pstar = peringkat(df[df.cfg.isin(PEMBANDING)]).index[0]
-    catat(f'-> pembanding P* = {pstar}')
+    if 'ident' not in st:
+        K = [cfg(ident=i) for i in ('I0', 'I1', 'I2')]
+        df = saring(K, blok, skala, catat, '1a identitas')
+        p, pr = pilih(lengkap(df, [nama(k) for k in K]), [nama(k) for k in K], {nama(k): j for j, k in enumerate(K)})
+        catat(pr.round(4).to_string())
+        simpan(df, 'tahap1a')
+        selesai(ident=p.split('|')[0], pstar=peringkat(df[df.cfg.isin(PEMBANDING)]).index[0])
+    ident, pstar = st['ident'], st['pstar']
+    catat(f'-> identitas: {ident}; pembanding P* = {pstar}')
     # 1b isian x batas lubang
-    K = [cfg(ident=ident, metode=m, batas=b) for m in metode for b in (2, 3, 6, 99)]
-    sd = {nama(k): M_URUT.index(k[1]) * 10 + {99: 0, 6: 1, 3: 2, 2: 3}[k[2]] for k in K}
-    df1b = saring(K, blok, skala, catat, '1b isian')
-    pr_all = peringkat(df1b[df1b.rep < skala[0]])
-    catat(pr_all.round(4).to_string())
-    penuh = [k for k in sd if df1b[df1b.cfg == k].rep.nunique() == df1b.rep.nunique()]
-    p, pr = pilih(lengkap(df1b, penuh), penuh, sd)
-    win = next(k for k in K if nama(k) == p)
-    catat(f'-> isian: {p}')
-    simpan(df1b, 'tahap1b')
-    juara = {}
-    for k in pr_all.index:
-        if k in sd:
-            juara.setdefault(KELUARGA[k.split('|')[1]], k)
+    semua1b = [cfg(ident=ident, metode=m, batas=b) for m in M_URUT for b in (2, 3, 6, 99)]
+    if 'isian' not in st:
+        K = [k for k in semua1b if k[1] in metode]
+        sd = {nama(k): M_URUT.index(k[1]) * 10 + {99: 0, 6: 1, 3: 2, 2: 3}[k[2]] for k in K}
+        df1b = saring(K, blok, skala, catat, '1b isian')
+        pr_all = peringkat(df1b[df1b.rep < skala[0]])
+        catat(pr_all.round(4).to_string())
+        penuh = [k for k in sd if df1b[df1b.cfg == k].rep.nunique() == df1b.rep.nunique()]
+        p, pr = pilih(lengkap(df1b, penuh), penuh, sd)
+        simpan(df1b, 'tahap1b')
+        juara = {}
+        for k in pr_all.index:
+            if k in sd:
+                juara.setdefault(KELUARGA[k.split('|')[1]], k)
+        selesai(isian=p, juara=juara)
+    win = next(k for k in semua1b if nama(k) == st['isian'])
+    juara = st['juara']
+    catat(f'-> isian: {st["isian"]}; juara keluarga: {juara}')
     # 1c tambahan
     dasar = dict(ident=ident, metode=win[1], batas=win[2])
-    K = [cfg(**dasar)] + [cfg(add=(a,), **dasar) for a in TAMBAHAN]
-    df = saring(K, blok, (skala[0], skala[0], skala[0]) if len(K) > 5 else skala, catat, '1c tambahan (satu per satu)')
-    pr = peringkat(df).drop(PEMBANDING, errors='ignore')
-    baik = [k.split('|')[3] for k in pr.index if pr[k] < pr[nama(K[0])] and k != nama(K[0])]
-    K2 = K + ([cfg(add=tuple(baik), **dasar)] if len(baik) >= 2 else [])
-    df = saring(K2, blok, skala, catat, '1c tambahan')
-    sd = {nama(k): (0 if not k[3] else 1 if len(k[3]) == 1 else 2) for k in K2}
-    penuh = [k for k in sd if df[df.cfg == k].rep.nunique() == df.rep.nunique()]
-    p, pr = pilih(lengkap(df, penuh), penuh, sd)
-    add = next(k for k in K2 if nama(k) == p)[3]
-    catat(peringkat(df).round(4).to_string()); catat(f'-> tambahan: {add or "tanpa"}')
-    simpan(df, 'tahap1c')
+    if 'add' not in st:
+        K = [cfg(**dasar)] + [cfg(add=(a,), **dasar) for a in TAMBAHAN]
+        df = saring(K, blok, (skala[0], skala[0], skala[0]), catat, '1c tambahan (satu per satu)')
+        pr = peringkat(df).drop(PEMBANDING, errors='ignore')
+        baik = [k.split('|')[3] for k in pr.index if pr[k] < pr[nama(K[0])] and k != nama(K[0])]
+        K2 = K + ([cfg(add=tuple(baik), **dasar)] if len(baik) >= 2 else [])
+        df = saring(K2, blok, skala, catat, '1c tambahan')
+        sd = {nama(k): (0 if not k[3] else 1 if len(k[3]) == 1 else 2) for k in K2}
+        penuh = [k for k in sd if df[df.cfg == k].rep.nunique() == df.rep.nunique()]
+        p, pr = pilih(lengkap(df, penuh), penuh, sd)
+        catat(peringkat(df).round(4).to_string())
+        simpan(df, 'tahap1c')
+        selesai(add=list(next(k for k in K2 if nama(k) == p)[3]))
+    add = tuple(st['add'])
+    catat(f'-> tambahan: {add or "tanpa"}')
     dasar['add'] = add
     # 2 bobot x ragam
-    K = [cfg(bobot=b, ragam=r, **dasar) for b in (None, 3, 5) for r in ('titik', 0.5, 1.0, 2.0)]
-    sd = {nama(k): {None: 0, 3: 1, 5: 2}[k[4]] * 10 + {1.0: 0, 'titik': 1, 0.5: 2, 2.0: 2}[k[5]] for k in K}
-    df = saring(K, blok, skala, catat, '2 bobot x ragam')
-    penuh = [k for k in sd if df[df.cfg == k].rep.nunique() == df.rep.nunique()]
-    p, pr = pilih(lengkap(df, penuh), penuh, sd)
-    w2 = next(k for k in K if nama(k) == p)
-    catat(peringkat(df[df.rep < skala[0]]).round(4).to_string()); catat(f'-> bobot {w2[4]}, ragam {w2[5]}')
-    simpan(df, 'tahap2')
-    dasar.update(bobot=w2[4], ragam=w2[5])
+    if 'bobot' not in st:
+        K = [cfg(bobot=b, ragam=r, **dasar) for b in (None, 3, 5) for r in ('titik', 0.5, 1.0, 2.0)]
+        sd = {nama(k): {None: 0, 3: 1, 5: 2}[k[4]] * 10 + {1.0: 0, 'titik': 1, 0.5: 2, 2.0: 2}[k[5]] for k in K}
+        df = saring(K, blok, skala, catat, '2 bobot x ragam')
+        penuh = [k for k in sd if df[df.cfg == k].rep.nunique() == df.rep.nunique()]
+        p, pr = pilih(lengkap(df, penuh), penuh, sd)
+        w2 = next(k for k in K if nama(k) == p)
+        catat(peringkat(df[df.rep < skala[0]]).round(4).to_string())
+        simpan(df, 'tahap2')
+        selesai(bobot=w2[4], ragam=w2[5])
+    catat(f'-> bobot {st["bobot"]}, ragam {st["ragam"]}')
+    dasar.update(bobot=st['bobot'], ragam=st['ragam'])
     # 3 rekonsiliasi
-    K = [cfg(rekon=r, **dasar) for r in (0, 1)]
-    df = saring(K, blok, skala, catat, '3 rekonsiliasi')
-    p, pr = pilih(df, [nama(k) for k in K], {nama(k): k[6] for k in K}, tingkat='nas')
-    rekon = next(k for k in K if nama(k) == p)[6]
-    catat(peringkat(df, 'nas').round(4).to_string()); catat(f'-> rekonsiliasi: {"dengan" if rekon else "tanpa"}')
-    simpan(df, 'tahap3')
+    if 'rekon' not in st:
+        K = [cfg(rekon=r, **dasar) for r in (0, 1)]
+        df = saring(K, blok, skala, catat, '3 rekonsiliasi')
+        p, pr = pilih(df, [nama(k) for k in K], {nama(k): k[6] for k in K}, tingkat='nas')
+        catat(peringkat(df, 'nas').round(4).to_string())
+        simpan(df, 'tahap3')
+        selesai(rekon=next(k for k in K if nama(k) == p)[6])
+    rekon = st['rekon']
+    catat(f'-> rekonsiliasi: {"dengan" if rekon else "tanpa"}')
     dasar['rekon'] = rekon
     tunggal = cfg(**dasar)
     # 4 penggabung: juara tiap keluarga dengan pengaturan pemenang
     angg = [tunggal]
     for fam, k in juara.items():
-        kk = next(c for c in [cfg(ident=ident, metode=m, batas=b) for m in M_URUT for b in (2, 3, 6, 99)] if nama(c) == k)
+        kk = next(c for c in semua1b if nama(c) == k)
         c2 = cfg(ident=ident, metode=kk[1], batas=kk[2], add=add, bobot=dasar['bobot'], ragam=dasar['ragam'], rekon=rekon)
         if KELUARGA[kk[1]] != KELUARGA[tunggal[1]] and c2 not in angg:
             angg.append(c2)
-    df = jalankan(angg, blok, range(skala[2]))
-    df = tambah_skor(df)
     an = [nama(a) for a in angg]
-    tabel = [df]
-    if len(an) >= 2:
-        for cara in ('rata', 'pool', 'crps', 'juri'):
-            tabel.append(gabung(df, an, cara))
-    df4 = pd.concat(tabel)
-    kand = [nama(tunggal)] + [f'G:{c}' for c in ('rata', 'pool', 'crps', 'juri') if len(an) >= 2]
-    sd = {k: j for j, k in enumerate(kand)}
-    p, pr = pilih(lengkap(df4, kand) if len(kand) > 1 else df4, kand, sd)
-    catat(f'anggota: {an}'); catat(peringkat(df4).round(4).to_string()); catat(f'-> penggabung: {p}')
-    simpan(df4, 'tahap4')
+    f4 = os.path.join(out, 'tahap4_penuh.pkl')
+    if 'penggabung' not in st:
+        t0 = time.time()
+        df = tambah_skor(jalankan(angg, blok, range(skala[2])))
+        tabel = [df]
+        if len(an) >= 2:
+            for cara in ('rata', 'pool', 'crps', 'juri'):
+                tabel.append(gabung(df, an, cara))
+        df4 = pd.concat(tabel)
+        kand = [nama(tunggal)] + [f'G:{c}' for c in ('rata', 'pool', 'crps', 'juri') if len(an) >= 2]
+        p, pr = pilih(lengkap(df4, kand) if len(kand) > 1 else df4, kand, {k: j for j, k in enumerate(kand)})
+        catat(f'[4 penggabung] anggota: {an}, {time.time() - t0:.0f} detik')
+        catat(peringkat(df4).round(4).to_string())
+        simpan(df4, 'tahap4')
+        df4.to_pickle(f4)
+        selesai(penggabung=p)
+    df4, p = pd.read_pickle(f4), st['penggabung']
+    catat(f'-> penggabung: {p}')
     # 5 koreksi akhir (konformal mini: setel Jan-Des 2024, nilai Jan-Jun 2025)
     x = df4[df4.cfg == p]
     cal, ev = x[x.t <= 11], x[x.t >= 12]
@@ -633,7 +672,8 @@ def penyetelan(out, skala, catat, metode=M_URUT):
     kand5 = list(opsi)
     p5, pr = pilih(df5, kand5, {k: j for j, k in enumerate(kand5)})
     cov = per_unit(df5[df5.tingkat == UTAMA], 'cakup90').groupby('cfg').cakup90.mean()
-    catat(pd.concat([peringkat(df5).rename('crps'), cov], axis=1).round(4).to_string()); catat(f'-> koreksi: {p5}')
+    catat(pd.concat([peringkat(df5).rename('crps'), cov.rename('cakupan90')], axis=1).round(4).to_string())
+    catat(f'-> koreksi: {p5}')
     simpan(df5, 'tahap5')
     resep = dict(ident=ident, metode=tunggal[1], batas=tunggal[2], add=list(add), bobot=dasar['bobot'], ragam=dasar['ragam'],
                  rekon=rekon, anggota=[list(a) for a in angg], penggabung=p, koreksi=p5, pstar=pstar,
@@ -643,8 +683,8 @@ def penyetelan(out, skala, catat, metode=M_URUT):
     akhir = df5 if p5 != 'tanpa' else df4.assign(cfg=df4.cfg.replace({p: 'tanpa'}))
     G = [dict(gerbang(akhir, p5, pstar, tk), arah=arah(akhir, p5, tk)) for tk in TINGKAT]
     pd.DataFrame(G).to_csv(os.path.join(out, 'gerbang_penyetelan.csv'), index=False)
+    catat('== GERBANG di blok penyetelan (prov / wil / nas)')
     catat(pd.DataFrame(G).T.to_string())
-    df4.to_pickle(os.path.join(out, 'tahap4_penuh.pkl'))
     return resep
 
 
@@ -659,10 +699,55 @@ def jalankan_resep(resep, blok, n, latih):
     return df, p
 
 
-def main():
+def kalibrasi(out, catat, blok='kalibrasi', n=500, berkas='kalibrasi.pkl'):
+    resep = json.load(open(os.path.join(out, 'resep.json')))
+    latih = pd.read_pickle(os.path.join(out, 'tahap4_penuh.pkl'))
+    df, p = jalankan_resep(resep, blok, n, latih)
+    par = param_koreksi(df[df.cfg == p], bias='bias' in resep['koreksi'])
+    pd.to_pickle(dict(par=par, tabel=df[df.cfg == p]), os.path.join(out, berkas))
+    catat('== KALIBRASI: bias dan pelebar Q per tingkat/jenis lubang')
+    catat(pd.DataFrame({f'{k[0]}/{k[1]}': dict(bias=v['b'], n=v['n'], **{f'Q{int(a * 100)}': b for a, b in v['Q'].items()})
+                        for k, v in par.items()}).T.round(4).to_string())
+
+
+def ujian(out, catat, blok='ujian', n=500, berkas_kal='kalibrasi.pkl', label='U1'):
+    resep = json.load(open(os.path.join(out, 'resep.json')))
+    latih = pd.read_pickle(os.path.join(out, 'tahap4_penuh.pkl'))
+    kal = pd.read_pickle(os.path.join(out, berkas_kal))
+    df, p = jalankan_resep(resep, blok, n, latih)
+    x = df[df.cfg == p]
+    if resep['koreksi'] == 'tanpa':
+        akhir = x.assign(cfg='resep')
+    else:
+        # konformal adaptif (Gibbs & Candes 2021): kolam = kalibrasi + bulan ujian yang sudah dinilai;
+        # alpha[t+1] = alpha[t] + GAMMA * (alpha_sasaran - porsi meleset bulan t)
+        bagian, kolam = [], kal['tabel']
+        alpha = {(tk, jn, lv): 1 - lv for tk in TINGKAT for jn in ('tengah', 'akhir') for lv in PASANG}
+        for t in sorted(x.t.unique()):
+            par = param_koreksi(kolam, bias='bias' in resep['koreksi'], alpha=alpha)
+            bt = terapkan_koreksi(x[x.t == t], par, halus='halus' in resep['koreksi'], label='resep')
+            bagian.append(bt)
+            for (tk, jn, lv) in alpha:
+                g = bt[(bt.tingkat == tk) & (bt.jenis == jn)]
+                if len(g):
+                    lo, hi = PASANG[lv]
+                    masuk = ((g[QC[lo]] <= g.benar) & (g.benar <= g[QC[hi]])).groupby(g.w).mean().mean()
+                    alpha[(tk, jn, lv)] = float(np.clip(alpha[(tk, jn, lv)] + GAMMA * ((1 - lv) - (1 - masuk)), 0.001, 0.999))
+            kolam = pd.concat([kolam, x[x.t == t]])
+        akhir = pd.concat(bagian)
+    semua = pd.concat([akhir, df[df.cfg.isin(PEMBANDING)]])
+    G = [dict(gerbang(semua, 'resep', resep['pstar'], tk), arah=arah(semua, 'resep', tk)) for tk in TINGKAT]
+    pd.DataFrame(G).to_csv(os.path.join(out, f'gerbang_{label}.csv'), index=False)
+    semua.drop(columns=QC).to_csv(os.path.join(out, f'{label}_sel.csv'), index=False)
+    catat(f'== GERBANG {label} (prov / wil / nas); pembanding P* = {resep["pstar"]}')
+    catat(pd.DataFrame(G).T.to_string())
+
+
+def main(argv=None):
     global D, P
-    mode, xlsm, out = sys.argv[1], sys.argv[2], sys.argv[3]
-    bps = sys.argv[4] if len(sys.argv) > 4 else None
+    argv = argv or sys.argv[1:]
+    mode, xlsm, out = argv[0], argv[1], argv[2]
+    bps = argv[3] if len(argv) > 3 else None
     os.makedirs(out, exist_ok=True)
     pk = os.path.join(out, 'data_beras.pkl')
     if os.path.exists(pk):
@@ -675,44 +760,28 @@ def main():
 
     def catat(s):
         print(s, flush=True)
-        log.write(str(s) + '\n'); log.flush()
+        log.write(str(s) + '\n')
+        log.flush()
     catat(f'== {mode} {time.strftime("%Y-%m-%d %H:%M:%S")} | perusahaan {D["n"]}, besar {int(D["besar"].sum())}, '
-          f'wilayah {np.bincount(D["wil"]).tolist()} | pola hapus: h={P["h"].round(3)}, p_ekor={P["p_ekor"].round(3)}')
+          f'wilayah {np.bincount(D["wil"]).tolist()} | pola hapus: h={P["h"].round(3)}, p_ekor={P["p_ekor"].round(3)} | '
+          f'proses {PROSES}')
     if mode == 'coba':
+        # uji kode saja: semua langkah memakai blok PENYETELAN dengan sedikit ulangan; blok kalibrasi/ujian tidak disentuh
         penyetelan(out, (4, 6, 8), catat)
+        kalibrasi(out, catat, blok='penyetelan', n=6, berkas='coba_kalibrasi.pkl')
+        ujian(out, catat, blok='penyetelan', n=6, berkas_kal='coba_kalibrasi.pkl', label='coba')
     elif mode == 'penyetelan':
         penyetelan(out, (50, 200, 500), catat)
-    elif mode in ('kalibrasi', 'ujian'):
-        resep = json.load(open(os.path.join(out, 'resep.json')))
-        latih = pd.read_pickle(os.path.join(out, 'tahap4_penuh.pkl'))
-        if mode == 'kalibrasi':
-            df, p = jalankan_resep(resep, 'kalibrasi', 500, latih)
-            par = param_koreksi(df[df.cfg == p], bias='bias' in resep['koreksi'])
-            pd.to_pickle(dict(par=par, tabel=df[df.cfg == p]), os.path.join(out, 'kalibrasi.pkl'))
-            catat(pd.DataFrame({f'{k[0]}/{k[1]}': dict(bias=v['b'], n=v['n'], **{f'Q{int(a * 100)}': b for a, b in v['Q'].items()})
-                                for k, v in par.items()}).T.round(4).to_string())
-        else:
-            kunci = os.path.join(out, 'U1_SUDAH_JALAN.json')
-            if os.path.exists(kunci):
-                sys.exit('U1 sudah pernah dijalankan; ujian akhir hanya sekali jalan.')
-            json.dump(dict(mulai=time.strftime('%Y-%m-%d %H:%M:%S'), resep=resep), open(kunci, 'w'), default=str)
-            df, p = jalankan_resep(resep, 'ujian', 500, latih)
-            kal = pd.read_pickle(os.path.join(out, 'kalibrasi.pkl'))
-            x = df[df.cfg == p]
-            if resep['koreksi'] == 'tanpa':
-                akhir = x.assign(cfg='resep')
-            else:  # Q dan bias diperbarui bergulir tiap bulan: kolam = kalibrasi + bulan ujian yang sudah dinilai
-                bagian, kolam = [], kal['tabel']
-                for t in sorted(x.t.unique()):
-                    par = param_koreksi(kolam, bias='bias' in resep['koreksi'])
-                    bagian.append(terapkan_koreksi(x[x.t == t], par, halus='halus' in resep['koreksi'], label='resep'))
-                    kolam = pd.concat([kolam, x[x.t == t]])
-                akhir = pd.concat(bagian)
-            semua = pd.concat([akhir, df[df.cfg.isin(PEMBANDING)]])
-            G = [dict(gerbang(semua, 'resep', resep['pstar'], tk), arah=arah(semua, 'resep', tk)) for tk in TINGKAT]
-            pd.DataFrame(G).to_csv(os.path.join(out, 'gerbang_U1.csv'), index=False)
-            semua.drop(columns=QC).to_csv(os.path.join(out, 'U1_sel.csv'), index=False)
-            catat(pd.DataFrame(G).T.to_string())
+    elif mode == 'kalibrasi':
+        kalibrasi(out, catat)
+    elif mode == 'ujian':
+        kunci = os.path.join(out, 'U1_SUDAH_JALAN.json')
+        if os.path.exists(kunci):
+            sys.exit('U1 sudah pernah dijalankan; ujian akhir hanya sekali jalan.')
+        json.dump(dict(mulai=time.strftime('%Y-%m-%d %H:%M:%S')), open(kunci, 'w'))
+        ujian(out, catat)
+    else:
+        sys.exit('mode: coba | penyetelan | kalibrasi | ujian')
     log.close()
 
 
