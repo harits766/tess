@@ -12,6 +12,10 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   User-Agent); bps.go.id dan satudata.pertanian.go.id memblokir akses otomatis -> pakai WebAPI BPS.
 - Data mentah tidak disimpan di repo. Commit hanya ke branch `claude/bayesian-rice-stock-model-qmunfn`,
   tanpa PR kecuali diminta.
+- **Jangan menjalankan atau mengulang run tanpa diminta** (termasuk uji coba kecil). Kalau diminta mengirim sesuatu,
+  langsung kirim; jangan diselingi run. Pengguna sempat menghentikan run dan pengiriman file di sesi 6.
+- Pengguna ingin bisa menjalankan sendiri di Google Colab (unggah folder ke Drive).
+- Bahasa: Indonesia (pengguna kadang menulis Inggris; tetap jawab Indonesia kecuali diminta lain).
 
 ## File yang harus diunggah ulang di sesi baru
 - `Non_PAW_dari_nol.xlsm` (INATRADE, sheet "2024-2026", semua komoditas, PAW + Non PAW) — wajib.
@@ -131,6 +135,55 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   Jawa/Sumatera/Pulau lain, laporan berkepala ganda dijumlah. Dikunci di RANCANGAN bagian 7.8–7.9.
 - Belum: korelasi Harga Jual vs PIHPS (data PIHPS belum diambil), cakupan volume komoditas selain beras, cek BULOG.
 
+## 8. Kode adu versi beras — SUDAH DITULIS, baru uji kode; penyetelan penuh BELUM dijalankan (12 Nov 2026)
+**Berkas:** `binpas/adu_metode.py` (data, pola hapus, metode isian B, C, R1–R4, R5 QRF, R6a/b/c CatBoost, R7 MRP),
+`binpas/adu_versi.py` (soal ujian, skor, tahap 1a–5, penggabung, konformal, gerbang, kalibrasi, U1),
+notebook Colab `binpas/colab/03_tahap0.ipynb`, `04_adu_versi_beras.ipynb`, `BACA_DULU.txt`, `buat_paket.sh`.
+
+**Cara jalan** (pustaka: `pip install catboost quantile-forest statsmodels`; data BPS dari `beras_stok/ambil_bps.py`):
+```bash
+BPS_API_KEY=... python -I beras_stok/ambil_bps.py <cache json> <bps_out>            # ±1 menit
+python -I binpas/tahap0.py <xlsm> <hasil_tahap0> <bps_out>                          # ±10 detik
+python -I binpas/adu_versi.py coba       <xlsm> <hasil_coba> <bps_out>              # uji kode, ±3–4 menit (4 CPU)
+python -I binpas/adu_versi.py penyetelan <xlsm> <hasil_adu> <bps_out>               # BELUM PERNAH; perkiraan 0,5–1,5 jam (4 CPU)
+python -I binpas/adu_versi.py kalibrasi  <xlsm> <hasil_adu> <bps_out>               # BELUM PERNAH
+python -I binpas/adu_versi.py ujian      <xlsm> <hasil_adu> <bps_out>               # U1, SEKALI JALAN, BELUM PERNAH
+```
+- `penyetelan` bisa dilanjutkan bila terputus (`status.json` di folder keluaran; tahap selesai dilewati).
+- `ujian` menulis `U1_SUDAH_JALAN.json` dan menolak jalan kedua.
+- Mode `coba` memakai blok PENYETELAN saja (4/6/8 ulangan; langkah kalibrasi dan ujian versi coba juga di blok
+  penyetelan), jadi blok kalibrasi dan ujian belum pernah disentuh.
+
+**Status uji kode:** `coba` dijalankan sekali penuh di sesi 6 dan selesai tanpa error (keluar 0): tahap 1a–5, gerbang,
+kalibrasi, dan jalur ujian semuanya berjalan. Angka dari `coba` (8 ulangan) BUKAN hasil dan tidak boleh dikutip.
+Pengguna lalu meminta run dihentikan; **yang tertunda = `penyetelan` penuh (lalu `kalibrasi`, lalu `ujian`)**.
+Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
+
+**Yang sudah ditetapkan di kode (sesuai RANCANGAN bagian 7.8–7.9):**
+- Beras, pedagang tanpa BULOG: 90 perusahaan (Jawa 32, Sumatera 43, Pulau lain 15), 14 strata besar (wajib-hitung).
+- Pola hapus dari blok penyetelan: peluang mulai lubang ±7–8% per perusahaan-bulan; peluang belum lapor di bulan
+  terakhir 20% (kecil) dan 9% (besar).
+- Tiap ulangan: soal lubang tengah + soal lubang akhir (potong di bulan acak); sel dinilai bila populasi ≥ 3.
+- Pembanding A, A3, A5 diberi sebaran galat 6 bulan sebelumnya; P* dipilih di tahap 1a.
+- Pengaturan baku tahap 1a–1c: R2 (untuk 1a), bobot batas 3, ragam 1×. Tahap 3 dinilai di tingkat nasional.
+- Skor: 2 × rata-rata pinball pada 21 kuantil log total; peringkat di tingkat wilayah (target utama).
+- CatBoost dilatih pada 7 kuantil lalu diinterpolasi ke 21, `border_count=32` (17× lebih cepat; kedalaman, laju
+  belajar, jumlah pohon tetap seperti yang dikunci). Waktu per isian: B/C/R1–R4 < 0,1 detik; R7 ±1,4; R5 ±2;
+  R6a ±1; R6b ±2; R6c ±8 detik.
+- R7: MixedLM (REML); bila tidak konvergen, cadangan penarikan empiris berurutan.
+- Konformal adaptif di U1: kolam = kalibrasi + bulan ujian yang sudah dinilai, γ = 0,005.
+
+**Belum dikerjakan / keterbatasan kode saat ini:**
+- Skor tingkat perusahaan (pembanding "sama seperti bulan lalu") dan agregasi triwulanan belum ada.
+- Fallback gerbang "turun ke peringkat berikutnya" belum otomatis: gerbang dihitung untuk resep akhir saja.
+- Rekonsiliasi MinT hanya nasional–wilayah (provinsi tidak, karena banyak sel provinsi < 3 perusahaan).
+- `beras_stok/inatrade_panel.py` masih mengambil nilai terbesar untuk laporan berkepala ganda (keputusan: dijumlah);
+  model stok beras lama belum disesuaikan.
+- Belum: korelasi Harga Jual vs PIHPS, cakupan volume komoditas selain beras, cek data BULOG, U2, U3 (model gabungan).
+- Paket Colab (`inatrade_colab.zip`, ±15 MB, berisi data internal) sempat disusun di sesi 6 tetapi belum terkirim ke
+  pengguna; susun ulang dengan `bash binpas/colab/buat_paket.sh <xlsm> <bps_out> <cache json> <hasil_tahap0> <tujuan>`.
+- WA ke Bu Fitria soal "CRPS dihitung dalam skala log (persen)" belum dikonfirmasi terkirim.
+
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
@@ -144,9 +197,11 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md, lalu binpas/RANCANGAN_INATRADE.md, binpas/ambang_ujian.md,
-beras_stok/CATATAN_SESI.md, dan stok_komoditas/README.md.
-File INATRADE terlampir. Ikuti aturan di bagian "Pengguna dan cara kerja".
-Tugas sekarang: <isi tugasnya, mis. jalankan Tahap 0 (profil kehadiran pelapor INATRADE)>.
-Kabari dulu sebelum menjalankan apa pun yang > 10 menit.
+Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–8), lalu binpas/RANCANGAN_INATRADE.md
+(bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
+File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
+Tugas sekarang: siapkan lingkungan (pip install catboost quantile-forest statsmodels; ambil data BPS dengan
+beras_stok/ambil_bps.py), lalu jalankan `python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> <bps_out>`
+(adu versi beras penuh, ±0,5–1,5 jam). Sesudah selesai laporkan resep dan gerbangnya, lalu TANYA DULU sebelum
+kalibrasi dan ujian akhir (U1 hanya sekali jalan). Jangan menjalankan hal lain tanpa diminta.
 ```
