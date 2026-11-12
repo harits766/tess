@@ -188,13 +188,15 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - ±1 jam 21 menit (4 CPU), keluar 0. Keluaran penting di `binpas/hasil_adu_beras/` (resep, status, log, gerbang,
   `tahap4_penuh.pkl.xz`). Blok kalibrasi dan ujian BELUM disentuh; `kalibrasi` dan `ujian` (U1) BELUM dijalankan.
 - Resep: I0, isian B (interpolasi/laporan terakhir, semua lubang diisi), tambahan tdist, tanpa bobot pelapor,
-  ragam 0,5×, tanpa rekonsiliasi, tanpa penggabung, koreksi "tanpa"; P\* = A5.
+  ragam 0,5×, tanpa rekonsiliasi, tanpa penggabung; P\* = A5. Koreksi akhir: peringkat 1 CRPS "tanpa" gagal gerbang
+  cakupan (Jan–Jun 2025: wilayah 76%), **Bu Fitria memutuskan turun ke konformal** (12 Nov 2026); `resep.json` sudah diubah.
 - Gerbang penyetelan, wilayah (target utama): CRPS 0,019 vs 0,236 (−92%), konsisten, bias +0,1%, arah 94% -> lolos;
   cakupan 81,0% (Wilson 65,7–90,5%) -> "belum bisa diputuskan". Provinsi: cakupan 77,4% -> gagal. Nasional: cakupan
   80,6% -> belum bisa diputuskan.
-- Perlu keputusan pengguna sebelum U1: rentang terlalu sempit (cakupan wilayah Jan–Jun 2025 76% untuk "tanpa",
-  92,8% untuk konformal dengan CRPS 0,0163 vs 0,0149); fallback gerbang belum otomatis; seed turunan memakai `hash()`
-  teks (tidak persis terulang antarjalan).
+- Konformal di blok penyetelan (Jan–Jun 2025): wilayah dan provinsi lolos semua gerbang (cakupan 92,8% dan 91,0%);
+  nasional cakupan "belum bisa diputuskan". Rincian: `hasil_adu_beras/gerbang_opsi5.csv`, skrip `binpas/gerbang_opsi5.py`.
+- Catatan: seed turunan memakai `hash()` teks (tidak persis terulang antarjalan); `kalibrasi`/`ujian` ikut menjalankan
+  R5 dan R7 yang tidak dipakai resep (±0,5 jam per langkah).
 - Melanjutkan: salin `binpas/hasil_adu_beras/*` ke folder keluaran, `xz -dk tahap4_penuh.pkl.xz`, lalu `kalibrasi`,
   lalu `ujian`. TANYA DULU sebelum keduanya.
 

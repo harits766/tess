@@ -18,7 +18,7 @@ quantile-forest 1.5.0, statsmodels 0.15.0.
 | 2 bobot × ragam | tanpa bobot pelapor, ragam 0,5× | 0,0192; ragam 1× 0,0204; bobot tidak berpengaruh (semua lubang sudah diisi) |
 | 3 rekonsiliasi | tanpa | nasional 0,0133 vs dengan 0,0151 |
 | 4 penggabung | tidak dipakai (versi tunggal B) | B 0,0189; juri RF 0,0196; R5 0,0217; pool 0,0277; rata/CRPS 0,0370; R7 0,0911 |
-| 5 koreksi akhir | tanpa | lihat bagian cakupan |
+| 5 koreksi akhir | konformal (peringkat 2; peringkat 1 "tanpa" gagal cakupan) | lihat bagian keputusan koreksi |
 
 Di tahap 1b (500 ulangan) R5/QRF sedikit lebih kecil daripada B (0,0230 vs 0,0254); selisihnya tipis (rentang
 bootstrap mencakup 0) sehingga aturan "pilih yang lebih sederhana" memilih B. Dengan pengaturan pemenang (tahap 4)
@@ -41,20 +41,44 @@ B lebih kecil daripada R5.
 
 "Belum bisa diputuskan" = 0,90 ada di dalam selang dan cakupan ≥ 80%, tetapi setengah lebar selang > 10 poin persen.
 
+## Keputusan koreksi akhir (12 Nov 2026, sebelum kalibrasi dan ujian): KONFORMAL
+Gerbang tiap opsi tahap 5 dihitung ulang pada pijakan yang sama (Q dari Jan–Des 2024, dinilai Jan–Jun 2025) dari tabel
+tahap 4 yang sudah ada, tanpa isian baru: `python -I binpas/gerbang_opsi5.py binpas <keluaran>` ->
+`hasil_adu_beras/gerbang_opsi5.csv`.
+
+| Opsi | CRPS wilayah | Cakupan prov / wil / nas | Gerbang cakupan prov / wil / nas |
+| --- | --- | --- | --- |
+| tanpa (peringkat 1) | 0,0149 | 75,0% / 76,0% / 78,2% | gagal / gagal / gagal |
+| konformal (peringkat 2) | 0,0163 | 91,0% / 92,8% / 95,7% | lolos / lolos / belum bisa diputuskan |
+| konformal + bias | 0,0163 | sama | sama |
+| konformal + bias + penghalusan | 0,0170 | 88,8% / 90,5% / 91,3% | lolos / lolos / belum bisa diputuskan |
+
+- "Tanpa" gagal gerbang cakupan (< 80%) di ketiga tingkat pada Jan–Jun 2025. Tabel gerbang di atas (81,0% wilayah)
+  dinilai di seluruh blok penyetelan, pijakan yang berbeda.
+- Sesuai `ambang_ujian.md` (pemenang dipakai hanya jika lolos semua gerbang; kalau tidak, turun ke peringkat
+  berikutnya di blok penyetelan), resep turun ke **konformal**. Konformal dan konformal + bias sama (selisih CRPS
+  ±10⁻⁸), jadi dipilih yang lebih sederhana. Diputuskan Bu Fitria (lewat pengguna) sebelum blok kalibrasi dan ujian
+  dijalankan.
+- Konformal, wilayah: perbaikan CRPS 91% terhadap P\*, selisih −0,205 … −0,130, bias +0,1%, arah 94%, cakupan 92,8%
+  (Wilson 79,5–97,7%, n efektif 25) -> lolos semua gerbang. Provinsi lolos semua. Nasional: cakupan "belum bisa
+  diputuskan" (11 sel-bulan), gerbang lain lolos.
+- `resep.json`: `koreksi` = `konformal` (`koreksi_peringkat1` = `tanpa` dicatat). Bagian lain resep tidak berubah.
+
 ## Yang perlu diperhatikan sebelum U1
 - **Rentang terlalu sempit.** Ragam 0,5× dan koreksi "tanpa" menang karena CRPS, tetapi cakupan di bawah 90%. Di
   Jan–Jun 2025 (periode sesudah patahan pelapor) cakupan wilayah 76,0% untuk "tanpa" dan 92,8% untuk konformal
   (CRPS 0,0149 vs 0,0163). Cakupan wilayah per periode: Jan–Sep 2024 85%, Okt–Des 2024 86%, Jan–Jun 2025 76%;
   per wilayah: Jawa 76%, Sumatera 87%, Pulau lain 81%.
-- Dengan koreksi "tanpa", langkah `kalibrasi` tetap menghitung Q dan bias tetapi `ujian` tidak memakainya.
-- Fallback "turun ke peringkat berikutnya" belum otomatis di kode; gerbang hanya dihitung untuk resep akhir.
+- Fallback "turun ke peringkat berikutnya" belum otomatis di kode; untuk tahap 5 dihitung dengan `gerbang_opsi5.py`.
+- `kalibrasi` dan `ujian` menjalankan ketiga anggota di `resep.json` (B, R5, R7) walau penggabung tidak dipakai;
+  R5 dan R7 hanya menambah waktu (±0,5 jam per langkah) dan tidak memengaruhi hasil resep.
 - Kunci jawaban = total laporan yang ada di sel; yang dinilai adalah kemampuan menutup laporan yang hilang, bukan
   keterwakilan pasar (cakupan volume pedagang beras tetap ±1,5–3%).
 - Seed turunan per metode memakai `hash()` teks, yang diacak Python tiap proses (dan `-I` mengabaikan
   `PYTHONHASHSEED`): pola hapus sama antarversi dan antarjalan, tetapi tarikan acak isian tidak persis terulang.
 
 ## Berkas di `hasil_adu_beras/`
-- `resep.json`, `status.json`, `log_penyetelan.txt`, `gerbang_penyetelan.csv`.
+- `resep.json`, `status.json`, `log_penyetelan.txt`, `gerbang_penyetelan.csv`, `gerbang_opsi5.csv`.
 - `tahap4_penuh.pkl.xz` (±50 MB; skor per sel × ulangan, sel berpopulasi ≥ 3 perusahaan). Dibutuhkan `kalibrasi`
   dan `ujian`. Pulihkan dengan `xz -dk tahap4_penuh.pkl.xz` (sha256 hasil `d49c8432643e3fcc…`).
 - Tidak disimpan: `data_beras.pkl` (data per perusahaan; dibuat ulang dari xlsm) dan `tahap1a…5.csv` (±320 MB).

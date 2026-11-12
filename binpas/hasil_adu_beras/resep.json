@@ -44,12 +44,14 @@
   ]
  ],
  "penggabung": "I0|B|99|tdist|None|0.5|0",
- "koreksi": "tanpa",
+ "koreksi": "konformal",
  "pstar": "A5",
  "skala": [
   50,
   200,
   500
  ],
- "dibuat": "2026-11-12 09:22:45"
+ "dibuat": "2026-11-12 09:22:45",
+ "koreksi_peringkat1": "tanpa",
+ "catatan_koreksi": "Peringkat 1 CRPS tahap 5 = tanpa, gagal gerbang cakupan di blok penyetelan (Jan-Jun 2025). Turun ke peringkat 2 = konformal sesuai ambang_ujian.md; diputuskan Bu Fitria 12 Nov 2026, sebelum blok kalibrasi dan ujian dijalankan."
 }
