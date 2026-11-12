@@ -156,6 +156,10 @@ Disepakati dengan pengguna lewat diskusi; belum ada yang dijalankan saat bagian 
 - Urutan komoditas diuji: menurut cakupan volume dan jumlah sel hampir lengkap (beras tetap pertama).
 - Varian rantai harga (harga distributor) di M3: hanya bila validasi Harga Jual lolos (satuan wajar dan korelasi
   perubahan bulanan dengan PIHPS ≥ 0,5); diputuskan sebelum U3.
+- Skala INATRADE di M3: tetap per pulau (a_pulau) secara baku. Bila cakupan volume per pulau bergeser > ±30% antara
+  2024 dan 2026, cakupan volume bulanan dipakai sebagai skala (seperti model kedelai).
+- Angka-angka di 7.2 dan 7.5 (30 sel-bulan, pangsa 5 terbesar ≥ 50%, korelasi ≥ 0,5, γ = 0,005, revisi maks 2/tahun)
+  dan aturan ±30% di atas disetujui pengguna 12 Nov 2026, sebelum Tahap 0 dijalankan.
 
 ### 7.3 Target dan skor
 - Target UTAMA: indeks penyaluran/arus, tingkat pulau-bulanan. Provinsi dan stok = sekunder/eksploratif (tangga klaim
