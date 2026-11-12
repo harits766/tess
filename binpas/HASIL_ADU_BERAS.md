@@ -70,8 +70,9 @@ tahap 4 yang sudah ada, tanpa isian baru: `python -I binpas/gerbang_opsi5.py bin
   (CRPS 0,0149 vs 0,0163). Cakupan wilayah per periode: Jan–Sep 2024 85%, Okt–Des 2024 86%, Jan–Jun 2025 76%;
   per wilayah: Jawa 76%, Sumatera 87%, Pulau lain 81%.
 - Fallback "turun ke peringkat berikutnya" belum otomatis di kode; untuk tahap 5 dihitung dengan `gerbang_opsi5.py`.
-- `kalibrasi` dan `ujian` menjalankan ketiga anggota di `resep.json` (B, R5, R7) walau penggabung tidak dipakai;
-  R5 dan R7 hanya menambah waktu (±0,5 jam per langkah) dan tidak memengaruhi hasil resep.
+- `anggota` di `resep.json` dipangkas ke B saja (disetujui pengguna 12 Nov 2026, sebelum kalibrasi dan U1): penggabung
+  tidak dipakai, dan R5/R7 hanya menambah waktu (±0,5 jam per langkah) tanpa memengaruhi hasil resep. Daftar semula
+  disimpan di `anggota_tahap4`.
 - Kunci jawaban = total laporan yang ada di sel; yang dinilai adalah kemampuan menutup laporan yang hilang, bukan
   keterwakilan pasar (cakupan volume pedagang beras tetap ±1,5–3%).
 - Seed turunan per metode memakai `hash()` teks, yang diacak Python tiap proses (dan `-I` mengabaikan
