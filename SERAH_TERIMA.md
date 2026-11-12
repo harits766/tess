@@ -118,6 +118,11 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   resep dikunci + parameter diperbarui bulanan; konformal adaptif; prior M3; definisi lonjakan/status; U3 waktu nyata;
   jejak keluaran; aturan revisi). **Perlu diberitahukan ke Bu Fitria: CRPS dihitung dalam skala log (persen).**
 - Kode untuk Tahap 0, adu versi, dan ujian BELUM ADA; notebook Colab yang ada hanya model stok beras lama.
+- Terbuka (belum dikunci): di M3 skala INATRADE a_pulau tetap sepanjang waktu (asumsi cakupan stabil). Bila Tahap 0
+  menunjukkan cakupan volume per pulau berubah > ±30% (2024 vs 2026), opsi: cakupan volume sebagai skala bulanan
+  (seperti model kedelai). Harus diputuskan sebelum ujian.
+- Lima angka yang ditetapkan Claude di bagian 7 (minta pengguna cek): sel < 30 -> ambang 85%; strata wajib-hitung bila
+  pangsa 5 terbesar ≥ 50%; varian harga distributor bila korelasi ≥ 0,5; konformal adaptif γ = 0,005; revisi maks 2/tahun.
 
 ## Langkah berikut yang masih terbuka
 0. **Pertama:** Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
