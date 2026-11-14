@@ -243,8 +243,13 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   juta ke ±0,3 juta ton. Kode perusahaan ada di berkas internal (tidak di repo). Sesudah konfirmasi: perbaiki koreksi
   satuan di `tahap0.py`, ulang penyetelan daging sapi dan pupuk (U1 keduanya belum pernah jalan).
 - **b. Uji ulang resep kedelai dan daging kerbau:** menunggu data bulan baru (sesudah Sep 2026). Belum bisa dikerjakan.
-- **c. Ujian keterwakilan (U2) terhadap Pola Distribusi BPS 2025, mulai dari beras:** lihat catatan di bawah bagian ini
-  bila sudah ada; U2 SEKALI JALAN, spesifikasi harus di-commit sebelum data 2025 dilihat. TANYA DULU sebelum jalan.
+- **c. Ujian keterwakilan (U2) terhadap Pola Distribusi BPS 2025, mulai dari beras: BARU KELAYAKAN** —
+  `binpas/RANCANGAN_U2.md` (USULAN, belum dikunci). Temuan: publikasi BPS hanya memuat DAFTAR provinsi mitra (asal dan
+  tujuan), TIDAK ada pangsa per provinsi asal, sehingga gerbang "korelasi peringkat pangsa asal ≥ 0,6" tidak bisa
+  dihitung seperti tertulis. Edisi 2024 sudah diekstrak (`binpas/poldis_mitra.py`,
+  `binpas/data_publik/poldis_beras_2024_mitra.csv`, 150 tautan). INATRADE beras PAW (26 perusahaan) menangkap ±20–25%
+  tautan BPS 2024, presisi 54–73% (acak 13%). **Isi edisi 2025 BELUM dibuka.** Perlu keputusan Bu Fitria soal definisi
+  pengganti gerbang (usul di RANCANGAN_U2 bagian 4) sebelum U2 dijalankan; U2 SEKALI JALAN. TANYA DULU.
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
