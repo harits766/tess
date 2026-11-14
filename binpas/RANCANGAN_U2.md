@@ -1,7 +1,7 @@
 # Ujian keterwakilan (U2) beras terhadap Pola Distribusi BPS: temuan kelayakan dan USULAN (14 Nov 2026)
 
-**Status: USULAN, BELUM DIKUNCI. U2 belum dijalankan. Isi edisi BPS 2025 BELUM dibuka** (baru metadata dan tautan
-unduhnya). Yang diperiksa di sini hanya edisi 2024 (yang memang tidak disembunyikan) dan data INATRADE.
+**Status: bagian 6 DIKUNCI (14 Nov 2026, disetujui Bu Fitria lewat pengguna) sebelum isi edisi BPS 2025 dibuka**
+(saat dikunci baru metadata dan tautan unduhnya yang diambil). Yang diperiksa di sini hanya edisi 2024 (yang memang tidak disembunyikan) dan data INATRADE.
 
 ## 1. Apa isi publikasi BPS sebenarnya
 - "Distribusi Perdagangan Komoditas Beras Indonesia 2024" (188 halaman, 34 provinsi) diambil lewat WebAPI BPS.
@@ -59,3 +59,31 @@ unduhnya). Yang diperiksa di sini hanya edisi 2024 (yang memang tidak disembunyi
   yang dipakai. INATRADE baru ada sejak Jan 2024 dan pelapor PAW beras 2024 hanya 10 perusahaan.
 - Apakah bagian narasi publikasi (berupa gambar, tidak terbaca mesin) menyebut pangsa asal; perlu dibaca manual/OCR.
 - BPS "Perdagangan Antar Wilayah" (bila memuat volume antarprovinsi per komoditas) belum dicek sebagai sumber pangsa.
+
+## 6. Definisi U2 beras — DIKUNCI 14 Nov 2026, sebelum edisi 2025 dibuka (skrip `binpas/u2_beras.py`)
+Persetujuan Bu Fitria (lewat pengguna, 14 Nov 2026): cek dulu publikasi BPS lain; bila tidak memuat pangsa, gerbang
+diganti perbandingan jalur dan dikunci sebelum edisi 2025 dibuka; ujian sekali jalan.
+- **Cek sumber lain:** "Perdagangan Antar Wilayah Indonesia 2023" (tahun data 2022) hanya memuat nilai perdagangan
+  SEMUA barang antarprovinsi dalam bentuk peta kelas nilai; tidak ada rincian beras. Jadi definisi pengganti dipakai.
+- **Satuan:** pasangan berarah asal -> tujuan antarprovinsi yang punya bagian di kedua edisi (2024 dan 2025).
+- **Jawaban:** tautan edisi 2025 = gabungan daftar "pembelian dari luar provinsi" dan "penjualan ke luar provinsi",
+  diekstrak dengan `binpas/poldis_mitra.py` apa adanya. Sebelum skor dihitung hanya struktur yang dicek (jumlah
+  provinsi, jumlah mitra vs angka di halaman peta); bila ekstraksi gagal secara struktur, skrip ekstraksi diperbaiki
+  memakai cek struktur saja.
+- **INATRADE:** beras tanpa BULOG, baris dengan provinsi tujuan ≠ provinsi perusahaan dan rincian penyaluran > 0, semua
+  bulan Jan 2024–Sep 2026 digabung (tahun acuan survei BPS tidak pasti dan pelapor PAW 2024 hanya 10 perusahaan).
+  Asal = provinsi kedudukan perusahaan.
+- **Yang diadu (skor tiap pasangan):** (1) INATRADE mentah = jumlah perusahaan-bulan yang melaporkan tautan itu;
+  (2) BPS 2024 apa adanya = 1 bila tautan ada di edisi 2024; (3) gabungan = BPS 2024 + 0,5 × [tautan ada di INATRADE]
+  (urutan: ada di keduanya > BPS saja > INATRADE saja > tidak ada). Rekonstruksi gravitasi, bobot semu, dan kalibrasi
+  pangsa tidak diikutkan (butuh data jarak/pangsa dan penyetelan sendiri).
+- **Ukuran:** average precision (skor seri dikelompokkan); pendamping: presisi, recall, F1 himpunan tautan; INATRADE per
+  tahun dilaporkan sebagai pendamping.
+- **Gerbang (i) "lebih dekat":** AP gabungan > AP INATRADE mentah DAN > AP BPS 2024 apa adanya, dengan selang 90%
+  bootstrap per provinsi tujuan (2.000 resampel, seed 20261114) dari selisih AP seluruhnya > 0 -> lolos; selisih positif
+  tetapi selang mencakup 0 -> "belum bisa diputuskan"; selain itu gagal.
+- **Gerbang (ii) pengganti korelasi pangsa asal:** korelasi peringkat (Spearman) antarprovinsi antara volume keluar
+  INATRADE per provinsi asal (rincian penyaluran, koreksi satuan aturan Tahap 0) dan jumlah provinsi yang menyebut
+  provinsi itu sebagai asal di BPS 2025, ≥ 0,6. Pendamping: versi jumlah provinsi tujuan, dan korelasi BPS 2024 vs 2025.
+- Aturan lama tetap: hanya satu tahun pembanding, menang tipis -> "belum bisa diputuskan". U2 menulis
+  `U2_SUDAH_JALAN.json` dan menolak jalan kedua.
