@@ -4,7 +4,8 @@ Pakai:
   python -I binpas/tahap0.py <Non_PAW_dari_nol.xlsm> <folder keluaran> [folder keluaran beras_stok/ambil_bps.py]
 
 Isi (RANCANGAN_INATRADE.md bagian 4 dan 7.1):
-  1. Laporan per perusahaan x komoditas x subkomoditas x bulan; koreksi kg->ton (>= 100x median sendiri).
+  1. Laporan per perusahaan x komoditas x subkomoditas x bulan; koreksi kg->ton (>= 100x median sendiri, dan daftar
+     perusahaan yang konsisten mengisi kg: KOREKSI_KG).
      Bila satu kunci memuat beberapa kepala laporan berbeda, tiap kepala dihitung sebagai sub-laporan dan dijumlah.
   2. Populasi dan profil kehadiran: aktif (bulan pertama..terakhir lapor; varian +3 bulan), melapor, panjang lubang.
   3. Sel hampir lengkap (>= 90% / 85% pelapor aktif melapor, aktif >= 3) per tingkat dan blok waktu.
@@ -41,6 +42,10 @@ BLOK = {'penyetelan': ('2024-01', '2025-06'), 'kalibrasi': ('2025-07', '2025-12'
 Q = ['Pengadaan', 'Penyaluran', 'Stok Awal', 'Stok Akhir']
 KODE_BULOG = '00372'
 AMBANG_KG = 100
+# Perusahaan yang mengisi dalam kg secara konsisten (tidak tertangkap aturan lonjakan): (komoditas, kode, mulai bulan).
+# Dasar: HASIL_VALIDASI_SATUAN.md dan SERAH_TERIMA bagian 12 (omzet/rincian tidak masuk akal bila ton; untuk pupuk stok
+# awal Jun 2025 = 1.000 x stok akhir sebelumnya). Disetujui Bu Fitria 14 Nov 2026. Tidak menyentuh komoditas lain.
+KOREKSI_KG = [('DAGING SAPI', '00267', '2024-01'), ('DAGING SAPI', '00397', '2024-01'), ('PUPUK', '00009', '2025-06')]
 MIN_AKTIF = 3
 TENGGANG = 3  # bulan; varian definisi aktif sesudah laporan terakhir
 RENDEMEN = 0.5762  # GKG -> beras (sama dengan model stok beras)
@@ -71,6 +76,9 @@ def laporan(S):
     kunci = ['kode', 'kom', 'sub', 'per']
     K = S.drop_duplicates(kunci + Q)[kunci + Q + ['prov', 'satuan']].copy()  # sub-laporan = kepala laporan berbeda
     K['n_kepala'] = K.groupby(kunci).per.transform('size')
+    for kom, kode, mulai in KOREKSI_KG:
+        m = (K.kom == kom) & (K.kode == kode) & (K.per >= mulai)
+        K.loc[m, Q] = K.loc[m, Q] / 1000
     basis = {}
     for k, g in K.groupby(['kode', 'kom', 'sub']):
         v = g[Q].replace(0, np.nan).stack()
