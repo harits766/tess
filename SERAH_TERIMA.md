@@ -32,6 +32,7 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
 | Rencana Model Stok 7 Komoditas (doc) | https://claude.ai/artifact/4GD99BQKeAv95DRAfUTKXR | rencana beras, kedelai, pupuk, sapi, kerbau, ayam, telur |
 | Tautan Data Stok dan Distribusi 7 Komoditas (doc, dibuat pengguna) | https://claude.ai/artifact/6WTegJt8gPHDsNwzLZBdUX | daftar sumber Bapanas, BPS, BULOG, Kementan |
 | Rancangan Metodologi Pelaporan Stok dan Distribusi Beras (doc) | https://claude.ai/artifact/WjvkAe8JC9xDFVG9EwDGvR | rancangan terbaru (lihat bagian 4) |
+| Laporan Ringkas: Penguatan Data INATRADE Tujuh Komoditas (doc) | https://claude.ai/artifact/GTjBbAhSw52RP2Kszwqm6o | hasil ujian tujuh komoditas + keterwakilan beras, untuk Bu Fitria (14 Nov 2026) |
 
 ## 1. Model stok beras (`beras_stok/`) — selesai
 - State-space Bayesian per provinsi per bulan, Jul 2022–Sep 2026 (ditampilkan mulai Jan 2024), PyMC + nutpie.
@@ -266,6 +267,11 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   daging kerbau, telur ayam ras, daging ayam ras, pupuk. Semua U1 dan U2 beras sudah terpakai.
 - **Keputusan redaksi (Bu Fitria, 14 Nov 2026):** di laporan, INATRADE disebut PENGUAT peta jalur BPS, bukan gambaran
   pola asal perdagangan.
+
+- **Keputusan penutup (Bu Fitria lewat pengguna, 14 Nov 2026):** (1) koreksi satuan tiga perusahaan TIDAK dikonfirmasi
+  ke perusahaan; perkiraan dari data tetap dipakai (jangan diusulkan lagi). (2) Kedelai, daging kerbau, telur ayam ras
+  diuji ulang bila data sesudah Sep 2026 masuk (belum bisa dikerjakan). (3) Laporan ringkas tujuh komoditas sudah
+  dibuat sebagai doc (lihat tabel artefak).
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
