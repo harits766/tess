@@ -243,13 +243,19 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   juta ke ±0,3 juta ton. Kode perusahaan ada di berkas internal (tidak di repo). Sesudah konfirmasi: perbaiki koreksi
   satuan di `tahap0.py`, ulang penyetelan daging sapi dan pupuk (U1 keduanya belum pernah jalan).
 - **b. Uji ulang resep kedelai dan daging kerbau:** menunggu data bulan baru (sesudah Sep 2026). Belum bisa dikerjakan.
-- **c. Ujian keterwakilan (U2) terhadap Pola Distribusi BPS 2025, mulai dari beras: BARU KELAYAKAN** —
-  `binpas/RANCANGAN_U2.md` (USULAN, belum dikunci). Temuan: publikasi BPS hanya memuat DAFTAR provinsi mitra (asal dan
-  tujuan), TIDAK ada pangsa per provinsi asal, sehingga gerbang "korelasi peringkat pangsa asal ≥ 0,6" tidak bisa
-  dihitung seperti tertulis. Edisi 2024 sudah diekstrak (`binpas/poldis_mitra.py`,
-  `binpas/data_publik/poldis_beras_2024_mitra.csv`, 150 tautan). INATRADE beras PAW (26 perusahaan) menangkap ±20–25%
-  tautan BPS 2024, presisi 54–73% (acak 13%). **Isi edisi 2025 BELUM dibuka.** Perlu keputusan Bu Fitria soal definisi
-  pengganti gerbang (usul di RANCANGAN_U2 bagian 4) sebelum U2 dijalankan; U2 SEKALI JALAN. TANYA DULU.
+- **c. Ujian keterwakilan (U2) beras: SUDAH DIJALANKAN (sekali jalan, terpakai)** — `binpas/RANCANGAN_U2.md` bagian 6
+  (definisi dikunci) dan 7 (hasil), `binpas/hasil_u2_beras/`. Publikasi BPS hanya memuat DAFTAR provinsi mitra (bukan
+  pangsa); "Perdagangan Antar Wilayah" BPS juga tidak memuat rincian beras; Bu Fitria menyetujui gerbang diganti
+  perbandingan jalur. Hasil: gabungan BPS 2024 + INATRADE lebih tepat menebak jalur BPS 2025 (AP 0,563) daripada BPS
+  2024 saja (0,480; selisih +0,083, selang 0,041–0,133) dan INATRADE mentah (0,329) -> gerbang "lebih dekat" LOLOS;
+  korelasi volume asal INATRADE vs BPS 2025 = 0,20 (batas 0,6) -> gerbang keterwakilan GAGAL. INATRADE = penguat peta
+  jalur, bukan wakil pola asal. Ekstraksi: `poldis_mitra.py` (2024, diagram), `poldis_mitra_narasi.py` (2025, kalimat),
+  hasilnya di `binpas/data_publik/`.
+- **Satuan (perkiraan sendiri, diminta pengguna):** ketiga perusahaan berskala besar hampir pasti kg. Pupuk: laporan
+  beralih dari ton ke kg mulai Jun 2025 (stok awal Jun = 1.000 × stok akhir sebelumnya, di 4 jenis pupuk). Daging sapi:
+  satu perusahaan omzetnya Rp31,8 triliun sebulan bila ton; satu lagi rincian per tujuan 1–16 ribu "ton" (perusahaan
+  lain median 5,8 ton). Peralihan ton <-> kg yang terlihat dari stok juga ada di komoditas lain (beras 8 pasangan
+  laporan). Belum diterapkan ke `tahap0.py`; penyetelan daging sapi belum diulang (TANYA DULU).
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;

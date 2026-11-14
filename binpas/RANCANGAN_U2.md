@@ -1,4 +1,4 @@
-# Ujian keterwakilan (U2) beras terhadap Pola Distribusi BPS: temuan kelayakan dan USULAN (14 Nov 2026)
+# Ujian keterwakilan (U2) beras terhadap Pola Distribusi BPS: kelayakan, definisi, dan HASIL (14 Nov 2026)
 
 **Status: bagian 6 DIKUNCI (14 Nov 2026, disetujui Bu Fitria lewat pengguna) sebelum isi edisi BPS 2025 dibuka**
 (saat dikunci baru metadata dan tautan unduhnya yang diambil). Yang diperiksa di sini hanya edisi 2024 (yang memang tidak disembunyikan) dan data INATRADE.
@@ -87,3 +87,39 @@ diganti perbandingan jalur dan dikunci sebelum edisi 2025 dibuka; ujian sekali j
   provinsi itu sebagai asal di BPS 2025, ≥ 0,6. Pendamping: versi jumlah provinsi tujuan, dan korelasi BPS 2024 vs 2025.
 - Aturan lama tetap: hanya satu tahun pembanding, menang tipis -> "belum bisa diputuskan". U2 menulis
   `U2_SUDAH_JALAN.json` dan menolak jalan kedua.
+
+## 7. HASIL U2 beras (14 Nov 2026, 15.03 UTC; SEKALI JALAN, sudah terpakai) — `hasil_u2_beras/hasil_U2.json`
+Definisi commit `4bd139b`; ekstraksi edisi 2025 commit `438c907` (sebelum skor dihitung hanya struktur yang dicek).
+- **Ekstraksi edisi 2025:** diagram di separuh provinsi tidak terbaca mesin, tetapi daftar mitra ditulis sebagai kalimat
+  ("... pembelian beras dari N provinsi lain yaitu ..."), jadi dipakai `binpas/poldis_mitra_narasi.py`. 38 provinsi,
+  226 tautan; 64 dari 64 jumlah mitra cocok dengan angka N yang tertulis; di 16 provinsi yang diagramnya terbaca, 107
+  dari 107 tautan diagram juga ada di kalimat. Ditambahkan singkatan (Jabar, Kalsel, ...) dan satu salah ketik
+  publikasi ("Jawa Tiimur"); ekstraksi edisi 2024 tidak berubah.
+- **Cakupan:** 34 provinsi yang ada di kedua edisi, 1.122 pasangan. Tautan BPS 2024: 150; BPS 2025: 104; yang tetap
+  dari 2024 ke 2025: 85. INATRADE: 26 perusahaan, 77 tautan, 9 provinsi asal.
+
+| Versi | Average precision | Tautan | Presisi | Recall | F1 |
+| --- | --- | --- | --- | --- | --- |
+| Acak (kepadatan) | 0,093 | – | 9% | – | – |
+| INATRADE mentah | 0,329 | 77 | 51% | 38% | 0,43 |
+| BPS 2024 apa adanya | 0,480 | 150 | 57% | 82% | 0,67 |
+| Gabungan (BPS 2024 + INATRADE) | **0,563** | 185 | 50% | 89% | 0,64 |
+
+- **Gerbang (i) "lebih dekat": LOLOS.** Gabungan − BPS 2024 = +0,083 (selang 90% 0,041 … 0,133); gabungan − INATRADE
+  mentah = +0,234 (0,167 … 0,300). Kedua selang tidak mencakup 0.
+- **Gerbang (ii) pengganti korelasi pangsa asal: GAGAL.** Korelasi peringkat volume keluar INATRADE per provinsi asal vs
+  jumlah provinsi yang menyebutnya asal di BPS 2025 = 0,20 (batas 0,6); versi jumlah tujuan 0,20. Pembanding: BPS 2024
+  vs BPS 2025 = 0,89.
+- INATRADE per tahun (pendamping): AP 0,25 (2024, 10 perusahaan), 0,31 (2025, 14), 0,30 (2026, 20).
+
+Cara membaca:
+- Keunggulan gabungan datang dari URUTAN, bukan dari himpunan tautan: tautan BPS 2024 yang juga tercatat di INATRADE
+  lebih sering muncul lagi di 2025. Sebagai himpunan, gabungan justru sedikit lebih buruk daripada BPS 2024 saja (F1 0,64
+  vs 0,67) karena tautan INATRADE yang tidak ada di BPS menambah tebakan salah.
+- INATRADE TIDAK mewakili struktur asal: hanya 9 provinsi asal (kedudukan perusahaan), korelasi 0,20. Gerbang
+  keterwakilan tidak lolos.
+- Kesimpulan menurut ambang: INATRADE berguna sebagai PENGUAT/penegas peta jalur BPS (gerbang i), tetapi tidak boleh
+  diklaim mewakili pola asal perdagangan beras (gerbang ii). Hanya satu tahun pembanding.
+- Keterbatasan: edisi 2024 diekstrak dari diagram dan edisi 2025 dari kalimat (cara berbeda; edisi 2024 meleset 1–2
+  tautan di 3 provinsi); jumlah tautan BPS turun 150 -> 104 antara edisi, bisa karena perubahan survei/penyajian; empat
+  provinsi baru Papua tidak ikut; "asal" INATRADE = kedudukan perusahaan.
