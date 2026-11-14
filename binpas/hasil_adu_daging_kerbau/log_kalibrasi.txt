@@ -1,0 +1,9 @@
+== kalibrasi 2026-11-14 13:49:35 | DAGING KERBAU | perusahaan 22, besar 7, wilayah [13, 4, 5] | pola hapus: h=[0.087 0.094], p_ekor=[0.268 0.173] | proses 4
+== KALIBRASI: bias dan pelebar Q per tingkat/jenis lubang
+             bias     n     Q50     Q80     Q90     Q95
+prov/tengah   0.0  44.0  0.0006  0.0014  0.0066  0.0202
+prov/akhir    0.0  44.0  0.0006  0.0014  0.0066  0.0202
+wil/tengah    0.0  33.0  0.0003  0.0035  0.0074  1.2729
+wil/akhir     0.0  33.0  0.0003  0.0035  0.0074  1.2729
+nas/tengah    0.0  44.0  0.0006  0.0014  0.0066  0.0202
+nas/akhir     0.0  44.0  0.0006  0.0014  0.0066  0.0202

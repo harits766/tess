@@ -1,0 +1,24 @@
+== ujian 2026-11-14 13:49:50 | DAGING KERBAU | perusahaan 22, besar 7, wilayah [13, 4, 5] | pola hapus: h=[0.087 0.094], p_ekor=[0.268 0.173] | proses 4
+== GERBANG U1 (prov / wil / nas); pembanding P* = A5
+                           0         1          2
+tingkat                 prov       wil        nas
+sel_bulan                  9        49         17
+crps                0.218027  0.138354   0.094397
+crps_pembanding      0.83721  0.276293   0.162393
+perbaikan           0.739579  0.499249   0.418708
+mae                 0.336536  0.191812   0.135007
+mae_pembanding      0.866704  0.325979    0.18724
+selisih_lo         -0.800255 -0.180949   -0.08983
+selisih_hi         -0.426517  -0.09473  -0.046681
+cakupan             0.965804  0.855001   0.823828
+n_efektif                9.0      49.0  14.166018
+wilson_lo           0.719457  0.753758   0.610723
+wilson_hi           0.996795  0.919086   0.933058
+bias               -0.173844  0.056653   0.030018
+bias_pembanding    -0.377122 -0.122857  -0.048122
+L_lebih_baik            True      True       True
+L_konsisten             True      True       True
+L_cakupan               True      True       True
+cakupan_belum_bisa      True     False       True
+L_bias                 False     False      False
+arah                0.786269  0.801137   0.883603
