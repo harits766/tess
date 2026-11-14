@@ -1,0 +1,24 @@
+== ujian 2026-11-14 15:24:27 | DAGING SAPI | perusahaan 73, besar 11, wilayah [61, 5, 7] | pola hapus: h=[0.101 0.047], p_ekor=[0.206 0.103] | proses 4
+== GERBANG U1 (prov / wil / nas); pembanding P* = A5
+                           0         1          2
+tingkat                 prov       wil        nas
+sel_bulan                 49        51         17
+crps                0.115514  0.060536   0.047745
+crps_pembanding     0.425829  0.168126   0.088962
+perbaikan           0.728732  0.639939   0.463316
+mae                  0.15033  0.070362   0.061314
+mae_pembanding      0.493249  0.206949   0.105983
+selisih_lo         -0.421454 -0.133886    -0.0521
+selisih_hi         -0.200707 -0.086446  -0.029894
+cakupan              0.92236  0.965833   0.935053
+n_efektif               49.0      51.0  14.781561
+wilson_lo           0.835168  0.895312   0.749711
+wilson_hi           0.965343  0.989411   0.985755
+bias                0.045703  0.011416   0.033722
+bias_pembanding    -0.236558 -0.062082  -0.024079
+L_lebih_baik            True      True       True
+L_konsisten             True      True       True
+L_cakupan               True      True       True
+cakupan_belum_bisa     False     False       True
+L_bias                 False      True      False
+arah                0.882663  0.864974   0.936381

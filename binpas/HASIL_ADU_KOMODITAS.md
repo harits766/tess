@@ -154,7 +154,24 @@ tidak berubah. Hasil lama (`hasil_adu_daging_sapi/`) disimpan sebagai pembanding
   95,4%. Nasional (11): −23%, bias −0,7%, cakupan belum bisa diputuskan.
 - Bias pemenang semula berasal dari lubang panjang perusahaan kecil yang tidak diisi (batas 2, tanpa bobot); dengan
   semua lubang diisi biasnya hilang dan CRPS-nya malah lebih kecil (0,134 vs 0,150).
-- **Kalibrasi dan U1 daging sapi BELUM dijalankan.**
+
+#### U1 daging sapi (14 Nov 2026, 15.24 UTC, sekali jalan, sudah terpakai) — disetujui Bu Fitria; resep commit `a84aa98`
+| Ukuran | Provinsi | Wilayah (target utama) | Nasional |
+| --- | --- | --- | --- |
+| Sel-bulan | 49 (3 provinsi) | 51 | 17 |
+| CRPS log (resep / P\*) | 0,116 / 0,426 | 0,061 / 0,168 | 0,048 / 0,089 |
+| Perbaikan CRPS | 73% | 64% | 46% |
+| Bias (resep / P\*) | +4,6% / −23,7% | **+1,1%** / −6,2% | +3,4% / −2,4% |
+| Arah perubahan sama | 88% | 86% | 94% |
+| Cakupan 90% (Wilson) | 92,2% (83,5–96,5) | 96,6% (89,5–98,9) | 93,5% (75,0–98,6) |
+| CRPS vs penyetelan | −23% | −55% | −46% |
+| Status | gagal (bias) | **LOLOS semua gerbang** | gagal (bias); cakupan belum bisa diputuskan |
+
+- Wilayah: lebih baik, konsisten, cakupan, bias, arah, dan "memburuk ≤ 20%" semuanya lolos. Bias per wilayah: Jawa
+  +3,3%, Sumatera −1,6%, Pulau lain +1,8% (masing-masing 17 sel-bulan).
+- Provinsi dan nasional gagal gerbang bias (+4,6% dan +3,4%), jadi klaim hanya di tingkat wilayah.
+- Catatan: hasil ini bergantung pada koreksi satuan dua perusahaan (perkiraan dari data, belum dikonfirmasi pengelola
+  INATRADE), dan resepnya hasil turun peringkat di blok penyetelan.
 
 ### Status akhir per komoditas (14 Nov 2026)
 | Komoditas | Status |
@@ -163,6 +180,6 @@ tidak berubah. Hasil lama (`hasil_adu_daging_sapi/`) disimpan sebagai pembanding
 | Kedelai | wilayah gagal U1 (bias) -> "tercatat"; provinsi lolos U1, dilaporkan dengan catatan |
 | Daging kerbau | gagal U1 (bias) -> "tercatat" |
 | Telur ayam ras | gagal U1 -> "tercatat" |
-| Daging sapi | satuan dikoreksi; resep peringkat berikutnya lolos penyetelan; U1 belum |
+| Daging sapi | wilayah LOLOS U1 (satuan dikoreksi, resep peringkat berikutnya); provinsi dan nasional gagal bias |
 | Pupuk | "tercatat" (pelapor tinggal 4; gagal bias di penyetelan) |
 | Daging ayam ras | "tercatat" (tidak bisa diuji) |

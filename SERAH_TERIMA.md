@@ -259,8 +259,11 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   tidak berubah.
 - **Daging sapi diulang dengan satuan terkoreksi** (`binpas/hasil_adu_daging_sapi_v2/`, rincian di
   `HASIL_ADU_KOMODITAS.md`): pemenang masih gagal bias (−4,8%) -> turun peringkat -> resep B dengan semua lubang diisi
-  + konformal LOLOS semua gerbang wilayah di blok penyetelan (perbaikan 61%, bias +0,1%, cakupan 92%). **Kalibrasi dan
-  U1 daging sapi BELUM dijalankan; TANYA DULU.** Pupuk tetap "tercatat".
+  + konformal LOLOS semua gerbang wilayah di blok penyetelan (perbaikan 61%, bias +0,1%, cakupan 92%). **U1 daging
+  sapi SUDAH (terpakai, disetujui Bu Fitria): wilayah LOLOS semua gerbang** (CRPS 0,061 vs 0,168, −64%; bias +1,1%;
+  arah 86%; cakupan 96,6%); provinsi dan nasional gagal bias (+4,6%, +3,4%). Pupuk tetap "tercatat".
+- **Status akhir (14 Nov 2026):** lolos di wilayah: beras, daging sapi; lolos di provinsi saja: kedelai; "tercatat":
+  daging kerbau, telur ayam ras, daging ayam ras, pupuk. Semua U1 dan U2 beras sudah terpakai.
 - **Keputusan redaksi (Bu Fitria, 14 Nov 2026):** di laporan, INATRADE disebut PENGUAT peta jalur BPS, bukan gambaran
   pola asal perdagangan.
 

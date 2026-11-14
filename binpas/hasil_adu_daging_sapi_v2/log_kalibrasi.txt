@@ -1,0 +1,9 @@
+== kalibrasi 2026-11-14 15:23:57 | DAGING SAPI | perusahaan 73, besar 11, wilayah [61, 5, 7] | pola hapus: h=[0.101 0.047], p_ekor=[0.206 0.103] | proses 4
+== KALIBRASI: bias dan pelebar Q per tingkat/jenis lubang
+             bias     n     Q50     Q80     Q90     Q95
+prov/tengah   0.0  33.0  0.0006  0.0048  0.0205  1.3271
+prov/akhir    0.0  33.0  0.0006  0.0048  0.0205  1.3271
+wil/tengah    0.0  33.0 -0.0063  0.0092  0.0275  0.6305
+wil/akhir     0.0  33.0 -0.0063  0.0092  0.0275  0.6305
+nas/tengah    0.0  77.0 -0.0000  0.0016  0.0113  0.0453
+nas/akhir     0.0  77.0 -0.0000  0.0016  0.0113  0.0453
