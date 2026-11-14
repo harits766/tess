@@ -1,0 +1,85 @@
+== penyetelan 2026-11-14 13:36:08 | DAGING AYAM RAS | perusahaan 12, besar 4, wilayah [10, 2] | pola hapus: h=[0.108 0.118], p_ekor=[0.364 0.259] | proses 4
+[1a identitas] 3 versi, 483 ulangan, 2 detik
+cfg
+I1|R2|99||3|1.0|0    0.2332
+I2|R2|99||3|1.0|0    0.2375
+I0|R2|99||3|1.0|0    0.2763
+-> identitas: I1; pembanding P* = A3
+[1b isian] 24 versi, 483 ulangan, 5 detik
+cfg
+I1|B|6||3|1.0|0      0.0855
+I1|B|99||3|1.0|0     0.0855
+I1|B|3||3|1.0|0      0.0855
+I1|B|2||3|1.0|0      0.0855
+I1|R2|2||3|1.0|0     0.1691
+I1|R2|99||3|1.0|0    0.1699
+I1|R2|6||3|1.0|0     0.1699
+I1|R2|3||3|1.0|0     0.1699
+I1|R1|2||3|1.0|0     0.1779
+I1|R1|99||3|1.0|0    0.1790
+I1|R1|6||3|1.0|0     0.1790
+I1|R1|3||3|1.0|0     0.1790
+I1|R3|2||3|1.0|0     0.1806
+I1|R3|99||3|1.0|0    0.1814
+I1|R3|6||3|1.0|0     0.1814
+I1|R3|3||3|1.0|0     0.1814
+I1|R4|2||3|1.0|0     0.2542
+I1|R4|3||3|1.0|0     0.2553
+I1|R4|99||3|1.0|0    0.2553
+I1|R4|6||3|1.0|0     0.2553
+I1|C|2||3|1.0|0      0.3378
+I1|C|3||3|1.0|0      0.3379
+I1|C|99||3|1.0|0     0.3379
+I1|C|6||3|1.0|0      0.3379
+A3                   0.4770
+A5                   0.4771
+A                    0.5843
+-> isian: I1|B|99||3|1.0|0; juara keluarga: {'regresi': 'I1|B|6||3|1.0|0'}
+[1c tambahan (satu per satu)] 7 versi, 48 ulangan, 1 detik
+[1c tambahan] 8 versi, 483 ulangan, 4 detik
+cfg
+I1|B|99|tdist|3|1.0|0         0.0700
+I1|B|99|luar+tdist|3|1.0|0    0.0722
+I1|B|99|luar|3|1.0|0          0.0859
+I1|B|99|ragamkel|3|1.0|0      0.0865
+I1|B|99|ciri|3|1.0|0          0.0874
+I1|B|99||3|1.0|0              0.0967
+I1|B|99|pola|3|1.0|0          0.0974
+I1|B|99|kalender|3|1.0|0      0.0982
+A3                            0.5953
+A5                            0.5953
+A                             0.6868
+-> tambahan: ('tdist',)
+[2 bobot x ragam] 12 versi, 483 ulangan, 2 detik
+cfg
+I1|B|99|tdist|3|0.5|0         0.0526
+I1|B|99|tdist|5|0.5|0         0.0526
+I1|B|99|tdist|None|0.5|0      0.0526
+I1|B|99|tdist|3|titik|0       0.0584
+I1|B|99|tdist|5|titik|0       0.0584
+I1|B|99|tdist|None|titik|0    0.0584
+I1|B|99|tdist|5|1.0|0         0.0606
+I1|B|99|tdist|3|1.0|0         0.0606
+I1|B|99|tdist|None|1.0|0      0.0606
+I1|B|99|tdist|5|2.0|0         0.0735
+I1|B|99|tdist|None|2.0|0      0.0735
+I1|B|99|tdist|3|2.0|0         0.0735
+A3                            0.4770
+A5                            0.4771
+A                             0.5843
+-> bobot None, ragam titik
+[3 rekonsiliasi] 2 versi, 483 ulangan, 1 detik
+cfg
+I1|B|99|tdist|None|titik|0    0.0472
+I1|B|99|tdist|None|titik|1    0.0579
+A3                            0.9574
+A5                            0.9574
+A                             0.9711
+-> rekonsiliasi: tanpa
+[4 penggabung] anggota: ['I1|B|99|tdist|None|titik|0'], 1 detik
+cfg
+I1|B|99|tdist|None|titik|0    0.0577
+A3                            0.5953
+A5                            0.5953
+A                             0.6868
+-> penggabung: I1|B|99|tdist|None|titik|0

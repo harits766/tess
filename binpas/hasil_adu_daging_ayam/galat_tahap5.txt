@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/user/tess/binpas/adu_versi.py", line 821, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/tess/binpas/adu_versi.py", line 806, in main
+    penyetelan(out, (50, 200, 500), catat, metode=M_URUT if beras else M_58)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tess/binpas/adu_versi.py", line 674, in penyetelan
+    opsi['konformal'] = terapkan_koreksi(ev, param_koreksi(cal, bias=False), label='konformal')
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/user/tess/binpas/adu_versi.py", line 458, in param_koreksi
+    Q[lv] = _kuantil_bobot(s, g.bw.values, float(np.clip(math.ceil((n + 1) * lv_pakai) / n, 0.0, 1.0)))
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+ZeroDivisionError: division by zero

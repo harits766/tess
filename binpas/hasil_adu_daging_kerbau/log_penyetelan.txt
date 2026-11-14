@@ -1,0 +1,119 @@
+== penyetelan 2026-11-14 13:34:38 | DAGING KERBAU | perusahaan 22, besar 7, wilayah [13, 4, 5] | pola hapus: h=[0.087 0.094], p_ekor=[0.268 0.173] | proses 4
+[1a identitas] 3 versi, 500 ulangan, 9 detik
+cfg
+I0|R2|99||3|1.0|0    0.2377
+I2|R2|99||3|1.0|0    0.2417
+I1|R2|99||3|1.0|0    0.2474
+-> identitas: I0; pembanding P* = A5
+[1b isian] 24 versi, 500 ulangan, 14 detik
+cfg
+I0|R2|99||3|1.0|0    0.2176
+I0|R1|99||3|1.0|0    0.2178
+I0|R4|6||3|1.0|0     0.2190
+I0|R4|99||3|1.0|0    0.2195
+I0|R4|3||3|1.0|0     0.2210
+I0|R4|2||3|1.0|0     0.2213
+I0|R2|6||3|1.0|0     0.2217
+I0|R3|99||3|1.0|0    0.2217
+I0|R1|6||3|1.0|0     0.2220
+I0|R2|3||3|1.0|0     0.2237
+I0|R1|3||3|1.0|0     0.2241
+I0|R3|6||3|1.0|0     0.2241
+I0|R2|2||3|1.0|0     0.2241
+I0|R1|2||3|1.0|0     0.2246
+I0|R3|3||3|1.0|0     0.2261
+I0|R3|2||3|1.0|0     0.2265
+I0|B|2||3|1.0|0      0.2973
+I0|B|3||3|1.0|0      0.2996
+I0|B|6||3|1.0|0      0.3002
+I0|C|2||3|1.0|0      0.3023
+I0|C|6||3|1.0|0      0.3029
+I0|C|3||3|1.0|0      0.3032
+I0|B|99||3|1.0|0     0.3211
+I0|C|99||3|1.0|0     0.3268
+A5                   0.4974
+A3                   0.4976
+A                    0.5266
+-> isian: I0|R3|99||3|1.0|0; juara keluarga: {'regresi': 'I0|R2|99||3|1.0|0'}
+[1c tambahan (satu per satu)] 7 versi, 50 ulangan, 2 detik
+[1c tambahan] 8 versi, 500 ulangan, 20 detik
+cfg
+I0|R3|99|ciri+luar+pola|3|1.0|0    0.1616
+I0|R3|99|luar|3|1.0|0              0.1735
+I0|R3|99|pola|3|1.0|0              0.2193
+I0|R3|99|tdist|3|1.0|0             0.2242
+I0|R3|99|ciri|3|1.0|0              0.2247
+I0|R3|99||3|1.0|0                  0.2300
+I0|R3|99|kalender|3|1.0|0          0.2315
+I0|R3|99|ragamkel|3|1.0|0          0.2395
+A5                                 0.5444
+A3                                 0.5445
+A                                  0.5841
+-> tambahan: ('ciri', 'luar', 'pola')
+[2 bobot x ragam] 12 versi, 500 ulangan, 10 detik
+cfg
+I0|R3|99|ciri+luar+pola|3|0.5|0         0.1438
+I0|R3|99|ciri+luar+pola|5|0.5|0         0.1438
+I0|R3|99|ciri+luar+pola|None|0.5|0      0.1438
+I0|R3|99|ciri+luar+pola|3|1.0|0         0.1540
+I0|R3|99|ciri+luar+pola|5|1.0|0         0.1540
+I0|R3|99|ciri+luar+pola|None|1.0|0      0.1540
+I0|R3|99|ciri+luar+pola|5|2.0|0         0.1794
+I0|R3|99|ciri+luar+pola|3|2.0|0         0.1794
+I0|R3|99|ciri+luar+pola|None|2.0|0      0.1794
+I0|R3|99|ciri+luar+pola|5|titik|0       0.1974
+I0|R3|99|ciri+luar+pola|None|titik|0    0.1974
+I0|R3|99|ciri+luar+pola|3|titik|0       0.1974
+A5                                      0.4974
+A3                                      0.4976
+A                                       0.5266
+-> bobot None, ragam 0.5
+[3 rekonsiliasi] 2 versi, 500 ulangan, 7 detik
+cfg
+I0|R3|99|ciri+luar+pola|None|0.5|0    0.0892
+A3                                    0.2021
+A5                                    0.2022
+I0|R3|99|ciri+luar+pola|None|0.5|1    0.2310
+A                                     0.2497
+-> rekonsiliasi: tanpa
+[4 penggabung] anggota: ['I0|R3|99|ciri+luar+pola|None|0.5|0'], 6 detik
+cfg
+I0|R3|99|ciri+luar+pola|None|0.5|0    0.1523
+A5                                    0.5444
+A3                                    0.5445
+A                                     0.5841
+-> penggabung: I0|R3|99|ciri+luar+pola|None|0.5|0
+                        crps  cakupan90
+cfg                                    
+tanpa                 0.1254     0.8152
+konformal             0.1299     0.9815
+konformal+bias        0.1299     0.9815
+konformal+bias+halus  0.1318     0.9762
+A5                    0.5090     0.6674
+A3                    0.5092     0.6674
+A                     0.5266     0.6568
+-> koreksi: tanpa (peringkat 1: tanpa; lolos gerbang tingkat wil: {'tanpa': False, 'konformal': False, 'konformal+bias': False, 'konformal+bias+halus': False})
+== GERBANG di blok penyetelan, Jan-Jun 2025 (prov / wil / nas); lolos di tingkat wil: False
+                                0         1         2
+tingkat                      prov       wil       nas
+status              tidak ada sel       NaN       NaN
+arah                          NaN  0.917549  0.962152
+sel_bulan                     NaN      25.0      11.0
+crps                          NaN  0.125427  0.069739
+crps_pembanding               NaN   0.50899   0.17979
+perbaikan                     NaN  0.753577  0.612109
+mae                           NaN  0.170154  0.092145
+mae_pembanding                NaN   0.60944  0.228157
+selisih_lo                    NaN -0.623709 -0.176056
+selisih_hi                    NaN -0.179349 -0.066458
+cakupan                       NaN  0.815215  0.824148
+n_efektif                     NaN      25.0  9.913095
+wilson_lo                     NaN  0.659286  0.565139
+wilson_hi                     NaN  0.909571  0.944137
+bias                          NaN -0.079056 -0.021883
+bias_pembanding               NaN -0.287778 -0.012421
+L_lebih_baik                  NaN      True      True
+L_konsisten                   NaN      True      True
+L_cakupan                     NaN      True      True
+cakupan_belum_bisa            NaN      True      True
+L_bias                        NaN     False     False

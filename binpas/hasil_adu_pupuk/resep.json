@@ -1,0 +1,31 @@
+{
+ "ident": "I0",
+ "metode": "B",
+ "batas": 99,
+ "add": [],
+ "bobot": null,
+ "ragam": 1.0,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "B",
+   99,
+   [],
+   null,
+   1.0,
+   0
+  ]
+ ],
+ "penggabung": "I0|B|99||None|1.0|0",
+ "koreksi": "konformal",
+ "koreksi_peringkat1": "konformal",
+ "lolos_penyetelan": false,
+ "pstar": "A3",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-14 13:37:43"
+}

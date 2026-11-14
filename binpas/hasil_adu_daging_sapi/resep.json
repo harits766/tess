@@ -1,0 +1,35 @@
+{
+ "ident": "I0",
+ "metode": "B",
+ "batas": 3,
+ "add": [
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 0.5,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "B",
+   3,
+   [
+    "tdist"
+   ],
+   null,
+   0.5,
+   0
+  ]
+ ],
+ "penggabung": "I0|B|3|tdist|None|0.5|0",
+ "koreksi": "tanpa",
+ "koreksi_peringkat1": "tanpa",
+ "lolos_penyetelan": false,
+ "pstar": "A3",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-14 13:34:26"
+}

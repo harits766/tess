@@ -212,6 +212,18 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - Belum: skor tingkat perusahaan, triwulanan, CRPS ton, U2 (keterwakilan, Poldis 2025), U3 (model gabungan), komoditas
   lain. Hasil U1 sudah dilaporkan ke Bu Fitria lewat WA (14 Nov 2026); arahan beliau soal tahap berikutnya belum ada.
 
+## 11. Adu versi komoditas lain: PENYETELAN sudah (14 Nov 2026, sesi 7) — rincian di `binpas/HASIL_ADU_KOMODITAS.md`
+- Bu Fitria: lanjut ("gas"). Pengguna membatasi komoditas: **daging sapi, daging kerbau, daging ayam ras, telur ayam
+  ras, beras, kedelai, pupuk SAJA** (minyak goreng, gula, tepung terigu dibatalkan).
+- Kode diubah dulu (commit `fc81529`): argumen ke-5 = nama komoditas, 58 kombinasi untuk selain beras, seed tetap
+  (crc32), sel di luar blok tidak dinilai, turun peringkat otomatis antaropsi koreksi di tahap 5.
+- Penyetelan enam komoditas ±8 menit total. Hasil di tingkat wilayah (blok penyetelan, Jan–Jun 2025):
+  kedelai LOLOS (B + tdist + konformal; perbaikan 47%); telur ayam ras LOLOS tapi hanya 6 sel-bulan; daging sapi,
+  daging kerbau, pupuk GAGAL gerbang bias (−5,2%, −7,9%, +4,4%; batas 3%); daging ayam ras TIDAK BISA DIUJI (tidak ada
+  data 2024 untuk konformal mini, tahap 5 berhenti).
+- Kalibrasi dan U1 komoditas ini BELUM dijalankan. TANYA DULU. Berkas: `binpas/hasil_adu_<komoditas>/`.
+- Belum diputuskan: untuk yang gagal, apakah turun peringkat antarversi tahap 1–3 dicoba atau langsung A "tercatat".
+
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
@@ -225,9 +237,10 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–10), lalu binpas/RANCANGAN_INATRADE.md
+Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–11), lalu binpas/RANCANGAN_INATRADE.md
 (bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
-Baca juga bagian 9–10 dan binpas/HASIL_ADU_BERAS.md (penyetelan, kalibrasi, dan U1 beras sudah selesai; U1 tidak
-boleh dijalankan lagi). Jangan menjalankan apa pun tanpa diminta; tanya dulu tugas berikutnya.
+Baca juga bagian 9–11, binpas/HASIL_ADU_BERAS.md (beras selesai sampai U1; U1 tidak boleh dijalankan lagi), dan
+binpas/HASIL_ADU_KOMODITAS.md (enam komoditas lain baru sampai penyetelan). Jangan menjalankan apa pun tanpa diminta;
+tanya dulu tugas berikutnya.
 ```
