@@ -204,11 +204,13 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - **Wilayah-bulanan (target utama) LOLOS semua gerbang U1:** CRPS 0,016 vs P\* 0,116 (−86%), bias +0,04%, arah 96%,
   cakupan 97,8% (Wilson 88,1–99,6%), CRPS −3% dibanding penyetelan.
 - Provinsi (7 provinsi ber-pelapor ≥ 3): lolos semua; CRPS +13% dibanding resep yang sama di penyetelan (+28% bila
-  acuannya angka seluruh blok tanpa koreksi; acuan tidak dirinci di ambang). Nasional: cakupan "belum bisa diputuskan".
+  acuannya angka seluruh blok tanpa koreksi; acuan tidak dirinci di ambang). **Bu Fitria memutuskan acuan = resep
+  yang sama (14 Nov 2026, sesudah hasil U1 dilihat) -> provinsi "lolos dengan catatan"**; angka +28% tetap dilaporkan.
+  Nasional: cakupan "belum bisa diputuskan".
 - Catatan: 6 dari 57 sel-bulan wilayah di U1 jatuh di Nov–Des 2025 (lubang akhir mundur ke blok kalibrasi); uji
   kepekaan hanya 2026 memberi status gerbang yang sama (`binpas/peka_u1.py`). Rentang cenderung terlalu lebar.
 - Belum: skor tingkat perusahaan, triwulanan, CRPS ton, U2 (keterwakilan, Poldis 2025), U3 (model gabungan), komoditas
-  lain. Hasil U1 belum dilaporkan ke Bu Fitria (per akhir sesi 7).
+  lain. Hasil U1 sudah dilaporkan ke Bu Fitria lewat WA (14 Nov 2026); arahan beliau soal tahap berikutnya belum ada.
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;

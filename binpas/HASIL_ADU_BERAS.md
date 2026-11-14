@@ -114,6 +114,9 @@ Catatan hasil U1:
 - **Acuan "memburuk ≤ 20%" untuk provinsi.** Terhadap resep yang sama di blok penyetelan (konformal, Jan–Jun 2025)
   CRPS provinsi +13%. Terhadap angka seluruh blok penyetelan tanpa koreksi (0,034) selisihnya +28%. `ambang_ujian.md`
   tidak merinci acuannya; yang dipakai di tabel = resep yang sama. Wilayah dan nasional lolos dengan kedua acuan.
+  **Keputusan Bu Fitria (14 Nov 2026, lewat pengguna): acuan = resep yang sama di blok penyetelan**, sehingga provinsi
+  dilaporkan "lolos dengan catatan". Keputusan ini diambil SESUDAH hasil U1 dilihat (penjelasan ambang, bukan
+  perubahan ambang; `ambang_ujian.md` tidak diubah); angka +28% tetap dilaporkan.
 - **Sel Nov–Des 2025 ikut dinilai.** Lubang akhir bisa mundur sampai 3 bulan sebelum bulan potong, sehingga soal dengan
   bulan potong Jan–Feb 2026 memuat sel Nov–Des 2025 (blok kalibrasi): 6 dari 57 sel-bulan wilayah, 14 dari 133
   provinsi, 2 dari 19 nasional. Uji kepekaan sesudah hasil (bukan hasil resmi), hanya sel Jan–Sep 2026
