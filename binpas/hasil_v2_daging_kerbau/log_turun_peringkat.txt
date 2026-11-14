@@ -1,0 +1,70 @@
+== turun peringkat 2026-11-14 15:49:59 | DAGING KERBAU | pemenang I0|R1|99|luar+tdist|None|0.5|0 | 43 kandidat | P* = A5
+44 versi x 500 ulangan, 101 detik
+                           versi              koreksi  lolos   crps  perbaikan  cakupan    bias   arah
+   I0|B|99|luar+tdist|None|0.5|0                tanpa   True 0.0931     0.6713   0.8517  0.0085 0.8742
+    I0|B|6|luar+tdist|None|0.5|0                tanpa  False 0.0968     0.6585   0.6548 -0.0150 0.8745
+    I0|B|3|luar+tdist|None|0.5|0                tanpa  False 0.1000     0.6470   0.6008 -0.0221 0.8737
+    I0|B|2|luar+tdist|None|0.5|0                tanpa  False 0.1020     0.6401   0.5680 -0.0256 0.8738
+  I0|R2|99|luar+tdist|None|0.5|0                tanpa  False 0.1147     0.5952   0.7883  0.0020 0.8388
+  I0|R1|99|luar+tdist|None|0.5|0                tanpa  False 0.1151     0.5938   0.7866  0.0017 0.8337
+     I0|R1|99|luar+tdist|5|0.5|0                tanpa  False 0.1151     0.5938   0.7866  0.0017 0.8337
+     I0|R1|99|luar+tdist|3|0.5|0                tanpa  False 0.1151     0.5938   0.7866  0.0017 0.8337
+  I0|R1|99|luar+tdist|None|0.5|1                tanpa  False 0.1158     0.5912   0.7636  0.0073 0.8338
+  I0|R3|99|luar+tdist|None|0.5|0                tanpa  False 0.1174     0.5858   0.8073  0.0021 0.8366
+  I2|R1|99|luar+tdist|None|0.5|0                tanpa  False 0.1178     0.5844   0.7888  0.0080 0.8308
+  I0|R1|99|luar+tdist|None|1.0|0                tanpa   True 0.1199     0.5768   0.8620  0.0046 0.8340
+     I0|R1|99|luar+tdist|5|1.0|0                tanpa   True 0.1199     0.5768   0.8620  0.0046 0.8340
+     I0|R1|99|luar+tdist|3|1.0|0                tanpa   True 0.1199     0.5768   0.8620  0.0046 0.8340
+   I0|R3|6|luar+tdist|None|0.5|0                tanpa  False 0.1207     0.5741   0.6301 -0.0258 0.8388
+   I0|R2|6|luar+tdist|None|0.5|0                tanpa  False 0.1208     0.5738   0.6201 -0.0177 0.8400
+  I1|R1|99|luar+tdist|None|0.5|0                tanpa  False 0.1210     0.5732   0.7794  0.0097 0.8270
+   I0|R1|6|luar+tdist|None|0.5|0                tanpa  False 0.1212     0.5725   0.6181 -0.0180 0.8357
+   I0|R3|3|luar+tdist|None|0.5|0                tanpa  False 0.1230     0.5661   0.5834 -0.0337 0.8406
+   I0|R2|3|luar+tdist|None|0.5|0                tanpa  False 0.1234     0.5646   0.5757 -0.0248 0.8420
+   I0|R1|3|luar+tdist|None|0.5|0                tanpa  False 0.1237     0.5634   0.5734 -0.0250 0.8379
+   I0|R3|2|luar+tdist|None|0.5|0                tanpa  False 0.1243     0.5613   0.5530 -0.0379 0.8414
+   I0|R2|2|luar+tdist|None|0.5|0                tanpa  False 0.1249     0.5594   0.5469 -0.0285 0.8427
+   I0|R1|2|luar+tdist|None|0.5|0                tanpa  False 0.1252     0.5582   0.5447 -0.0287 0.8387
+  I0|R1|99|luar+tdist|None|2.0|0                tanpa   True 0.1352     0.5229   0.9144  0.0115 0.8331
+     I0|R1|99|luar+tdist|3|2.0|0                tanpa   True 0.1352     0.5229   0.9144  0.0115 0.8331
+     I0|R1|99|luar+tdist|5|2.0|0                tanpa   True 0.1352     0.5229   0.9144  0.0115 0.8331
+   I0|C|99|luar+tdist|None|0.5|0                tanpa  False 0.1385     0.5112   0.7731 -0.0131 0.8682
+    I0|C|6|luar+tdist|None|0.5|0                tanpa  False 0.1432     0.4947   0.5781 -0.0406 0.8706
+    I0|C|3|luar+tdist|None|0.5|0                tanpa  False 0.1456     0.4864   0.5303 -0.0479 0.8708
+  I0|R4|99|luar+tdist|None|0.5|0 konformal+bias+halus   True 0.1465     0.4829   0.9527  0.0145 0.8257
+    I0|C|2|luar+tdist|None|0.5|0                tanpa  False 0.1466     0.4826   0.5009 -0.0517 0.8708
+   I0|R4|6|luar+tdist|None|0.5|0 konformal+bias+halus   True 0.1469     0.4816   0.9497 -0.0123 0.8306
+   I0|R1|99|luar+tdist|5|titik|0            konformal  False 0.1477     0.4787   0.9900 -0.0060 0.8342
+I0|R1|99|luar+tdist|None|titik|0            konformal  False 0.1477     0.4787   0.9900 -0.0060 0.8342
+   I0|R1|99|luar+tdist|3|titik|0            konformal  False 0.1477     0.4787   0.9900 -0.0060 0.8342
+   I0|R4|3|luar+tdist|None|0.5|0 konformal+bias+halus   True 0.1479     0.4781   0.9485 -0.0206 0.8351
+   I0|R4|2|luar+tdist|None|0.5|0 konformal+bias+halus   True 0.1483     0.4767   0.9485 -0.0251 0.8364
+        I0|R1|99|ciri|None|0.5|0                tanpa  False 0.1519     0.4641   0.7942  0.0166 0.8192
+            I0|R1|99||None|0.5|0                tanpa  False 0.1519     0.4639   0.7956  0.0166 0.8172
+       I0|R1|99|tdist|None|0.5|0                tanpa  False 0.1531     0.4599   0.7486  0.0143 0.8173
+    I0|R1|99|ragamkel|None|0.5|0                tanpa  False 0.1618     0.4290   0.7230  0.0157 0.8184
+        I0|R1|99|pola|None|0.5|0                tanpa  False 0.1618     0.4289   0.7546  0.0233 0.8148
+    I0|R1|99|kalender|None|0.5|0                tanpa  False 0.1631     0.4244   0.7872  0.0304 0.8118
+-> terbaik yang lolos: I0|B|99|luar+tdist|None|0.5|0#tanpa; dipilih (aturan lebih sederhana): I0|B|99|luar+tdist|None|0.5|0#tanpa
+                           0          1          2
+tingkat                 prov        wil        nas
+sel_bulan                  9        113         41
+crps                0.121019   0.093143   0.060247
+crps_pembanding     0.683144   0.283392   0.125219
+perbaikan           0.822849   0.671329   0.518872
+mae                 0.152363   0.121073   0.080691
+mae_pembanding       0.70235   0.343996   0.156042
+selisih_lo         -0.797744  -0.238558  -0.079319
+selisih_hi         -0.302358  -0.149653  -0.051366
+cakupan             0.947112   0.851737   0.813169
+n_efektif           6.426838  51.270533  15.175272
+wilson_lo           0.634657   0.752606   0.606913
+wilson_hi           0.994612   0.915601   0.924639
+bias                -0.00676   0.008519    0.01197
+bias_pembanding    -0.240974  -0.119967  -0.033191
+L_lebih_baik            True       True       True
+L_konsisten             True       True       True
+L_cakupan               True       True       True
+cakupan_belum_bisa      True      False       True
+L_bias                  True       True       True
+arah                0.727731   0.874177   0.927445

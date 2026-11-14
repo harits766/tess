@@ -1,0 +1,20 @@
+{
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "ident": "I0",
+ "pstar": "A3",
+ "isian": "I0|B|99||3|1.0|0",
+ "juara": {
+  "regresi": "I0|C|99||3|1.0|0"
+ },
+ "add": [
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 1.0,
+ "rekon": 0,
+ "penggabung": "I0|B|99|tdist|None|1.0|0"
+}

@@ -1,0 +1,41 @@
+{
+ "ident": "I0",
+ "metode": "C",
+ "batas": 99,
+ "add": [
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 1.0,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "C",
+   99,
+   [
+    "tdist"
+   ],
+   null,
+   1.0,
+   0
+  ]
+ ],
+ "penggabung": "I0|C|99|tdist|None|1.0|0",
+ "koreksi": "tanpa",
+ "koreksi_peringkat1": "tanpa",
+ "lolos_penyetelan": true,
+ "pstar": "A3",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-14 15:36:55",
+ "turun_peringkat": {
+  "dari": "I0|B|99|tdist|None|1.0|0",
+  "kandidat": 42,
+  "lolos": 10,
+  "dibuat": "2026-11-14 15:47:24"
+ }
+}

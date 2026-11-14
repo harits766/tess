@@ -273,6 +273,18 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   diuji ulang bila data sesudah Sep 2026 masuk (belum bisa dikerjakan). (3) Laporan ringkas tujuh komoditas sudah
   dibuat sebagai doc (lihat tabel artefak).
 
+## 13. Resep versi 2 dan cakupan volume komoditas lain (14 Nov 2026, sesi 7)
+- **Resep versi 2 kedelai, daging kerbau, telur ayam ras: DIKUNCI, BELUM DIUJI** — `binpas/RANCANGAN_V2.md`,
+  `binpas/hasil_v2_<komoditas>/`. Blok penyetelan versi 2 = Jan 2024–Sep 2026 (opsi `v2`); ujiannya HANYA boleh di
+  bulan sesudah Sep 2026 (perkiraan butuh Okt 2026–Mar 2027, ±April 2027). Resep: kedelai C, daging kerbau B, telur
+  R1; ketiganya lolos gerbang wilayah di data penyetelan (bukan hasil ujian). Jangan ubah `resep.json`.
+- Telusur bias U1 (eksploratif): kedelai dari "Pulau lain" (1 perusahaan 91%), kerbau dari Sumatera (2 perusahaan 91%).
+- **Cakupan volume enam komoditas lain terhadap BPS: SUDAH** — `binpas/HASIL_CAKUPAN_KOMODITAS.md`,
+  `binpas/cakupan_komoditas.py` (Susenas, produksi per provinsi, impor dataexim). Penyaluran ÷ pasokan 2025: kedelai
+  62%, daging sapi 12%, daging ayam ras 2,7%, pupuk ±1%, telur 0,08% (beras ±2–3%).
+- Belum (tawaran ke pengguna, belum diminta): peubah luar di adu versi untuk kedelai/daging sapi; ujian keterwakilan
+  daging sapi/telur/ayam dengan Pola Distribusi BPS (sekali jalan, definisi dikunci dulu).
+
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
    bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
@@ -286,7 +298,7 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–12), lalu binpas/RANCANGAN_INATRADE.md
+Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–13), lalu binpas/RANCANGAN_INATRADE.md
 (bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
 Baca juga bagian 9–11, binpas/HASIL_ADU_BERAS.md (beras selesai sampai U1; U1 tidak boleh dijalankan lagi), dan

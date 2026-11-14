@@ -1,0 +1,35 @@
+{
+ "ident": "I0",
+ "metode": "R1",
+ "batas": 99,
+ "add": [
+  "luar"
+ ],
+ "bobot": null,
+ "ragam": 1.0,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "R1",
+   99,
+   [
+    "luar"
+   ],
+   null,
+   1.0,
+   0
+  ]
+ ],
+ "penggabung": "I0|R1|99|luar|None|1.0|0",
+ "koreksi": "tanpa",
+ "koreksi_peringkat1": "tanpa",
+ "lolos_penyetelan": true,
+ "pstar": "A3",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-14 15:57:18"
+}

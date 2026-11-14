@@ -29,3 +29,29 @@ Ini revisi pertama untuk ketiga komoditas.
   (Okt 2026–Mar 2027) supaya gerbang cakupan bisa diputuskan.
 - Bila tidak ada versi yang lolos gerbang wilayah di blok penyetelan versi 2: tidak ada resep versi 2; komoditas tetap
   "tercatat" di tingkat itu dan tidak diuji ulang.
+
+## 3. Resep versi 2 — DIKUNCI 14 Nov 2026 (`binpas/hasil_v2_<komoditas>/resep.json`), belum diuji
+Dijalankan dengan aturan bagian 2 (commit `1012302`), ±25 menit. Gerbang di bawah dinilai di Jan 2025–Sep 2026, yaitu
+data yang SUDAH TERLIHAT (termasuk periode ujian versi 1). **Ini hasil penyetelan, bukan hasil ujian.** Ujian yang sah
+baru bisa dilakukan di bulan-bulan sesudah Sep 2026. (Judul di log masih bertuliskan "Jan-Jun 2025"; untuk versi 2
+periodenya Jan 2025–Sep 2026.)
+
+| Komoditas | Resep versi 1 (gagal U1) | Resep versi 2 | Wilayah: sel-bulan | Perbaikan CRPS | Bias | Arah | Cakupan 90% (Wilson) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Kedelai | B, tdist, ragam 1×, konformal | **C (pertumbuhan perusahaan sejenis)**, semua lubang, tdist, ragam 1×, tanpa koreksi | 89 | 75% | +2,5% | 97% | 83,4% (72,4–90,6) |
+| Daging kerbau | R4, ciri + pola, ragam 0,5×, tanpa koreksi | **B (interpolasi)**, semua lubang, tdist, ragam 0,5×, tanpa koreksi | 113 | 67% | +0,9% | 87% | 85,2% (75,3–91,6) |
+| Telur ayam ras | I1, B, tdist, ragam 1×, tanpa koreksi | **R1 (regresi panel)**, semua lubang, ragam 1×, tanpa koreksi | 45 | 84% | +0,3% | 92% | 87,2% (76,1–93,6) |
+
+- Kedelai dan daging kerbau: pemenang adu versi (B dan R1) gagal gerbang wilayah, lalu turun peringkat memilih resep di
+  atas (10 dan 11 kandidat lolos dari 42 dan 43). Telur: pemenang langsung lolos di wilayah.
+- Ketiganya lolos semua gerbang di tingkat wilayah pada data penyetelan versi 2. Kedelai juga lolos di provinsi dan
+  nasional (cakupan nasional belum bisa diputuskan); telur gagal cakupan di provinsi dan bias di nasional.
+- Tambahan "luar" yang ikut terpilih di daging kerbau dan telur tidak berpengaruh (tidak ada peubah luar untuk
+  komoditas selain beras).
+- Bias kedelai +2,5% masih dekat batas 3%: masalah sel "Pulau lain" (satu perusahaan 91%) tidak hilang, hanya mengecil.
+
+## 4. Saat data baru datang
+1. Unduh ulang INATRADE (catat tanggal dan hash); perpanjang `tahap0.PER` sampai bulan terakhir.
+2. Salin `binpas/hasil_v2_<komoditas>/` ke folder keluaran, pulihkan `tahap4_penuh.pkl.xz`, lalu
+   `adu_versi.py kalibrasi ...` dan `adu_versi.py ujian ...` (sekali jalan) dengan argumen `"<KOMODITAS>" v2`.
+3. Jangan mengubah `resep.json`. Perkiraan kebutuhan 5–6 bulan baru (Okt 2026–Mar 2027).
