@@ -1,0 +1,41 @@
+{
+ "ident": "I0",
+ "metode": "B",
+ "batas": 2,
+ "add": [
+  "ciri",
+  "pola",
+  "ragamkel",
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 0.5,
+ "rekon": 0,
+ "anggota": [
+  [
+   "I0",
+   "B",
+   2,
+   [
+    "ciri",
+    "pola",
+    "ragamkel",
+    "tdist"
+   ],
+   null,
+   0.5,
+   0
+  ]
+ ],
+ "penggabung": "I0|B|2|ciri+pola+ragamkel+tdist|None|0.5|0",
+ "koreksi": "konformal+bias",
+ "koreksi_peringkat1": "konformal+bias",
+ "lolos_penyetelan": false,
+ "pstar": "A5",
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "dibuat": "2026-11-14 15:15:05"
+}

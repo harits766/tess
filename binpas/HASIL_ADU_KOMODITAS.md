@@ -132,6 +132,30 @@ d. daging sapi dan pupuk berlabel "tercatat" sampai satuan divalidasi; e. daging
 dilaporkan dengan catatan (tangga klaim); perbaikan "Pulau lain" hanya boleh diuji di data bulan berikutnya.
 3. Telur ayam ras "tercatat", ditinjau lagi bila pelapor bertambah.
 
+### Daging sapi diulang dengan satuan terkoreksi (14 Nov 2026) — `hasil_adu_daging_sapi_v2/`
+Disetujui Bu Fitria: dua perusahaan daging sapi yang konsisten mengisi kg dikoreksi (`tahap0.KOREKSI_KG`, commit
+`b1f1171`; dasar di `HASIL_VALIDASI_SATUAN.md`). Data beras, kedelai, dan daging kerbau yang dipakai adu versi dicek
+tidak berubah. Hasil lama (`hasil_adu_daging_sapi/`) disimpan sebagai pembanding. U1 daging sapi belum pernah jalan.
+
+| | Satuan lama | Satuan terkoreksi |
+| --- | --- | --- |
+| Total penyaluran Jan 2024–Sep 2026 | 571 ribu ton | 141 ribu ton |
+| Pangsa perusahaan terbesar | 64% | 20% |
+| Strata besar (wajib-hitung) | 5 perusahaan | 11 perusahaan |
+| Pemenang adu versi | B batas 3, tdist, ragam 0,5×, tanpa koreksi | B batas 2, ciri + pola + ragamkel + tdist, ragam 0,5×, konformal + bias |
+| Wilayah: perbaikan / bias / cakupan | 53% / −5,2% / 62,8% | 56% / −4,8% / 89,1% |
+| Status pemenang | gagal (bias, cakupan) | gagal (bias saja) |
+
+- Pemenang masih gagal gerbang bias, jadi aturan turun peringkat dijalankan (`turun_peringkat.py`, aturan yang sama
+  dengan daging kerbau; 43 kandidat, 500 ulangan, blok penyetelan saja): 10 kandidat lolos.
+- **Terpilih: I0, B (interpolasi) dengan SEMUA lubang diisi, ciri + pola + ragamkel + tdist, tanpa bobot, ragam 0,5×,
+  koreksi konformal.** Wilayah (33 sel-bulan): CRPS 0,134 vs P\* (A5) 0,340 (−61%), bias +0,1%, arah 88%, cakupan
+  92,1% (Wilson 80,9–97,0%) -> lolos semua gerbang. Provinsi (31): −33%, bias +3,1% (tipis di atas batas), cakupan
+  95,4%. Nasional (11): −23%, bias −0,7%, cakupan belum bisa diputuskan.
+- Bias pemenang semula berasal dari lubang panjang perusahaan kecil yang tidak diisi (batas 2, tanpa bobot); dengan
+  semua lubang diisi biasnya hilang dan CRPS-nya malah lebih kecil (0,134 vs 0,150).
+- **Kalibrasi dan U1 daging sapi BELUM dijalankan.**
+
 ### Status akhir per komoditas (14 Nov 2026)
 | Komoditas | Status |
 | --- | --- |
@@ -139,5 +163,6 @@ dilaporkan dengan catatan (tangga klaim); perbaikan "Pulau lain" hanya boleh diu
 | Kedelai | wilayah gagal U1 (bias) -> "tercatat"; provinsi lolos U1, dilaporkan dengan catatan |
 | Daging kerbau | gagal U1 (bias) -> "tercatat" |
 | Telur ayam ras | gagal U1 -> "tercatat" |
-| Daging sapi, pupuk | "tercatat" sampai satuan divalidasi (gagal bias di penyetelan) |
+| Daging sapi | satuan dikoreksi; resep peringkat berikutnya lolos penyetelan; U1 belum |
+| Pupuk | "tercatat" (pelapor tinggal 4; gagal bias di penyetelan) |
 | Daging ayam ras | "tercatat" (tidak bisa diuji) |

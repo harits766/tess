@@ -1,0 +1,23 @@
+{
+ "skala": [
+  50,
+  200,
+  500
+ ],
+ "ident": "I0",
+ "pstar": "A5",
+ "isian": "I0|B|2||3|1.0|0",
+ "juara": {
+  "regresi": "I0|C|2||3|1.0|0"
+ },
+ "add": [
+  "ciri",
+  "pola",
+  "ragamkel",
+  "tdist"
+ ],
+ "bobot": null,
+ "ragam": 0.5,
+ "rekon": 0,
+ "penggabung": "I0|B|2|ciri+pola+ragamkel+tdist|None|0.5|0"
+}

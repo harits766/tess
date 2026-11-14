@@ -1,0 +1,70 @@
+== turun peringkat 2026-11-14 15:15:17 | DAGING SAPI | pemenang I0|B|2|ciri+pola+ragamkel+tdist|None|0.5|0 | 43 kandidat | P* = A5
+44 versi x 500 ulangan, 125 detik
+                                       versi              koreksi  lolos   crps  perbaikan  cakupan    bias   arah
+ I0|B|99|ciri+pola+ragamkel+tdist|None|0.5|0            konformal   True 0.1343     0.6050   0.9213  0.0014 0.8844
+  I0|B|6|ciri+pola+ragamkel+tdist|None|0.5|0            konformal   True 0.1372     0.5965   0.9205 -0.0173 0.8861
+     I0|B|2|ciri+pola+ragamkel+tdist|3|0.5|0            konformal   True 0.1411     0.5852   0.8819 -0.0102 0.8804
+     I0|B|2|ciri+pola+ragamkel+tdist|5|0.5|0            konformal   True 0.1411     0.5852   0.8819 -0.0102 0.8804
+   I0|B|2|ciri+pola+ragamkel+tdist|3|titik|0            konformal   True 0.1412     0.5849   0.8436 -0.0157 0.8804
+   I0|B|2|ciri+pola+ragamkel+tdist|5|titik|0            konformal   True 0.1412     0.5849   0.8436 -0.0157 0.8804
+     I0|B|2|ciri+pola+ragamkel+tdist|3|1.0|0 konformal+bias+halus   True 0.1473     0.5670   0.9013 -0.0096 0.8779
+     I0|B|2|ciri+pola+ragamkel+tdist|5|1.0|0 konformal+bias+halus   True 0.1473     0.5670   0.9013 -0.0096 0.8779
+ I0|C|99|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.1473     0.5669   0.7425 -0.0465 0.8885
+  I0|B|3|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.1492     0.5614   0.6767 -0.0426 0.8858
+  I0|B|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.1498     0.5597   0.8913 -0.0478 0.8814
+                     I0|B|2|tdist|None|0.5|0       konformal+bias  False 0.1501     0.5586   0.8896 -0.0475 0.8805
+I0|B|2|ciri+pola+ragamkel+tdist|None|titik|0            konformal  False 0.1510     0.5559   0.8477 -0.0588 0.8823
+  I0|B|2|ciri+pola+ragamkel+tdist|None|0.5|1       konformal+bias  False 0.1511     0.5557   0.8874 -0.0416 0.8772
+  I2|B|2|ciri+pola+ragamkel+tdist|None|0.5|0            konformal  False 0.1539     0.5474   0.8905 -0.0514 0.8778
+  I0|C|6|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.1546     0.5455   0.6942 -0.0597 0.8885
+  I0|B|2|ciri+pola+ragamkel+tdist|None|1.0|0                tanpa  False 0.1584     0.5342   0.6648 -0.0530 0.8813
+     I0|B|2|ciri+pola+ragamkel+tdist|3|2.0|0 konformal+bias+halus   True 0.1609     0.5269   0.9055 -0.0069 0.8760
+     I0|B|2|ciri+pola+ragamkel+tdist|5|2.0|0 konformal+bias+halus   True 0.1609     0.5269   0.9055 -0.0069 0.8760
+  I1|B|2|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.1616     0.5248   0.5985 -0.0502 0.8759
+  I0|C|3|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.1626     0.5218   0.8819 -0.0752 0.8872
+  I0|C|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.1651     0.5146   0.8689 -0.0823 0.8840
+  I0|B|2|ciri+pola+ragamkel+tdist|None|2.0|0                tanpa  False 0.1704     0.4989   0.6946 -0.0504 0.8799
+                      I0|B|2|pola|None|0.5|0                tanpa  False 0.1850     0.4560   0.6980 -0.0447 0.8679
+                          I0|B|2||None|0.5|0                tanpa  False 0.1857     0.4539   0.7001 -0.0484 0.8700
+                      I0|B|2|ciri|None|0.5|0                tanpa  False 0.1858     0.4538   0.6994 -0.0452 0.8671
+                  I0|B|2|ragamkel|None|0.5|0                tanpa  False 0.1860     0.4532   0.6975 -0.0451 0.8714
+                  I0|B|2|kalender|None|0.5|0                tanpa  False 0.1862     0.4526   0.6986 -0.0439 0.8682
+I0|R3|99|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2033     0.4021   0.6927 -0.0802 0.8780
+ I0|R3|3|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2041     0.3999   0.8761 -0.1043 0.8806
+ I0|R3|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2046     0.3983   0.8660 -0.1103 0.8801
+ I0|R3|6|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2050     0.3972   0.6611 -0.0910 0.8786
+ I0|R1|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2074     0.3902   0.8572 -0.1095 0.8819
+ I0|R2|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2080     0.3886   0.8599 -0.1107 0.8804
+I0|R1|99|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2116     0.3778   0.6923 -0.0651 0.8777
+ I0|R1|6|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2116     0.3777   0.6603 -0.0813 0.8786
+ I0|R2|6|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2123     0.3757   0.6621 -0.0826 0.8764
+I0|R2|99|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2124     0.3756   0.6940 -0.0666 0.8747
+ I0|R1|3|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2128     0.3743   0.6081 -0.1047 0.8821
+ I0|R2|3|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2134     0.3724   0.6092 -0.1059 0.8810
+ I0|R4|3|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2256     0.3366   0.8668 -0.0908 0.8786
+ I0|R4|2|ciri+pola+ragamkel+tdist|None|0.5|0       konformal+bias  False 0.2259     0.3358   0.8651 -0.0973 0.8768
+I0|R4|99|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2259     0.3358   0.6804 -0.0657 0.8755
+ I0|R4|6|ciri+pola+ragamkel+tdist|None|0.5|0                tanpa  False 0.2275     0.3310   0.6490 -0.0770 0.8759
+-> terbaik yang lolos: I0|B|99|ciri+pola+ragamkel+tdist|None|0.5|0#konformal; dipilih (aturan lebih sederhana): I0|B|99|ciri+pola+ragamkel+tdist|None|0.5|0#konformal
+                           0         1         2
+tingkat                 prov       wil       nas
+sel_bulan                 31        33        11
+crps                0.149723  0.134325  0.088665
+crps_pembanding     0.221969  0.340097  0.114541
+perbaikan           0.325478  0.605041  0.225909
+mae                 0.181406  0.161279  0.106275
+mae_pembanding      0.274457  0.391038  0.138911
+selisih_lo         -0.112134 -0.357097 -0.043258
+selisih_hi         -0.035171 -0.082812 -0.008433
+cakupan             0.954207  0.921253  0.924396
+n_efektif               31.0      33.0      11.0
+wilson_lo           0.848188  0.808598  0.696319
+wilson_hi           0.987296  0.970057  0.984894
+bias                0.031095  0.001352 -0.007254
+bias_pembanding    -0.080302 -0.184729 -0.032236
+L_lebih_baik            True      True      True
+L_konsisten             True      True      True
+L_cakupan               True      True      True
+cakupan_belum_bisa     False     False      True
+L_bias                 False      True      True
+arah                0.886334  0.884408  0.889706

@@ -255,7 +255,14 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   beralih dari ton ke kg mulai Jun 2025 (stok awal Jun = 1.000 × stok akhir sebelumnya, di 4 jenis pupuk). Daging sapi:
   satu perusahaan omzetnya Rp31,8 triliun sebulan bila ton; satu lagi rincian per tujuan 1–16 ribu "ton" (perusahaan
   lain median 5,8 ton). Peralihan ton <-> kg yang terlihat dari stok juga ada di komoditas lain (beras 8 pasangan
-  laporan). Belum diterapkan ke `tahap0.py`; penyetelan daging sapi belum diulang (TANYA DULU).
+  laporan). **Diterapkan (disetujui Bu Fitria):** `tahap0.KOREKSI_KG` (commit `b1f1171`); data komoditas lain dicek
+  tidak berubah.
+- **Daging sapi diulang dengan satuan terkoreksi** (`binpas/hasil_adu_daging_sapi_v2/`, rincian di
+  `HASIL_ADU_KOMODITAS.md`): pemenang masih gagal bias (−4,8%) -> turun peringkat -> resep B dengan semua lubang diisi
+  + konformal LOLOS semua gerbang wilayah di blok penyetelan (perbaikan 61%, bias +0,1%, cakupan 92%). **Kalibrasi dan
+  U1 daging sapi BELUM dijalankan; TANYA DULU.** Pupuk tetap "tercatat".
+- **Keputusan redaksi (Bu Fitria, 14 Nov 2026):** di laporan, INATRADE disebut PENGUAT peta jalur BPS, bukan gambaran
+  pola asal perdagangan.
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
