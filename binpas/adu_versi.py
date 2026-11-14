@@ -8,6 +8,8 @@ Pakai:
 Komoditas selain beras: tambahkan nama komoditas sebagai argumen ke-5 (folder bps diisi "-"), mis.
   python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> - "MINYAK GORENG"
 Komoditas selain beras memakai 58 kombinasi (tanpa R5, R6, R7, juri RF; RANCANGAN bagian 4) dan folder keluaran sendiri.
+Revisi (RANCANGAN_V2.md): argumen ke-6 "v2" memakai blok penyetelan Jan 2024-Sep 2026, kalibrasi Jan-Sep 2026, dan
+ujian = bulan sesudah Sep 2026 (belum ada datanya); pembagian blok disimpan di <keluaran>/blok.json.
 
 Satu ulangan = satu pola hapus acak (lubang tengah + lubang akhir) yang sama untuk semua versi dan pembanding.
 Keluaran berisi angka agregat per sel; tidak ada data per perusahaan.
@@ -547,6 +549,7 @@ def arah(df, versi, tingkat):
 # ---------------------------------------------------------------- alur
 M_URUT = ['B', 'C', 'R1', 'R2', 'R3', 'R4', 'R7', 'R5', 'R6a', 'R6b', 'R6c']
 M_58 = ['B', 'C', 'R1', 'R2', 'R3', 'R4']  # komoditas selain beras
+BLOK_V2 = {'penyetelan': (0, 32), 'kalibrasi': (24, 32), 'ujian': (33, 44)}  # revisi: ujian = Okt 2026 dst.
 KELUARGA = {'B': 'regresi', 'C': 'regresi', 'R1': 'regresi', 'R2': 'regresi', 'R3': 'regresi', 'R4': 'regresi',
             'R7': 'survei', 'R5': 'pohon', 'R6a': 'pohon', 'R6b': 'pohon', 'R6c': 'pohon'}
 TAMBAHAN = ['kalender', 'ragamkel', 'tdist', 'pola', 'ciri', 'luar']
@@ -774,6 +777,11 @@ def main(argv=None):
     kom = argv[4].upper() if len(argv) > 4 else 'BERAS'
     beras = kom == 'BERAS'
     os.makedirs(out, exist_ok=True)
+    fb = os.path.join(out, 'blok.json')
+    if len(argv) > 5 and argv[5] == 'v2' and not os.path.exists(fb):
+        json.dump(BLOK_V2, open(fb, 'w'))
+    if os.path.exists(fb):
+        AM.BLOK_IDX.update({k: tuple(v) for k, v in json.load(open(fb)).items()})
     fk = os.path.join(out, 'komoditas.txt')
     if os.path.exists(fk) and open(fk).read().strip() != kom:
         sys.exit(f'folder keluaran ini milik komoditas lain ({open(fk).read().strip()}); pakai folder sendiri.')
@@ -807,6 +815,8 @@ def main(argv=None):
     elif mode == 'kalibrasi':
         kalibrasi(out, catat)
     elif mode == 'ujian':
+        if AM.BLOK_IDX['ujian'][0] >= D['T']:
+            sys.exit('blok ujian revisi (sesudah Sep 2026) belum ada datanya.')
         kunci = os.path.join(out, 'U1_SUDAH_JALAN.json')
         if os.path.exists(kunci):
             sys.exit('U1 sudah pernah dijalankan; ujian akhir hanya sekali jalan.')

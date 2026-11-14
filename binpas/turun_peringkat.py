@@ -70,6 +70,9 @@ def tahap5(df, c, pstar):
 
 
 def main(out):
+    fb = os.path.join(out, 'blok.json')
+    if os.path.exists(fb):
+        AM.BLOK_IDX.update({k: tuple(v) for k, v in json.load(open(fb)).items()})
     AV.D = pd.read_pickle(os.path.join(out, 'data_komoditas.pkl'))
     AV.P = AM.profil_hapus(AV.D)
     st = json.load(open(os.path.join(out, 'status.json')))
