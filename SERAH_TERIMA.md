@@ -232,8 +232,19 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - **Status akhir tujuh komoditas (14 Nov 2026):** beras lolos di wilayah; kedelai lolos di provinsi saja (wilayah
   "tercatat"; disetujui Bu Fitria); daging kerbau, telur ayam ras, daging sapi, pupuk, daging ayam ras "tercatat".
   Semua U1 yang ada sudah terpakai; jangan dijalankan lagi. Perbaikan resep hanya boleh diuji di data bulan baru.
-- Hasil U1 kerbau belum dilaporkan ke Bu Fitria (per saat ini).
+- Hasil U1 kerbau dan status akhir sudah dilaporkan ke Bu Fitria (14 Nov 2026).
 - Berkas: `binpas/hasil_adu_<komoditas>/`.
+
+## 12. Lanjutan sesudah tujuh komoditas (14 Nov 2026, sesi 7) — disetujui Bu Fitria (butir a–c)
+- **a. Validasi satuan daging sapi dan pupuk: SUDAH** — `binpas/HASIL_VALIDASI_SATUAN.md`, skrip
+  `binpas/validasi_satuan.py`. Semua baris berlabel TON tetapi sebagian diisi kg. Dua pola: lonjakan sesaat (bisa
+  dikoreksi otomatis) dan skala konsisten besar (3 perusahaan: 2 daging sapi, 1 pupuk; harus dikonfirmasi ke
+  pengelola INATRADE). Bila ketiganya kg: daging sapi 2025 turun dari 451 ribu ke ±63 ribu ton, pupuk 2025 dari 15,8
+  juta ke ±0,3 juta ton. Kode perusahaan ada di berkas internal (tidak di repo). Sesudah konfirmasi: perbaiki koreksi
+  satuan di `tahap0.py`, ulang penyetelan daging sapi dan pupuk (U1 keduanya belum pernah jalan).
+- **b. Uji ulang resep kedelai dan daging kerbau:** menunggu data bulan baru (sesudah Sep 2026). Belum bisa dikerjakan.
+- **c. Ujian keterwakilan (U2) terhadap Pola Distribusi BPS 2025, mulai dari beras:** lihat catatan di bawah bagian ini
+  bila sudah ada; U2 SEKALI JALAN, spesifikasi harus di-commit sebelum data 2025 dilihat. TANYA DULU sebelum jalan.
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
@@ -248,7 +259,7 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–11), lalu binpas/RANCANGAN_INATRADE.md
+Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–12), lalu binpas/RANCANGAN_INATRADE.md
 (bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
 Baca juga bagian 9–11, binpas/HASIL_ADU_BERAS.md (beras selesai sampai U1; U1 tidak boleh dijalankan lagi), dan
