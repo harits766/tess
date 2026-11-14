@@ -1,0 +1,9 @@
+== kalibrasi 2026-11-14 13:42:16 | TELUR AYAM RAS | perusahaan 11, besar 3, wilayah [5, 5, 1] | pola hapus: h=[0.163 0.083], p_ekor=[0.308 0.162] | proses 4
+== KALIBRASI: bias dan pelebar Q per tingkat/jenis lubang
+             bias     n  Q50     Q80     Q90     Q95
+prov/tengah   0.0  37.0  0.0  0.0466  0.1784  0.7402
+prov/akhir    0.0  37.0  0.0  0.0466  0.1784  0.7402
+wil/tengah    0.0  37.0  0.0  0.0466  0.1784  0.7402
+wil/akhir     0.0  37.0  0.0  0.0466  0.1784  0.7402
+nas/tengah    0.0  37.0  0.0  0.0466  0.1784  0.7402
+nas/akhir     0.0  37.0  0.0  0.0466  0.1784  0.7402

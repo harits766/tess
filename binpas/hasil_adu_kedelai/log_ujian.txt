@@ -1,0 +1,24 @@
+== ujian 2026-11-14 13:42:07 | KEDELAI BAHAN BAKU TEMPE DAN TAHU | perusahaan 73, besar 9, wilayah [42, 24, 7] | pola hapus: h=[0.07  0.082], p_ekor=[0.38  0.151] | proses 4
+== GERBANG U1 (prov / wil / nas); pembanding P* = A3
+                            0          1         2
+tingkat                  prov        wil       nas
+sel_bulan                  43         38        17
+crps                 0.036592    0.05205  0.010154
+crps_pembanding      0.274592    0.31768  0.093405
+perbaikan             0.86674   0.836156  0.891295
+mae                  0.047037   0.070281  0.011911
+mae_pembanding       0.338622   0.343284  0.107797
+selisih_lo          -0.254645  -0.455707 -0.091888
+selisih_hi          -0.219704  -0.105941 -0.074242
+cakupan              0.967098    0.95162  0.963804
+n_efektif           41.167309  24.143605  4.780008
+wilson_lo            0.885444   0.824178  0.594362
+wilson_hi            0.991133   0.988029  0.997938
+bias                -0.003529   0.049735 -0.001526
+bias_pembanding     -0.115504  -0.196441 -0.016803
+L_lebih_baik             True       True      True
+L_konsisten              True       True      True
+L_cakupan                True       True      True
+cakupan_belum_bisa      False      False      True
+L_bias                   True      False      True
+arah                 0.907243   0.968439  0.915311

@@ -1,0 +1,24 @@
+== ujian 2026-11-14 13:42:34 | TELUR AYAM RAS | perusahaan 11, besar 3, wilayah [5, 5, 1] | pola hapus: h=[0.163 0.083], p_ekor=[0.308 0.162] | proses 4
+== GERBANG U1 (prov / wil / nas); pembanding P* = A3
+                           0         1          2
+tingkat                 prov       wil        nas
+sel_bulan                  4        17         17
+crps                0.148248  0.139288   0.140074
+crps_pembanding     0.791917  0.420996   0.273949
+perbaikan           0.812798  0.669146   0.488685
+mae                 0.159658  0.153405    0.15182
+mae_pembanding      0.791917  0.463177   0.311283
+selisih_lo         -1.098538 -0.362288  -0.166936
+selisih_hi           -0.1888 -0.216408  -0.101706
+cakupan             0.584148  0.804535   0.763458
+n_efektif                4.0      17.0  12.342327
+wilson_lo            0.23527  0.609931   0.529753
+wilson_hi           0.865115  0.915502   0.902411
+bias                0.064158  0.025251  -0.049429
+bias_pembanding    -0.320075 -0.214907  -0.087814
+L_lebih_baik            True      True       True
+L_konsisten             True      True       True
+L_cakupan              False      True      False
+cakupan_belum_bisa      True      True       True
+L_bias                 False      True      False
+arah                0.984334  0.960132   0.951826
