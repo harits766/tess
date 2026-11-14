@@ -5,6 +5,9 @@ Pakai:
   python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> [folder bps]   # tahap 1a-5 + gerbang, blok Jan 2024-Jun 2025
   python -I binpas/adu_versi.py kalibrasi  <xlsm> <keluaran> [folder bps]   # Q konformal + bias, blok Jul-Des 2025
   python -I binpas/adu_versi.py ujian      <xlsm> <keluaran> [folder bps]   # U1, Jan-Sep 2026, SEKALI JALAN
+Komoditas selain beras: tambahkan nama komoditas sebagai argumen ke-5 (folder bps diisi "-"), mis.
+  python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> - "MINYAK GORENG"
+Komoditas selain beras memakai 58 kombinasi (tanpa R5, R6, R7, juri RF; RANCANGAN bagian 4) dan folder keluaran sendiri.
 
 Satu ulangan = satu pola hapus acak (lubang tengah + lubang akhir) yang sama untuk semua versi dan pembanding.
 Keluaran berisi angka agregat per sel; tidak ada data per perusahaan.
@@ -14,6 +17,7 @@ import math
 import os
 import sys
 import time
+import zlib
 from multiprocessing import Pool
 
 import numpy as np
@@ -96,7 +100,8 @@ def _isi_cfg(c, soal, cache, rng_seed):
     for v in (['peny'] if ident == 'I0' else ['peny', 'peng']):
         k = (metode, add, v)
         if k not in cache:
-            rng = np.random.default_rng([rng_seed, hash(nama(k)) % (1 << 31)])
+            kunci = f'{metode}|{"+".join(sorted(add))}|{v}'
+            rng = np.random.default_rng([rng_seed, zlib.crc32(kunci.encode()) % (1 << 31)])
             cache[k] = AM.isi(metode, D, P, Yav[v], tmax, ti, tt, rng, add, soal['mode'] == 'akhir')
         out[v] = cache[k]
     dr = out['peny']
@@ -247,7 +252,7 @@ def ulangan(arg):
             dr = _isi_cfg(c, soal, cache, seed * 2 + (soal['mode'] == 'akhir'))
             for j, q in enumerate(_total(c, soal, dr)):
                 rows.append((nama(c), seed) + kunci[j] + tuple(q))
-    return rows
+    return [r for r in rows if r[6] >= a]  # kolom 6 = bulan; hanya bulan di dalam blok
 
 
 KOL = ['cfg', 'rep', 'soal', 'jenis', 'tingkat', 'w', 't', 'benar', 'nhapus'] + QC
@@ -541,6 +546,7 @@ def arah(df, versi, tingkat):
 
 # ---------------------------------------------------------------- alur
 M_URUT = ['B', 'C', 'R1', 'R2', 'R3', 'R4', 'R7', 'R5', 'R6a', 'R6b', 'R6c']
+M_58 = ['B', 'C', 'R1', 'R2', 'R3', 'R4']  # komoditas selain beras
 KELUARGA = {'B': 'regresi', 'C': 'regresi', 'R1': 'regresi', 'R2': 'regresi', 'R3': 'regresi', 'R4': 'regresi',
             'R7': 'survei', 'R5': 'pohon', 'R6a': 'pohon', 'R6b': 'pohon', 'R6c': 'pohon'}
 TAMBAHAN = ['kalender', 'ragamkel', 'tdist', 'pola', 'ciri', 'luar']
@@ -673,17 +679,34 @@ def penyetelan(out, skala, catat, metode=M_URUT):
     p5, pr = pilih(df5, kand5, {k: j for j, k in enumerate(kand5)})
     cov = per_unit(df5[df5.tingkat == UTAMA], 'cakup90').groupby('cfg').cakup90.mean()
     catat(pd.concat([peringkat(df5).rename('crps'), cov.rename('cakupan90')], axis=1).round(4).to_string())
-    catat(f'-> koreksi: {p5}')
+    # ambang_ujian.md: pemenang dipakai hanya jika lolos semua gerbang; kalau tidak, turun ke peringkat berikutnya
+    urut5 = [p5] + [k for k in peringkat(df5).index if k in kand5 and k != p5]
+    G5 = {}
+    for k in urut5:
+        G5[k] = [dict(gerbang(df5, k, pstar, tk), arah=arah(df5, k, tk)) for tk in TINGKAT]
+    pd.concat([pd.DataFrame(v).assign(koreksi=k) for k, v in G5.items()]).to_csv(os.path.join(out, 'gerbang_opsi5.csv'), index=False)
+
+    def lolos(k):
+        g = G5[k][TINGKAT.index(UTAMA)]
+        return bool(g.get('L_lebih_baik') and g.get('L_konsisten') and g.get('L_cakupan') and g.get('L_bias')
+                    and g.get('arah', 0) >= 0.80)
+    p5_peringkat1 = p5
+    p5 = next((k for k in urut5 if lolos(k)), None)
+    lolos_penyetelan = p5 is not None
+    if p5 is None:
+        p5 = p5_peringkat1
+    catat(f'-> koreksi: {p5} (peringkat 1: {p5_peringkat1}; lolos gerbang tingkat {UTAMA}: '
+          f'{ {k: lolos(k) for k in urut5} })')
     simpan(df5, 'tahap5')
     resep = dict(ident=ident, metode=tunggal[1], batas=tunggal[2], add=list(add), bobot=dasar['bobot'], ragam=dasar['ragam'],
-                 rekon=rekon, anggota=[list(a) for a in angg], penggabung=p, koreksi=p5, pstar=pstar,
+                 rekon=rekon, anggota=[list(a) for a in angg], penggabung=p, koreksi=p5, koreksi_peringkat1=p5_peringkat1,
+                 lolos_penyetelan=lolos_penyetelan, pstar=pstar,
                  skala=list(skala), dibuat=time.strftime('%Y-%m-%d %H:%M:%S'))
     json.dump(resep, open(os.path.join(out, 'resep.json'), 'w'), indent=1, default=str)
-    # gerbang di blok penyetelan (resep akhir; bila ada koreksi, dinilai di Jan-Jun 2025)
-    akhir = df5 if p5 != 'tanpa' else df4.assign(cfg=df4.cfg.replace({p: 'tanpa'}))
-    G = [dict(gerbang(akhir, p5, pstar, tk), arah=arah(akhir, p5, tk)) for tk in TINGKAT]
+    # gerbang di blok penyetelan untuk resep akhir, semua opsi koreksi dinilai di Jan-Jun 2025 (pijakan sama)
+    G = G5[p5]
     pd.DataFrame(G).to_csv(os.path.join(out, 'gerbang_penyetelan.csv'), index=False)
-    catat('== GERBANG di blok penyetelan (prov / wil / nas)')
+    catat(f'== GERBANG di blok penyetelan, Jan-Jun 2025 (prov / wil / nas); lolos di tingkat {UTAMA}: {lolos_penyetelan}')
     catat(pd.DataFrame(G).T.to_string())
     return resep
 
@@ -747,13 +770,22 @@ def main(argv=None):
     global D, P
     argv = argv or sys.argv[1:]
     mode, xlsm, out = argv[0], argv[1], argv[2]
-    bps = argv[3] if len(argv) > 3 else None
+    bps = argv[3] if len(argv) > 3 and argv[3] != '-' else None
+    kom = argv[4].upper() if len(argv) > 4 else 'BERAS'
+    beras = kom == 'BERAS'
     os.makedirs(out, exist_ok=True)
-    pk = os.path.join(out, 'data_beras.pkl')
+    fk = os.path.join(out, 'komoditas.txt')
+    if os.path.exists(fk) and open(fk).read().strip() != kom:
+        sys.exit(f'folder keluaran ini milik komoditas lain ({open(fk).read().strip()}); pakai folder sendiri.')
+    if not beras and os.path.exists(os.path.join(out, 'data_beras.pkl')):
+        sys.exit('folder keluaran ini milik beras; pakai folder sendiri.')
+    if not beras or os.path.exists(fk):
+        open(fk, 'w').write(kom)
+    pk = os.path.join(out, 'data_beras.pkl' if beras else 'data_komoditas.pkl')
     if os.path.exists(pk):
         D = pd.read_pickle(pk)
     else:
-        D = AM.muat(xlsm, 'BERAS', bps)
+        D = AM.muat(xlsm, kom, bps if beras else None)  # peubah luar (produksi padi) hanya untuk beras
         pd.to_pickle(D, pk)
     P = AM.profil_hapus(D)
     log = open(os.path.join(out, f'log_{mode}.txt'), 'a')
@@ -762,16 +794,16 @@ def main(argv=None):
         print(s, flush=True)
         log.write(str(s) + '\n')
         log.flush()
-    catat(f'== {mode} {time.strftime("%Y-%m-%d %H:%M:%S")} | perusahaan {D["n"]}, besar {int(D["besar"].sum())}, '
+    catat(f'== {mode} {time.strftime("%Y-%m-%d %H:%M:%S")} | {kom} | perusahaan {D["n"]}, besar {int(D["besar"].sum())}, '
           f'wilayah {np.bincount(D["wil"]).tolist()} | pola hapus: h={P["h"].round(3)}, p_ekor={P["p_ekor"].round(3)} | '
           f'proses {PROSES}')
     if mode == 'coba':
         # uji kode saja: semua langkah memakai blok PENYETELAN dengan sedikit ulangan; blok kalibrasi/ujian tidak disentuh
-        penyetelan(out, (4, 6, 8), catat)
+        penyetelan(out, (4, 6, 8), catat, metode=M_URUT if beras else M_58)
         kalibrasi(out, catat, blok='penyetelan', n=6, berkas='coba_kalibrasi.pkl')
         ujian(out, catat, blok='penyetelan', n=6, berkas_kal='coba_kalibrasi.pkl', label='coba')
     elif mode == 'penyetelan':
-        penyetelan(out, (50, 200, 500), catat)
+        penyetelan(out, (50, 200, 500), catat, metode=M_URUT if beras else M_58)
     elif mode == 'kalibrasi':
         kalibrasi(out, catat)
     elif mode == 'ujian':
