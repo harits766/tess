@@ -1,8 +1,8 @@
-# Hasil adu versi komoditas selain beras, blok penyetelan (14 Nov 2026)
+# Hasil adu versi komoditas selain beras (14 Nov 2026)
 
 Daftar komoditas dari pengguna (14 Nov 2026): daging sapi, daging kerbau, daging ayam ras, telur ayam ras, beras,
 kedelai, pupuk. Beras sudah selesai sampai U1 (`HASIL_ADU_BERAS.md`). Berkas ini untuk enam lainnya.
-**Kalibrasi dan ujian akhir BELUM dijalankan untuk satu pun dari enam komoditas ini.**
+Bagian atas = hasil penyetelan; keputusan lanjutan dan hasil U1 kedelai dan telur ada di bagian paling bawah.
 
 Perintah: `python -I binpas/adu_versi.py penyetelan <xlsm> <keluaran> - "<NAMA KOMODITAS>"`, kode pada commit `fc81529`,
 13.30–13.38 UTC (±8 menit total, 4 CPU), skala ulangan 50 / 200 / 500. File INATRADE sama dengan beras.
@@ -67,3 +67,57 @@ Rincian:
 `binpas/hasil_adu_<komoditas>/`: `resep.json`, `status.json`, `log_penyetelan.txt`, `gerbang_penyetelan.csv`,
 `gerbang_opsi5.csv`, `komoditas.txt`; untuk kedelai dan telur juga `tahap4_penuh.pkl.xz` (dibutuhkan kalibrasi/ujian;
 pulihkan dengan `xz -dk`). Tidak disimpan: data per perusahaan dan CSV per tahap.
+
+## Keputusan Bu Fitria (14 Nov 2026) dan pelaksanaannya
+a. kedelai lanjut ke kalibrasi dan U1; b. telur ayam ras ikut diuji; c. daging kerbau dicoba peringkat berikutnya;
+d. daging sapi dan pupuk berlabel "tercatat" sampai satuan divalidasi; e. daging ayam ras "tercatat".
+
+### U1 kedelai (13.42 UTC, sekali jalan, sudah terpakai) — resep commit `96f4de9`, kode `fc81529`
+| Ukuran | Provinsi | Wilayah (target utama) | Nasional |
+| --- | --- | --- | --- |
+| Sel-bulan | 43 | 38 | 17 |
+| CRPS log (resep / P\*) | 0,037 / 0,275 | 0,052 / 0,318 | 0,010 / 0,093 |
+| Perbaikan CRPS | 87% | 84% | 89% |
+| Bias (resep / P\*) | −0,4% / −11,6% | **+5,0%** / −19,6% | −0,2% / −1,7% |
+| Arah perubahan sama | 91% | 97% | 92% |
+| Cakupan 90% (Wilson) | 96,7% (88,5–99,1) | 95,2% (82,4–98,8) | 96,4% (59,4–99,8) |
+| CRPS vs penyetelan | −3% | −36% | −29% |
+| Status | lolos semua | **gagal gerbang bias** (batas 3%) | lolos; cakupan belum bisa diputuskan |
+
+- Wilayah gagal gerbang bias. Menurut `ambang_ujian.md`: gagal di ujian akhir -> A "tercatat" (tidak turun peringkat
+  memakai data ujian).
+- Rincian sesudah hasil (bukan dasar keputusan): bias wilayah berasal dari "Pulau lain" (4 sel-bulan, bias +58%,
+  CRPS 0,317, cakupan 60%); Jawa −0,2% dan Sumatera +0,3% (masing-masing 17 sel-bulan, CRPS 0,014 dan 0,028).
+
+### U1 telur ayam ras (13.42 UTC, sekali jalan, sudah terpakai)
+| Ukuran | Provinsi | Wilayah (target utama) | Nasional |
+| --- | --- | --- | --- |
+| Sel-bulan | 4 | 17 | 17 |
+| CRPS log (resep / P\*) | 0,148 / 0,792 | 0,139 / 0,421 | 0,140 / 0,274 |
+| Perbaikan CRPS | 81% | 67% | 49% |
+| Bias | +6,4% | +2,5% | −4,9% |
+| Arah perubahan sama | 98% | 96% | 95% |
+| Cakupan 90% (Wilson) | 58,4% (23,5–86,5) | 80,5% (61,0–91,6) | 76,3% (53,0–90,2) |
+| CRPS vs penyetelan | +629% | **+397%** | +52% |
+| Status | gagal | **gagal** (memburuk > 20%) | gagal |
+
+- Di wilayah gerbang lebih baik, konsisten, bias, arah lolos dan cakupan "belum bisa diputuskan", tetapi CRPS 5× lebih
+  besar daripada di penyetelan (0,139 vs 0,028; penyetelan hanya 6 sel-bulan) -> gagal -> A "tercatat".
+
+### Turun peringkat daging kerbau (blok penyetelan saja) — aturan di `binpas/turun_peringkat.py`, commit `8c65bb5`
+- 43 kandidat (beda satu tahap dari pemenang), 500 ulangan, ±3 menit. 9 kandidat lolos semua gerbang wilayah.
+- Terpilih: **I0, R4 (regresi panel dengan musim), semua lubang diisi, ciri + pola, tanpa bobot, ragam 0,5×, tanpa
+  koreksi.** Wilayah (25 sel-bulan): CRPS 0,147 vs P\* 0,509 (−71%), bias +2,4%, arah 88%, cakupan 80,7%
+  (Wilson 65,1–90,4%) -> lolos; cakupan "belum bisa diputuskan". Nasional (11): −59%, bias +0,2%.
+- Pemenang semula (R3) CRPS 0,125 tetapi bias −7,9%. Resep semula disimpan di `resep_peringkat1.json`.
+- Kalibrasi dan U1 daging kerbau BELUM dijalankan.
+
+### Status akhir per komoditas (per 14 Nov 2026)
+| Komoditas | Status |
+| --- | --- |
+| Beras | wilayah lolos U1; provinsi lolos dengan catatan; nasional cakupan belum bisa diputuskan |
+| Kedelai | wilayah gagal U1 (bias) -> "tercatat"; provinsi lolos U1; nasional cakupan belum bisa diputuskan |
+| Telur ayam ras | gagal U1 -> "tercatat" |
+| Daging kerbau | resep peringkat berikutnya lolos penyetelan; U1 belum |
+| Daging sapi, pupuk | "tercatat" sampai satuan divalidasi (gagal bias di penyetelan) |
+| Daging ayam ras | "tercatat" (tidak bisa diuji) |

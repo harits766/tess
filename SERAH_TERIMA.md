@@ -221,8 +221,15 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
   kedelai LOLOS (B + tdist + konformal; perbaikan 47%); telur ayam ras LOLOS tapi hanya 6 sel-bulan; daging sapi,
   daging kerbau, pupuk GAGAL gerbang bias (−5,2%, −7,9%, +4,4%; batas 3%); daging ayam ras TIDAK BISA DIUJI (tidak ada
   data 2024 untuk konformal mini, tahap 5 berhenti).
-- Kalibrasi dan U1 komoditas ini BELUM dijalankan. TANYA DULU. Berkas: `binpas/hasil_adu_<komoditas>/`.
-- Belum diputuskan: untuk yang gagal, apakah turun peringkat antarversi tahap 1–3 dicoba atau langsung A "tercatat".
+- Bu Fitria menyetujui (14 Nov 2026): kedelai dan telur lanjut U1; daging kerbau dicoba turun peringkat; daging sapi,
+  pupuk, daging ayam ras berlabel "tercatat".
+- **U1 kedelai SUDAH (terpakai):** wilayah GAGAL gerbang bias (+5,0%, batas 3%; berasal dari "Pulau lain", 4 sel-bulan),
+  gerbang lain lolos (perbaikan 84%, cakupan 95%); provinsi lolos semua; nasional cakupan belum bisa diputuskan.
+- **U1 telur ayam ras SUDAH (terpakai):** gagal (CRPS wilayah 5× lebih besar daripada penyetelan) -> "tercatat".
+- **Daging kerbau:** turun peringkat (`binpas/turun_peringkat.py`, aturan di-commit sebelum dijalankan) -> resep R4
+  (regresi panel musiman) lolos gerbang penyetelan di wilayah (bias +2,4%, perbaikan 71%). Kalibrasi dan U1 kerbau
+  BELUM dijalankan; TANYA DULU.
+- Berkas: `binpas/hasil_adu_<komoditas>/`.
 
 ## Langkah berikut yang masih terbuka
 0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;

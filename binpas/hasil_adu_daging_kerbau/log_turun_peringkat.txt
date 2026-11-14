@@ -1,0 +1,71 @@
+== turun peringkat 2026-11-14 13:44:19 | DAGING KERBAU | pemenang I0|R3|99|ciri+luar+pola|None|0.5|0 | 43 kandidat | P* = A5
+44 versi x 500 ulangan, 56 detik
+                               versi   koreksi  lolos   crps  perbaikan  cakupan    bias   arah
+  I2|R3|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.1236     0.7573   0.8297 -0.0649 0.9114
+  I0|R3|99|ciri+luar+pola|None|0.5|1     tanpa  False 0.1238     0.7568   0.7858 -0.0698 0.9165
+  I1|R3|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.1244     0.7557   0.8072 -0.0596 0.9082
+  I0|R3|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.1254     0.7536   0.8152 -0.0791 0.9175
+     I0|R3|99|ciri+luar+pola|3|0.5|0     tanpa  False 0.1254     0.7536   0.8152 -0.0791 0.9175
+     I0|R3|99|ciri+luar+pola|5|0.5|0     tanpa  False 0.1254     0.7536   0.8152 -0.0791 0.9175
+   I0|R3|3|ciri+luar+pola|None|0.5|0     tanpa  False 0.1256     0.7533   0.7588 -0.0794 0.9177
+   I0|R3|6|ciri+luar+pola|None|0.5|0     tanpa  False 0.1256     0.7533   0.7707 -0.0793 0.9175
+   I0|R3|2|ciri+luar+pola|None|0.5|0     tanpa  False 0.1271     0.7503   0.7406 -0.0809 0.9157
+  I0|R1|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.1292     0.7461   0.8216 -0.0797 0.9165
+   I0|R1|3|ciri+luar+pola|None|0.5|0     tanpa  False 0.1294     0.7459   0.7637 -0.0800 0.9165
+   I0|R1|6|ciri+luar+pola|None|0.5|0     tanpa  False 0.1294     0.7458   0.7763 -0.0799 0.9165
+  I0|R2|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.1300     0.7446   0.8222 -0.0804 0.9145
+   I0|R2|3|ciri+luar+pola|None|0.5|0     tanpa  False 0.1301     0.7444   0.7659 -0.0808 0.9145
+   I0|R2|6|ciri+luar+pola|None|0.5|0     tanpa  False 0.1301     0.7444   0.7789 -0.0807 0.9145
+   I0|R1|2|ciri+luar+pola|None|0.5|0     tanpa  False 0.1308     0.7430   0.7420 -0.0822 0.9158
+   I0|R2|2|ciri+luar+pola|None|0.5|0     tanpa  False 0.1316     0.7414   0.7447 -0.0829 0.9133
+  I0|R3|99|ciri+luar+pola|None|1.0|0     tanpa  False 0.1401     0.7248   0.8845 -0.0786 0.9124
+     I0|R3|99|ciri+luar+pola|5|1.0|0     tanpa  False 0.1401     0.7248   0.8845 -0.0786 0.9124
+     I0|R3|99|ciri+luar+pola|3|1.0|0     tanpa  False 0.1401     0.7248   0.8845 -0.0786 0.9124
+  I0|R4|99|ciri+luar+pola|None|0.5|0     tanpa   True 0.1472     0.7108   0.8075  0.0238 0.8816
+   I0|R3|99|ciri+luar+pola|5|titik|0 konformal  False 0.1499     0.7054   0.9977 -0.0920 0.9204
+I0|R3|99|ciri+luar+pola|None|titik|0 konformal  False 0.1499     0.7054   0.9977 -0.0920 0.9204
+   I0|R3|99|ciri+luar+pola|3|titik|0 konformal  False 0.1499     0.7054   0.9977 -0.0920 0.9204
+   I0|R4|3|ciri+luar+pola|None|0.5|0 konformal   True 0.1528     0.6997   0.9715  0.0234 0.8815
+   I0|R4|6|ciri+luar+pola|None|0.5|0 konformal   True 0.1529     0.6997   0.9715  0.0234 0.8815
+   I0|R4|2|ciri+luar+pola|None|0.5|0 konformal   True 0.1539     0.6977   0.9663  0.0213 0.8803
+  I0|R3|99|ciri+luar+pola|None|2.0|0     tanpa  False 0.1701     0.6658   0.9351 -0.0751 0.9045
+     I0|R3|99|ciri+luar+pola|5|2.0|0     tanpa  False 0.1701     0.6658   0.9351 -0.0751 0.9045
+     I0|R3|99|ciri+luar+pola|3|2.0|0     tanpa  False 0.1701     0.6658   0.9351 -0.0751 0.9045
+            I0|R3|99|pola|None|0.5|0     tanpa  False 0.1823     0.6418   0.7297 -0.1283 0.8894
+                I0|R3|99||None|0.5|0     tanpa  False 0.1987     0.6096   0.7657 -0.0982 0.8760
+            I0|R3|99|ciri|None|0.5|0     tanpa  False 0.2018     0.6034   0.7559 -0.1042 0.8677
+           I0|R3|99|tdist|None|0.5|0     tanpa  False 0.2027     0.6017   0.7538 -0.0985 0.8743
+        I0|R3|99|ragamkel|None|0.5|0     tanpa  False 0.2167     0.5743   0.6759 -0.0982 0.8782
+    I0|B|2|ciri+luar+pola|None|0.5|0     tanpa   True 0.2228     0.5623   0.8170 -0.0265 0.8549
+    I0|B|3|ciri+luar+pola|None|0.5|0     tanpa   True 0.2233     0.5614   0.8428 -0.0181 0.8537
+    I0|B|6|ciri+luar+pola|None|0.5|0     tanpa   True 0.2235     0.5609   0.8599 -0.0166 0.8531
+   I0|B|99|ciri+luar+pola|None|0.5|0     tanpa   True 0.2243     0.5594   0.9247 -0.0128 0.8524
+        I0|R3|99|kalender|None|0.5|0 konformal   True 0.2349     0.5385   0.9747 -0.0134 0.8563
+    I0|C|3|ciri+luar+pola|None|0.5|0     tanpa  False 0.2623     0.4847   0.7970 -0.1245 0.8916
+   I0|C|99|ciri+luar+pola|None|0.5|0     tanpa  False 0.2624     0.4844   0.8782 -0.1199 0.8901
+    I0|C|6|ciri+luar+pola|None|0.5|0     tanpa  False 0.2625     0.4843   0.8156 -0.1232 0.8916
+    I0|C|2|ciri+luar+pola|None|0.5|0     tanpa  False 0.2632     0.4828   0.7718 -0.1294 0.8911
+-> terbaik yang lolos: I0|R4|99|ciri+luar+pola|None|0.5|0#tanpa; dipilih (aturan lebih sederhana): I0|R4|99|ciri+luar+pola|None|0.5|0#tanpa
+                                0         1         2
+tingkat                      prov       wil       nas
+status              tidak ada sel       NaN       NaN
+arah                          NaN   0.88162  0.962357
+sel_bulan                     NaN      25.0      11.0
+crps                          NaN  0.147223  0.073398
+crps_pembanding               NaN   0.50899   0.17979
+perbaikan                     NaN  0.710755  0.591757
+mae                           NaN  0.211028  0.099466
+mae_pembanding                NaN   0.60944  0.228157
+selisih_lo                    NaN -0.588574 -0.167383
+selisih_hi                    NaN  -0.16982 -0.064396
+cakupan                       NaN  0.807452  0.814566
+n_efektif                     NaN      25.0  1.639543
+wilson_lo                     NaN  0.650591  0.254775
+wilson_hi                     NaN  0.904257  0.982591
+bias                          NaN  0.023774  0.001505
+bias_pembanding               NaN -0.287778 -0.012421
+L_lebih_baik                  NaN      True      True
+L_konsisten                   NaN      True      True
+L_cakupan                     NaN      True      True
+cakupan_belum_bisa            NaN      True      True
+L_bias                        NaN      True      True

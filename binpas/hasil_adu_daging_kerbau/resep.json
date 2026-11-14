@@ -1,6 +1,6 @@
 {
  "ident": "I0",
- "metode": "R3",
+ "metode": "R4",
  "batas": 99,
  "add": [
   "ciri",
@@ -13,7 +13,7 @@
  "anggota": [
   [
    "I0",
-   "R3",
+   "R4",
    99,
    [
     "ciri",
@@ -25,15 +25,21 @@
    0
   ]
  ],
- "penggabung": "I0|R3|99|ciri+luar+pola|None|0.5|0",
+ "penggabung": "I0|R4|99|ciri+luar+pola|None|0.5|0",
  "koreksi": "tanpa",
  "koreksi_peringkat1": "tanpa",
- "lolos_penyetelan": false,
+ "lolos_penyetelan": true,
  "pstar": "A5",
  "skala": [
   50,
   200,
   500
  ],
- "dibuat": "2026-11-14 13:35:57"
+ "dibuat": "2026-11-14 13:35:57",
+ "turun_peringkat": {
+  "dari": "I0|R3|99|ciri+luar+pola|None|0.5|0",
+  "kandidat": 43,
+  "lolos": 9,
+  "dibuat": "2026-11-14 13:47:22"
+ }
 }
