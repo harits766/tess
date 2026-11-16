@@ -1,0 +1,704 @@
+<meta name="dash-one-writer">
+<style>
+.pd-page{display:flex;flex-direction:column;gap:var(--cds-gap-xl,28px);font-family:var(--font-anthropic-sans);color:var(--color-fg);font-size:var(--cds-font-size-body,14px);line-height:1.5}
+.pd-page *{box-sizing:border-box}
+.pd-h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title,28px);line-height:1.2;margin:0;text-wrap:balance}
+.pd-lead{margin:var(--cds-gap-sm,8px) 0 0;max-width:68ch;font-size:var(--cds-font-size-heading,17px);line-height:1.45}
+.pd-lead b,.pd-p b{font-weight:var(--cds-font-weight-medium,600);font-variant-numeric:tabular-nums}
+.pd-h2{font-size:var(--cds-font-size-heading,17px);font-weight:var(--cds-font-weight-medium,600);margin:0;text-wrap:balance}
+.pd-h3{font-size:var(--cds-font-size-body,14px);font-weight:var(--cds-font-weight-medium,600);margin:0}
+.pd-p{margin:0;max-width:72ch}
+.pd-muted{color:var(--color-fg-muted)}
+.pd-cap{font-size:var(--cds-font-size-caption,12px);color:var(--color-fg-muted);margin:0;max-width:80ch}
+.pd-sec{display:flex;flex-direction:column;gap:var(--cds-gap-md,12px);min-width:0}
+.pd-sechead{display:flex;flex-direction:column;gap:var(--cds-gap-xs,4px)}
+.pd-nav{display:flex;flex-wrap:wrap;gap:var(--cds-gap-xs,4px) var(--cds-gap-md,12px);font-size:var(--cds-font-size-caption,12px)}
+.pd-nav a{color:var(--color-fg-muted);text-decoration:underline;text-underline-offset:3px}
+.pd-nav a:hover,.pd-nav a:focus-visible{color:var(--color-fg)}
+
+.pd-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:var(--cds-gap-md,12px)}
+.pd-kpi{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius,8px);padding:var(--cds-pad-lg,16px);display:flex;flex-direction:column;gap:2px;min-width:0}
+.pd-kpi-label{font-size:var(--cds-font-size-caption,12px);color:var(--color-fg-muted)}
+.pd-kpi-num{font-family:var(--font-anthropic-serif);font-weight:400;font-size:34px;line-height:1.1;font-variant-numeric:tabular-nums;min-height:38px;display:block}
+.pd-kpi-sub{font-size:var(--cds-font-size-caption,12px);color:var(--color-fg-muted);font-variant-numeric:tabular-nums}
+.pd-up{color:var(--color-ok)}.pd-down{color:var(--color-bad)}
+
+.pd-bar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:var(--cds-gap-sm,8px) var(--cds-gap-md,12px);padding:var(--cds-pad-md,12px);background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius,8px)}
+.pd-field{display:flex;flex-direction:column;gap:2px;font-size:var(--cds-font-size-caption,12px);color:var(--color-fg-muted);min-width:0}
+.pd-field .dash-select{max-width:100%}
+.pd-check{display:flex;align-items:center;gap:6px;font-size:var(--cds-font-size-body,14px);color:var(--color-fg);min-height:32px}
+.pd-btn{font:inherit;color:var(--color-fg);background:transparent;border:1px solid var(--color-border-line);border-radius:var(--cds-radius,8px);padding:5px 12px;cursor:pointer;min-height:32px}
+.pd-btn:hover{background:var(--color-panel)}
+.pd-btn:focus-visible,.pd-link:focus-visible,.pd-hrow:focus-visible,.pd-tile:focus-visible{outline:2px solid var(--color-fg);outline-offset:2px}
+
+.pd-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--cds-gap-lg,20px)}
+.pd-block{display:flex;flex-direction:column;gap:var(--cds-gap-sm,8px);min-width:0}
+.pd-chart{position:relative;min-height:210px;width:100%}
+.pd-chart svg{display:block;overflow:visible}
+.pd-axis text{fill:var(--cds-text-secondary,var(--color-fg-muted));font-size:var(--cds-font-size-caption,12px);font-family:var(--font-anthropic-sans);font-variant-numeric:tabular-nums}
+.pd-endlabel{fill:var(--color-fg);font-size:var(--cds-font-size-caption,12px);font-weight:var(--cds-font-weight-medium,600);font-variant-numeric:tabular-nums}
+.pd-tip{position:absolute;z-index:3;pointer-events:none;background:var(--cds-surface-popover,var(--color-bg));border:1px solid var(--cds-border,var(--color-border-line));box-shadow:var(--cds-shadow-popover,0 2px 8px rgba(0,0,0,.15));border-radius:var(--cds-radius,8px);padding:6px 9px;font-size:var(--cds-font-size-caption,12px);line-height:1.4;max-width:230px;color:var(--color-fg)}
+.pd-tip-t{font-weight:var(--cds-font-weight-medium,600)}
+.pd-tip-l{color:var(--cds-text-secondary,var(--color-fg-muted));font-variant-numeric:tabular-nums}
+
+.pd-hbars{display:flex;flex-direction:column;gap:6px;min-height:150px}
+.pd-hrow{display:grid;grid-template-columns:minmax(84px,32%) 1fr 3.2em;align-items:center;gap:8px;font:inherit;color:inherit;background:transparent;border:0;padding:3px 4px;border-radius:6px;text-align:left;width:100%}
+.pd-hrow-btn{cursor:pointer}
+.pd-hrow-btn:hover{background:var(--color-panel)}
+.pd-hrow-on{background:var(--color-panel);box-shadow:inset 0 0 0 1px var(--color-border-line)}
+.pd-hlabel{overflow-wrap:anywhere;font-size:var(--cds-font-size-caption,12px)}
+.pd-htrack{height:14px;min-width:0}
+.pd-hfill{display:block;height:100%;border-radius:3px;min-width:2px}
+.pd-hval{text-align:right;font-variant-numeric:tabular-nums;font-weight:var(--cds-font-weight-medium,600)}
+
+.pd-map{position:relative;width:100%;min-height:200px}
+.pd-tile{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;font:inherit;color:var(--color-fg);border-radius:5px;border:1.5px solid var(--pd-k);background:color-mix(in srgb,var(--pd-k) 20%,transparent);padding:0;cursor:pointer;line-height:1.05}
+.pd-tile-code{font-size:10px;font-weight:var(--cds-font-weight-medium,600);letter-spacing:.02em}
+.pd-tile-n{font-size:13px;font-variant-numeric:tabular-nums}
+.pd-tile-on{box-shadow:0 0 0 2px var(--color-fg)}
+.pd-k0{--pd-k:var(--color-bad)}.pd-k1{--pd-k:var(--color-warn)}.pd-k2{--pd-k:var(--cds-chart-muted,var(--color-fg-muted))}.pd-k3{--pd-k:var(--color-ok)}
+.pd-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--cds-font-size-caption,12px);margin:0;padding:0;list-style:none}
+.pd-legend li{display:flex;align-items:center;gap:6px}
+.pd-sw{display:inline-block;width:12px;height:12px;border-radius:3px;border:1.5px solid var(--pd-k);background:color-mix(in srgb,var(--pd-k) 20%,transparent);flex:none}
+.pd-pill{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:var(--cds-font-size-caption,12px);padding:1px 8px;border-radius:999px;border:1px solid var(--pd-k);background:color-mix(in srgb,var(--pd-k) 16%,transparent)}
+
+.pd-scroll{overflow:auto;max-height:440px;border:1px solid var(--color-border-line);border-radius:var(--cds-radius,8px)}
+.pd-table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption,12px);font-variant-numeric:tabular-nums}
+.pd-table th{position:sticky;top:0;background:var(--color-panel);text-align:left;font-weight:var(--cds-font-weight-medium,600);padding:7px 10px;border-bottom:1px solid var(--color-border-line);white-space:nowrap;z-index:1}
+.pd-table td{padding:6px 10px;border-bottom:1px solid var(--color-border-line);vertical-align:middle}
+.pd-table .pd-num{text-align:right}
+.pd-table .pd-wrap{min-width:150px}
+.pd-link{font:inherit;color:inherit;background:transparent;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.pd-strip{display:inline-flex;gap:2px;vertical-align:middle}
+.pd-dot{width:8px;height:12px;border-radius:2px;border:1px solid var(--cds-chart-muted,var(--color-border-line))}
+.pd-share{display:flex;align-items:center;gap:8px;min-width:130px}
+.pd-share-track{flex:1;height:8px;border-radius:4px;background:color-mix(in srgb,var(--color-fg-muted) 18%,transparent);overflow:hidden}
+.pd-share-fill{display:block;height:100%}
+.pd-share-v{min-width:3.6em;text-align:right;font-weight:var(--cds-font-weight-medium,600)}
+.pd-empty{padding:14px 10px;color:var(--color-fg-muted)}
+
+.pd-heat{display:grid;gap:3px;font-size:var(--cds-font-size-caption,12px);font-variant-numeric:tabular-nums;min-height:150px;align-content:start}
+.pd-heat-h{color:var(--color-fg-muted);padding:4px 2px;white-space:nowrap}
+.pd-heat-c{padding:6px 2px;text-align:center;border-radius:4px}
+.pd-details{border-top:1px solid var(--color-border-line);padding-top:var(--cds-pad-md,12px)}
+.pd-details summary{cursor:pointer;font-weight:var(--cds-font-weight-medium,600)}
+.pd-defs{margin:var(--cds-gap-sm,8px) 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+[data-dash-source-state=refreshing]{opacity:.5}
+</style>
+
+<div class="pd-page">
+  <header class="pd-sechead" id="ringkasan">
+    <h1 class="pd-h1">Pelaporan Distribusi Bapokting</h1>
+    <p class="pd-lead">Pada periode <b data-draw="angka" data-source="ringkasan" data-field="periode" data-row="0">—</b>, <b data-draw="angka" data-source="ringkasan" data-field="pelapor" data-row="0">—</b> dari <b data-draw="angka" data-source="ringkasan" data-field="pernah_lapor" data-row="0">—</b> perusahaan yang pernah melapor mengirim laporan. <b data-draw="angka" data-source="ringkasan" data-field="perlu_follow_up" data-row="0">—</b> perusahaan perlu di-follow up, dan <b data-draw="angka" data-source="ringkasan" data-field="provinsi_prioritas" data-row="0">—</b> dari <b data-draw="angka" data-source="ringkasan" data-field="provinsi_total" data-row="0">—</b> provinsi belum punya atau hanya punya satu pelapor aktif.</p>
+    <nav class="pd-nav" aria-label="Bagian halaman">
+      <a href="#follow-up">Follow-up perusahaan</a>
+      <a href="#daerah">Sosialisasi dan daerah</a>
+      <a href="#dominasi">Dominasi volume</a>
+      <a href="#tren">Tren dan sebaran</a>
+      <a href="#catatan">Definisi</a>
+    </nav>
+  </header>
+
+  <section class="pd-kpis" aria-label="Angka utama">
+    <div class="pd-kpi" id="kpi-pelapor">
+      <span class="pd-kpi-label">Perusahaan melapor, periode <span data-draw="angka" data-source="ringkasan" data-field="periode" data-row="0">—</span></span>
+      <span class="pd-kpi-num dash-skeleton" data-draw="angka" data-source="ringkasan" data-field="pelapor" data-row="0">—</span>
+      <span class="pd-kpi-sub"><span data-draw="selisih" data-source="ringkasan" data-field="selisih_pelapor" data-row="0">—</span> dibanding <span data-draw="angka" data-source="ringkasan" data-field="periode_sebelumnya" data-row="0">—</span></span>
+    </div>
+    <div class="pd-kpi" id="kpi-follow-up">
+      <span class="pd-kpi-label">Perlu di-follow up</span>
+      <span class="pd-kpi-num dash-skeleton" data-draw="angka" data-source="ringkasan" data-field="perlu_follow_up" data-row="0">—</span>
+      <span class="pd-kpi-sub">1 sampai 12 bulan tanpa laporan. <span data-draw="angka" data-source="ringkasan" data-field="tidak_aktif" data-row="0">—</span> lainnya tidak aktif lebih dari 12 bulan</span>
+    </div>
+    <div class="pd-kpi" id="kpi-sosialisasi">
+      <span class="pd-kpi-label">Provinsi prioritas sosialisasi</span>
+      <span class="pd-kpi-num dash-skeleton" data-draw="angka" data-source="ringkasan" data-field="provinsi_prioritas" data-row="0">—</span>
+      <span class="pd-kpi-sub"><span data-draw="angka" data-source="ringkasan" data-field="provinsi_tanpa_pelapor" data-row="0">—</span> tanpa pelapor aktif, <span data-draw="angka" data-source="ringkasan" data-field="provinsi_satu_pelapor" data-row="0">—</span> hanya satu pelapor</span>
+    </div>
+    <div class="pd-kpi" id="kpi-dominasi">
+      <span class="pd-kpi-label">Pasangan provinsi dan komoditas yang didominasi</span>
+      <span class="pd-kpi-num dash-skeleton" data-draw="angka" data-source="ringkasan" data-field="pasangan_dominan" data-row="0">—</span>
+      <span class="pd-kpi-sub">satu perusahaan memegang <span data-draw="param" data-param="ambang_dominasi">—</span>% volume atau lebih. <span data-draw="angka" data-source="ringkasan" data-field="pasangan_tunggal" data-row="0">—</span> lainnya hanya punya satu pelapor</span>
+    </div>
+  </section>
+
+  <div class="pd-bar" id="filter" role="group" aria-label="Filter rincian">
+    <label class="pd-field">Provinsi
+      <select class="dash-select" id="pd-provinsi" data-draw="pilih_provinsi" data-source="provinsi" aria-label="Provinsi"></select>
+    </label>
+    <label class="pd-field">Komoditas
+      <select class="dash-select" id="pd-komoditas" data-draw="pilih_komoditas" data-source="komoditas" aria-label="Komoditas"></select>
+    </label>
+    <button type="button" class="pd-btn" id="pd-reset">Reset semua filter</button>
+    <p class="pd-cap">Filter ini berlaku untuk tabel rincian di bawah. Angka utama di atas selalu nasional.</p>
+  </div>
+
+  <section class="pd-sec" id="follow-up">
+    <div class="pd-sechead">
+      <h2 class="pd-h2">Perusahaan yang perlu di-follow up</h2>
+      <p class="pd-p pd-muted">Lama tidak melapor dihitung mundur dari periode <span data-draw="angka" data-source="ringkasan" data-field="periode" data-row="0">—</span>. "2 bulan" berarti laporan terakhirnya dua periode sebelum itu.</p>
+    </div>
+    <div class="pd-two">
+      <div class="pd-block">
+        <h3 class="pd-h3">Jumlah perusahaan menurut lama tidak melapor</h3>
+        <div class="pd-hbars dash-skeleton" id="chart-kelompok" data-draw="kelompok" data-source="kelompok_follow_up"></div>
+        <p class="pd-cap">Klik satu batang untuk menyaring tabel. Di luar kelompok ini, <b data-draw="angka" data-source="ringkasan" data-field="tidak_aktif" data-row="0">—</b> perusahaan sudah lebih dari 12 bulan tidak melapor.</p>
+      </div>
+      <div class="pd-block">
+        <h3 class="pd-h3">Provinsi dengan perusahaan terbanyak yang perlu di-follow up</h3>
+        <div class="pd-hbars dash-skeleton" id="chart-prov-follow-up" data-draw="prov_follow_up" data-source="provinsi"></div>
+        <p class="pd-cap">Klik satu provinsi untuk menyaring tabel rincian.</p>
+      </div>
+    </div>
+    <div class="pd-bar" role="group" aria-label="Filter daftar follow-up">
+      <label class="pd-field">Lama tidak melapor
+        <select class="dash-select pd-param" id="pd-kelompok" data-param="kelompok">
+          <option value="follow-up">Semua yang perlu follow-up (1 sampai 12 bulan)</option>
+          <option value="1 bulan">1 bulan</option>
+          <option value="2 bulan">2 bulan</option>
+          <option value="3 bulan">3 bulan</option>
+          <option value="4-6 bulan">4 sampai 6 bulan</option>
+          <option value="7-12 bulan">7 sampai 12 bulan</option>
+          <option value="Tidak aktif (>12 bulan)">Tidak aktif, lebih dari 12 bulan</option>
+          <option value="semua">Semua perusahaan</option>
+        </select>
+      </label>
+      <p class="pd-cap"><b data-draw="jumlah_baris" data-source="daftar_follow_up">—</b> perusahaan sesuai filter.</p>
+    </div>
+    <div class="pd-scroll">
+      <table class="pd-table" id="tabel-follow-up" data-source="daftar_follow_up" data-row-key="kode">
+        <thead><tr>
+          <th data-field="kode">Kode</th>
+          <th data-field="provinsi">Provinsi</th>
+          <th data-field="kab_kota">Kab/kota</th>
+          <th data-field="komoditas">Komoditas</th>
+          <th data-field="periode_terakhir">Laporan terakhir</th>
+          <th class="pd-num" data-field="bulan_tanpa_laporan">Bulan tanpa laporan</th>
+          <th>Riwayat 12 periode</th>
+          <th class="pd-num" data-field="lapor_12_bulan">Lapor dari 12</th>
+        </tr></thead>
+        <tbody data-draw="tabel_follow_up"></tbody>
+      </table>
+    </div>
+    <p class="pd-cap">Kotak terisi pada kolom riwayat berarti ada laporan pada periode itu, urut dari 12 periode lalu (kiri) sampai periode acuan (kanan). Perusahaan ditampilkan dengan kode karena data sumber tidak memuat nama.</p>
+  </section>
+
+  <section class="pd-sec" id="daerah">
+    <div class="pd-sechead">
+      <h2 class="pd-h2">Prioritas sosialisasi dan daerah yang pelaporannya perlu dipertahankan</h2>
+      <p class="pd-p pd-muted">Pelapor aktif adalah perusahaan yang melapor minimal sekali dalam tiga periode terakhir, <span data-draw="angka" data-source="ringkasan" data-field="periode_awal_jendela" data-row="0">—</span> sampai <span data-draw="angka" data-source="ringkasan" data-field="periode" data-row="0">—</span>, menurut provinsi domisili perusahaan.</p>
+    </div>
+    <div class="pd-bar" role="group" aria-label="Ambang daerah">
+      <label class="pd-field">Pertahankan jika pelapor aktif minimal
+        <select class="dash-select pd-param" id="pd-ambang-tahan" data-param="ambang_pertahankan" data-type="number">
+          <option value="3">3 perusahaan</option>
+          <option value="5">5 perusahaan</option>
+          <option value="10">10 perusahaan</option>
+        </select>
+      </label>
+    </div>
+    <ul class="pd-legend" id="legenda-daerah">
+      <li><span class="pd-sw pd-k0"></span>Tanpa pelapor aktif: <b data-draw="angka" data-source="ringkasan" data-field="provinsi_tanpa_pelapor" data-row="0">—</b></li>
+      <li><span class="pd-sw pd-k1"></span>Hanya satu pelapor: <b data-draw="angka" data-source="ringkasan" data-field="provinsi_satu_pelapor" data-row="0">—</b></li>
+      <li><span class="pd-sw pd-k2"></span>Masih sedikit: <b data-draw="angka" data-source="ringkasan" data-field="provinsi_sedikit" data-row="0">—</b></li>
+      <li><span class="pd-sw pd-k3"></span>Pertahankan: <b data-draw="angka" data-source="ringkasan" data-field="provinsi_pertahankan" data-row="0">—</b></li>
+    </ul>
+    <div class="pd-map dash-skeleton" id="peta-daerah" data-draw="peta" data-source="daerah"></div>
+    <p class="pd-cap">Peta petak: satu kotak per provinsi, disusun mendekati letak geografisnya. Klik satu kotak untuk melihat kab/kota dan menyaring tabel rincian.</p>
+    <div class="pd-scroll">
+      <table class="pd-table" id="tabel-daerah" data-source="daerah" data-row-key="provinsi">
+        <thead><tr>
+          <th data-field="provinsi">Provinsi</th>
+          <th data-field="kategori">Kategori</th>
+          <th data-field="tindak_lanjut">Tindak lanjut</th>
+          <th class="pd-num" data-field="pelapor_aktif">Pelapor aktif</th>
+          <th class="pd-num" data-field="perlu_follow_up">Perlu follow-up</th>
+          <th class="pd-num" data-field="tidak_aktif">Tidak aktif</th>
+          <th class="pd-num" data-field="pernah_lapor">Pernah lapor</th>
+        </tr></thead>
+        <tbody data-draw="tabel_daerah"></tbody>
+      </table>
+    </div>
+    <div class="pd-block" id="kabkota">
+      <h3 class="pd-h3">Rincian kab/kota: <span data-draw="param_teks" data-param="provinsi">—</span></h3>
+      <p class="pd-cap" id="pd-kab-hint">Pilih satu provinsi lewat peta, tabel, atau filter di atas untuk melihat kab/kotanya.</p>
+      <div class="pd-scroll" id="pd-kab-wrap" hidden>
+        <table class="pd-table" id="tabel-kabkota" data-source="kabkota" data-row-key="kab_kota">
+          <thead><tr>
+            <th data-field="kab_kota">Kab/kota</th>
+            <th class="pd-num" data-field="pelapor_aktif">Pelapor aktif</th>
+            <th class="pd-num" data-field="perlu_follow_up">Perlu follow-up</th>
+            <th class="pd-num" data-field="tidak_aktif">Tidak aktif</th>
+            <th class="pd-num" data-field="pernah_lapor">Pernah lapor</th>
+          </tr></thead>
+          <tbody data-draw="tabel_kabkota"></tbody>
+        </table>
+      </div>
+      <p class="pd-cap">Hanya kab/kota yang pernah punya pelapor yang tercantum. Data sumber tidak memuat daftar lengkap kab/kota, jadi kab/kota tanpa pelapor sama sekali tidak muncul di sini.</p>
+    </div>
+  </section>
+
+  <section class="pd-sec" id="dominasi">
+    <div class="pd-sechead">
+      <h2 class="pd-h2">Daerah yang volumenya didominasi satu perusahaan</h2>
+      <p class="pd-p pd-muted">Pangsa dihitung dari volume penyaluran <span data-draw="angka" data-source="ringkasan" data-field="periode_awal_jendela" data-row="0">—</span> sampai <span data-draw="angka" data-source="ringkasan" data-field="periode" data-row="0">—</span>, per provinsi domisili dan per komoditas, di antara perusahaan yang melapor.</p>
+    </div>
+    <div class="pd-bar" role="group" aria-label="Filter dominasi">
+      <label class="pd-field">Tandai jika pangsa perusahaan terbesar minimal
+        <select class="dash-select pd-param" id="pd-ambang-dom" data-param="ambang_dominasi" data-type="number">
+          <option value="50">50%</option>
+          <option value="60">60%</option>
+          <option value="75">75%</option>
+          <option value="90">90%</option>
+        </select>
+      </label>
+      <label class="pd-check"><input type="checkbox" class="pd-param" id="pd-tunggal" data-param="tunggal" data-type="boolean"> Sertakan yang hanya punya satu pelapor</label>
+      <p class="pd-cap"><b data-draw="jumlah_baris" data-source="daftar_dominasi">—</b> pasangan provinsi dan komoditas sesuai filter.</p>
+    </div>
+    <div class="pd-scroll">
+      <table class="pd-table" id="tabel-dominasi" data-source="daftar_dominasi" data-row-key="kunci">
+        <thead><tr>
+          <th data-field="provinsi">Provinsi</th>
+          <th data-field="komoditas">Komoditas</th>
+          <th data-field="perusahaan_terbesar">Perusahaan terbesar</th>
+          <th data-field="pangsa_terbesar">Pangsa volume</th>
+          <th class="pd-num" data-field="pangsa_kedua">Pangsa kedua</th>
+          <th class="pd-num" data-field="jumlah_pelapor">Jumlah pelapor</th>
+          <th class="pd-num" data-field="total_penyaluran">Total penyaluran</th>
+          <th data-field="satuan">Satuan</th>
+        </tr></thead>
+        <tbody data-draw="tabel_dominasi"></tbody>
+      </table>
+    </div>
+    <p class="pd-cap">Pangsa ini hanya mencakup perusahaan yang melapor dan berdomisili di provinsi itu, jadi bukan pangsa pasar sebenarnya. Di provinsi dengan sedikit pelapor, pangsa tinggi lebih menunjukkan kurangnya pelapor daripada penguasaan pasar.</p>
+  </section>
+
+  <section class="pd-sec" id="tren">
+    <div class="pd-sechead">
+      <h2 class="pd-h2">Tren pelaporan dan sebaran pelapor</h2>
+      <p class="pd-p pd-muted">Periode adalah bulan distribusi yang dilaporkan. Periode <span data-draw="angka" data-source="ringkasan" data-field="periode_belum_lengkap" data-row="0">—</span> baru memuat <span data-draw="angka" data-source="ringkasan" data-field="pelapor_belum_lengkap" data-row="0">—</span> pelapor, sehingga belum dipakai sebagai acuan.</p>
+    </div>
+    <div class="pd-two">
+      <div class="pd-block">
+        <h3 class="pd-h3">Jumlah perusahaan melapor per periode</h3>
+        <div class="pd-chart dash-skeleton" id="chart-tren" data-draw="tren" data-source="bulanan"></div>
+      </div>
+      <div class="pd-block">
+        <h3 class="pd-h3">Persentase pelapor yang berhenti dibanding periode sebelumnya</h3>
+        <div class="pd-chart dash-skeleton" id="chart-berhenti" data-draw="berhenti" data-source="bulanan"></div>
+      </div>
+    </div>
+    <div class="pd-two">
+      <div class="pd-block">
+        <h3 class="pd-h3">Pelapor aktif per komoditas</h3>
+        <div class="pd-hbars dash-skeleton" id="chart-komoditas" data-draw="komoditas" data-source="komoditas"></div>
+        <p class="pd-cap">Satu perusahaan bisa melapor lebih dari satu komoditas. Klik satu komoditas untuk menyaring tabel rincian.</p>
+      </div>
+      <div class="pd-block">
+        <h3 class="pd-h3">Persentase perusahaan yang masih melapor, menurut tahun pertama lapor</h3>
+        <div class="pd-heat dash-skeleton" id="chart-kohort" data-draw="kohort" data-source="kohort"></div>
+        <p class="pd-cap">Baris adalah tahun pertama perusahaan melapor, kolom adalah tahun laporan. Tiap sel menunjukkan berapa persen perusahaan dari baris itu yang melapor minimal sekali pada tahun tersebut.</p>
+      </div>
+    </div>
+  </section>
+
+  <details class="pd-details" id="catatan">
+    <summary>Definisi dan cara hitung</summary>
+    <ul class="pd-defs">
+      <li><b>Periode acuan</b> adalah periode terakhir yang datanya sudah lengkap. Periode paling baru dilewati jika jumlah pelapornya kurang dari separuh periode sebelumnya.</li>
+      <li><b>Bulan tanpa laporan</b> adalah selisih bulan antara periode acuan dan periode laporan terakhir perusahaan. Tanggal lapor di data sumber selalu tanggal 15 bulan berikutnya, jadi keterlambatan dalam hari tidak bisa diukur.</li>
+      <li><b>Perlu di-follow up</b> berarti 1 sampai 12 bulan tanpa laporan. Lebih dari 12 bulan dianggap tidak aktif dan dipisahkan.</li>
+      <li><b>Belum melapor</b> hanya bisa dihitung untuk perusahaan yang pernah melapor minimal sekali. Perusahaan wajib lapor yang belum pernah melapor tidak ada di data sumber.</li>
+      <li><b>Kategori provinsi</b>: tanpa pelapor aktif, hanya satu pelapor, masih sedikit (dua sampai di bawah ambang), dan pertahankan (mencapai ambang yang dipilih).</li>
+      <li><b>Volume penyaluran</b> memakai angka penyaluran induk tiap laporan. Baris rincian asal dan tujuan yang mengulang angka induk yang sama dihitung satu kali.</li>
+      <li><b>Dashboard lama</b> memakai bulan tanggal lapor, yang selalu satu bulan setelah periode distribusi. Halaman ini memakai periode distribusi, sehingga angka bulanannya bergeser satu bulan dari dashboard lama.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+const BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+const fmt = (v, d = 0) => (v === null || v === undefined || v === '' || isNaN(+v) ? '—' : (+v).toLocaleString('id-ID', {minimumFractionDigits: d, maximumFractionDigits: d}));
+const pct = (v) => fmt(v, 1) + '%';
+const periode = (s) => { const a = String(s || '').split('-'); return a.length === 2 ? BLN[+a[1] - 1] + ' ' + a[0] : String(s || '—'); };
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+const KELAS = {'Tanpa pelapor aktif': 'pd-k0', 'Hanya satu pelapor': 'pd-k1', 'Masih sedikit': 'pd-k2', 'Pertahankan': 'pd-k3'};
+const siap = (node, d) => { if (d.status === 'loading') return false; node.classList.remove('dash-skeleton'); return true; };
+const pesan = (node, d) => { node.replaceChildren(); node.textContent = d.status === 'error' ? 'Gagal memuat' : '—'; };
+const pesanTabel = (tbody, d, n, teks) => { const tr = el('tr'); const td = el('td', 'pd-empty', teks || (d.status === 'error' ? 'Gagal memuat' : d.status === 'loading' ? 'Memuat…' : '—')); td.colSpan = n; tr.append(td); tbody.replaceChildren(tr); };
+const pilih = (nama, nilai) => { const p = dash.params(); dash.setParams({[nama]: p[nama] === nilai ? 'semua' : nilai}); };
+
+dash.calc('ringkasan', {
+  title: 'Ringkasan periode acuan',
+  description: 'Angka utama pada periode lengkap terakhir, memakai ambang yang dipilih di halaman.',
+  inputs: ['bulanan', 'perusahaan', 'provinsi', 'dominasi'],
+  fn: (bulanan, perusahaan, provinsi, dominasi) => {
+    const p = dash.params();
+    const ambangDominasi = Number(p.ambang_dominasi ?? 50);
+    const ambangPertahankan = Number(p.ambang_pertahankan ?? 5);
+    const lengkap = bulanan.filter((r) => +r.lengkap === 1);
+    if (lengkap.length < 3 || !perusahaan.length) return [];
+    const akhir = lengkap[lengkap.length - 1];
+    const sebelum = lengkap[lengkap.length - 2];
+    const belum = bulanan.filter((r) => +r.lengkap !== 1);
+    const jeda = perusahaan.map((r) => +r.bulan_tanpa_laporan);
+    const aktif = provinsi.map((r) => +r.pelapor_aktif);
+    const tanpa = aktif.filter((n) => n === 0).length;
+    const satu = aktif.filter((n) => n === 1).length;
+    const tahan = aktif.filter((n) => n >= ambangPertahankan && n > 1).length;
+    return [{
+      periode: akhir.label,
+      periode_sebelumnya: sebelum.label,
+      periode_awal_jendela: lengkap[lengkap.length - 3].label,
+      pelapor: +akhir.pelapor,
+      selisih_pelapor: +akhir.pelapor - +sebelum.pelapor,
+      pernah_lapor: perusahaan.length,
+      perlu_follow_up: jeda.filter((n) => n >= 1 && n <= 12).length,
+      tidak_aktif: jeda.filter((n) => n > 12).length,
+      provinsi_total: provinsi.length,
+      provinsi_tanpa_pelapor: tanpa,
+      provinsi_satu_pelapor: satu,
+      provinsi_prioritas: tanpa + satu,
+      provinsi_sedikit: provinsi.length - tanpa - satu - tahan,
+      provinsi_pertahankan: tahan,
+      pasangan_total: dominasi.length,
+      pasangan_tunggal: dominasi.filter((r) => +r.jumlah_pelapor === 1).length,
+      pasangan_dominan: dominasi.filter((r) => +r.jumlah_pelapor > 1 && +r.pangsa_terbesar >= ambangDominasi).length,
+      periode_belum_lengkap: belum.map((r) => r.label).join(', ') || 'terbaru',
+      pelapor_belum_lengkap: belum.reduce((s, r) => s + +r.pelapor, 0),
+    }];
+  },
+});
+
+dash.calc('kelompok_follow_up', {
+  title: 'Perusahaan menurut lama tidak melapor',
+  description: 'Jumlah perusahaan di tiap kelompok lama tidak melapor, 1 sampai 12 bulan.',
+  inputs: ['perusahaan'],
+  fn: (perusahaan) => ['1 bulan', '2 bulan', '3 bulan', '4-6 bulan', '7-12 bulan'].map((kelompok) => ({
+    kelompok,
+    perusahaan: perusahaan.filter((r) => r.kelompok === kelompok).length,
+  })),
+});
+
+dash.calc('daerah', {
+  title: 'Kategori provinsi',
+  description: 'Tiap provinsi diberi kategori dan tindak lanjut dari jumlah pelapor aktifnya dan ambang yang dipilih.',
+  inputs: ['provinsi'],
+  fn: (provinsi) => {
+    const ambangPertahankan = Number(dash.params().ambang_pertahankan ?? 5);
+    return provinsi.map((r) => {
+      const aktif = +r.pelapor_aktif;
+      const pernah = +r.pernah_lapor;
+      let kategori = 'Masih sedikit', tindak_lanjut = 'Pantau dan tambah pelapor', urutan = 2;
+      if (aktif === 0) { kategori = 'Tanpa pelapor aktif'; tindak_lanjut = pernah === 0 ? 'Sosialisasi aturan, belum pernah ada pelapor' : 'Sosialisasi ulang, semua pelapor berhenti'; urutan = 0; }
+      else if (aktif === 1) { kategori = 'Hanya satu pelapor'; tindak_lanjut = 'Sosialisasi aturan untuk menambah pelapor'; urutan = 1; }
+      else if (aktif >= ambangPertahankan) { kategori = 'Pertahankan'; tindak_lanjut = 'Pertahankan pelaporan'; urutan = 3; }
+      return {provinsi: r.provinsi, kode_provinsi: r.kode_provinsi, kolom: +r.kolom, baris: +r.baris, kategori, tindak_lanjut, urutan,
+        pelapor_aktif: aktif, perlu_follow_up: +r.perlu_follow_up, tidak_aktif: +r.tidak_aktif, pernah_lapor: pernah};
+    }).sort((a, b) => a.urutan - b.urutan || a.pelapor_aktif - b.pelapor_aktif || b.pernah_lapor - a.pernah_lapor || a.provinsi.localeCompare(b.provinsi));
+  },
+});
+
+dash.calc('daftar_follow_up', {
+  title: 'Daftar perusahaan sesuai filter',
+  description: 'Perusahaan yang cocok dengan filter lama tidak melapor, provinsi, dan komoditas.',
+  inputs: ['perusahaan'],
+  fn: (perusahaan) => {
+    const p = dash.params();
+    const kelompok = p.kelompok ?? 'follow-up', provinsi = p.provinsi ?? 'semua', komoditas = p.komoditas ?? 'semua';
+    return perusahaan.filter((r) => {
+      const jeda = +r.bulan_tanpa_laporan;
+      if (kelompok === 'follow-up' ? !(jeda >= 1 && jeda <= 12) : kelompok !== 'semua' && r.kelompok !== kelompok) return false;
+      if (provinsi !== 'semua' && r.provinsi !== provinsi) return false;
+      if (komoditas !== 'semua' && !String(r.komoditas).split('; ').includes(komoditas)) return false;
+      return true;
+    }).map((r) => ({...r, bulan_tanpa_laporan: +r.bulan_tanpa_laporan, lapor_12_bulan: +r.lapor_12_bulan}))
+      .sort((a, b) => a.bulan_tanpa_laporan - b.bulan_tanpa_laporan || b.lapor_12_bulan - a.lapor_12_bulan || String(a.kode).localeCompare(String(b.kode)));
+  },
+});
+
+dash.calc('daftar_dominasi', {
+  title: 'Pasangan provinsi dan komoditas yang didominasi',
+  description: 'Pasangan yang pangsa volume perusahaan terbesarnya mencapai ambang, sesuai filter provinsi dan komoditas.',
+  inputs: ['dominasi'],
+  fn: (dominasi) => {
+    const p = dash.params();
+    const ambang = Number(p.ambang_dominasi ?? 50), tunggal = p.tunggal === true, provinsi = p.provinsi ?? 'semua', komoditas = p.komoditas ?? 'semua';
+    return dominasi.filter((r) => {
+      if (+r.pangsa_terbesar < ambang) return false;
+      if (!tunggal && +r.jumlah_pelapor === 1) return false;
+      if (provinsi !== 'semua' && r.provinsi !== provinsi) return false;
+      if (komoditas !== 'semua' && r.komoditas !== komoditas) return false;
+      return true;
+    }).map((r) => ({...r, pangsa_terbesar: +r.pangsa_terbesar, pangsa_kedua: +r.pangsa_kedua, jumlah_pelapor: +r.jumlah_pelapor, total_penyaluran: +r.total_penyaluran}))
+      .sort((a, b) => b.jumlah_pelapor > 1 !== a.jumlah_pelapor > 1 ? (b.jumlah_pelapor > 1) - (a.jumlah_pelapor > 1) : b.pangsa_terbesar - a.pangsa_terbesar || b.total_penyaluran - a.total_penyaluran);
+  },
+});
+
+/* ---------- angka dan kata di dalam kalimat ---------- */
+dash.draw('angka', (node) => {
+  const d = dash.data(node.dataset.source);
+  if (!siap(node, d)) return;
+  const row = d.status === 'ok' && d.data ? d.data[+(node.dataset.row || 0)] : null;
+  const v = row ? row[node.dataset.field] : null;
+  node.textContent = v === null || v === undefined || v === '' ? '—' : typeof v === 'number' ? fmt(v) : String(v);
+});
+dash.draw('selisih', (node) => {
+  const d = dash.data('ringkasan');
+  const v = d.status === 'ok' && d.data && d.data[0] ? d.data[0].selisih_pelapor : null;
+  node.classList.remove('pd-up', 'pd-down');
+  if (v === null || v === undefined) { node.textContent = '—'; return; }
+  node.textContent = (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v));
+  if (v !== 0) node.classList.add(v > 0 ? 'pd-up' : 'pd-down');
+});
+dash.draw('param', (node) => { const v = dash.params()[node.dataset.param]; node.textContent = v === null || v === undefined ? '—' : fmt(v); });
+dash.draw('param_teks', (node) => { const v = dash.params()[node.dataset.param]; node.textContent = !v || v === 'semua' ? 'belum ada provinsi dipilih' : String(v); });
+dash.draw('jumlah_baris', (node) => { const d = dash.data(node.dataset.source); node.textContent = d.status === 'ok' && d.data ? fmt(d.data.length) : '—'; });
+
+/* ---------- filter ---------- */
+const isiPilihan = (nama, sumber, kolom, semua) => (sel) => {
+  const d = dash.data(sumber);
+  const daftar = d.status === 'ok' ? d.data.map((r) => r[kolom]).sort((a, b) => String(a).localeCompare(String(b))) : [];
+  sel.replaceChildren(new Option(semua, 'semua'), ...daftar.map((v) => new Option(v, v)));
+  sel.value = dash.params()[nama] ?? 'semua';
+  if (sel.selectedIndex < 0) sel.value = 'semua';
+  sel.onchange = () => dash.setParams({[nama]: sel.value});
+};
+dash.draw('pilih_provinsi', isiPilihan('provinsi', 'provinsi', 'provinsi', 'Semua provinsi'));
+dash.draw('pilih_komoditas', isiPilihan('komoditas', 'komoditas', 'komoditas', 'Semua komoditas'));
+
+document.querySelectorAll('.pd-param').forEach((c) => c.addEventListener('change', () => {
+  const t = c.dataset.type;
+  dash.setParams({[c.dataset.param]: t === 'boolean' ? c.checked : t === 'number' ? Number(c.value) : c.value});
+}));
+document.querySelectorAll('#pd-reset').forEach((b) => b.addEventListener('click', () => dash.resetParams()));
+dash.onData(() => {
+  const p = dash.params();
+  document.querySelectorAll('.pd-param').forEach((c) => {
+    if (document.activeElement === c) return;
+    const v = p[c.dataset.param];
+    if (c.dataset.type === 'boolean') c.checked = v === true; else if (v !== undefined && v !== null) c.value = String(v);
+  });
+  const ada = !!p.provinsi && p.provinsi !== 'semua';
+  document.querySelectorAll('#pd-kab-wrap').forEach((n) => { n.hidden = !ada; });
+  document.querySelectorAll('#pd-kab-hint').forEach((n) => { n.hidden = ada; });
+});
+
+/* ---------- batang mendatar ---------- */
+function batang(node, items, o) {
+  const max = Math.max(1, ...items.map((i) => i.nilai));
+  node.replaceChildren(...items.map((i) => {
+    const row = el(o.klik ? 'button' : 'div', 'pd-hrow' + (o.klik ? ' pd-hrow-btn' : '') + (i.aktif ? ' pd-hrow-on' : ''));
+    if (o.klik) { row.type = 'button'; row.setAttribute('aria-pressed', i.aktif ? 'true' : 'false'); row.addEventListener('click', () => o.klik(i)); }
+    const track = el('span', 'pd-htrack'), fill = el('span', 'pd-hfill');
+    fill.style.width = (100 * i.nilai / max) + '%';
+    fill.style.background = i.redup ? 'var(--cds-chart-muted)' : dash.colors[0];
+    if (i.nilai === 0) fill.style.visibility = 'hidden';
+    track.append(fill);
+    row.append(el('span', 'pd-hlabel', i.label), track, el('span', 'pd-hval', fmt(i.nilai)));
+    return row;
+  }));
+}
+dash.draw('kelompok', (node) => {
+  const d = dash.data('kelompok_follow_up');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok' || !d.data) return pesan(node, d);
+  const kini = dash.params().kelompok;
+  batang(node, d.data.map((r) => ({label: r.kelompok.replace('-', ' sampai '), kunci: r.kelompok, nilai: r.perusahaan, aktif: kini === r.kelompok})),
+    {klik: (i) => dash.setParams({kelompok: kini === i.kunci ? 'follow-up' : i.kunci})});
+});
+dash.draw('prov_follow_up', (node) => {
+  const d = dash.data('provinsi');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok') return pesan(node, d);
+  const kini = dash.params().provinsi;
+  const rows = d.data.map((r) => ({label: r.provinsi, kunci: r.provinsi, nilai: +r.perlu_follow_up, aktif: kini === r.provinsi}))
+    .filter((r) => r.nilai > 0).sort((a, b) => b.nilai - a.nilai).slice(0, 8);
+  batang(node, rows, {klik: (i) => pilih('provinsi', i.kunci)});
+});
+dash.draw('komoditas', (node) => {
+  const d = dash.data('komoditas');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok') return pesan(node, d);
+  const kini = dash.params().komoditas;
+  const rows = d.data.map((r) => ({label: r.komoditas, kunci: r.komoditas, nilai: +r.pelapor_aktif, aktif: kini === r.komoditas, redup: +r.pelapor_aktif === 0}))
+    .sort((a, b) => b.nilai - a.nilai);
+  batang(node, rows, {klik: (i) => pilih('komoditas', i.kunci)});
+});
+
+/* ---------- grafik deret waktu ---------- */
+function deret(node, rows, o) {
+  const W = Math.max(240, node.clientWidth || 600), H = 210, m = {t: 20, r: 14, b: 22, l: 40};
+  const x = d3.scaleBand().domain(rows.map((r) => r.periode)).range([m.l, W - m.r]).paddingInner(0.25);
+  const y = d3.scaleLinear().domain([0, d3.max(rows, (r) => r.v) || 1]).nice(4).range([H - m.b, m.t]);
+  const cx = (r) => x(r.periode) + x.bandwidth() / 2;
+  node.replaceChildren();
+  const svg = d3.select(node).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%').attr('height', H).attr('role', 'img').attr('aria-label', o.aria);
+  const ticks = y.ticks(4);
+  svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).style('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').attr('class', 'pd-axis').selectAll('text').data(ticks).join('text').attr('x', m.l - 6).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text((t) => o.tick(t));
+  const jan = rows.filter((r) => r.periode.endsWith('-01'));
+  const tiapTahun = W / Math.max(1, jan.length) < 44 ? 2 : 1;
+  svg.append('g').attr('class', 'pd-axis').selectAll('text').data(jan.filter((_, i) => i % tiapTahun === 0)).join('text').attr('x', (r) => x(r.periode)).attr('y', H - 5).text((r) => r.periode.slice(0, 4));
+  svg.append('g').selectAll('line').data(jan).join('line').attr('x1', (r) => x(r.periode)).attr('x2', (r) => x(r.periode)).attr('y1', H - m.b).attr('y2', H - m.b + 4).style('stroke', 'var(--cds-chart-axis)');
+  const utuh = rows.filter((r) => r.lengkap);
+  const ujung = utuh[utuh.length - 1];
+  if (o.jenis === 'batang') {
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.periode)).attr('width', x.bandwidth()).attr('y', (r) => y(r.v)).attr('height', (r) => y(0) - y(r.v))
+      .style('fill', (r) => (r.lengkap ? dash.colors[0] : 'var(--cds-chart-muted)'));
+  } else {
+    svg.append('path').attr('d', d3.line().x(cx).y((r) => y(r.v))(utuh)).style('fill', 'none').style('stroke', dash.colors[0]).style('stroke-width', 1.75);
+    if (ujung) svg.append('circle').attr('cx', cx(ujung)).attr('cy', y(ujung.v)).attr('r', 3.5).style('fill', dash.colors[0]);
+  }
+  if (ujung) svg.append('text').attr('class', 'pd-endlabel').attr('x', Math.min(W - 2, cx(ujung) + 4)).attr('y', Math.max(11, y(ujung.v) - 7)).attr('text-anchor', 'end').text(o.nilai(ujung.v));
+  const garis = svg.append('line').attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-reference, var(--cds-chart-axis))').style('visibility', 'hidden');
+  const tip = el('div', 'pd-tip'); tip.hidden = true; node.append(tip);
+  const tunjuk = (ev) => {
+    const kotak = node.getBoundingClientRect();
+    const px = (ev.clientX - kotak.left) * (W / (kotak.width || W));
+    const i = Math.max(0, Math.min(rows.length - 1, Math.floor((px - m.l) / x.step())));
+    const r = rows[i];
+    garis.attr('x1', cx(r)).attr('x2', cx(r)).style('visibility', 'visible');
+    tip.replaceChildren(el('div', 'pd-tip-t', r.label), ...o.baris(r).map((s) => el('div', 'pd-tip-l', s)));
+    tip.hidden = false;
+    const lebar = tip.offsetWidth || 150;
+    tip.style.left = Math.max(0, Math.min(kotak.width - lebar, cx(r) + 10 > kotak.width - lebar ? cx(r) - lebar - 10 : cx(r) + 10)) + 'px';
+    tip.style.top = '0px';
+  };
+  svg.append('rect').attr('x', m.l).attr('y', 0).attr('width', W - m.l - m.r).attr('height', H).style('fill', 'transparent')
+    .on('pointermove', tunjuk).on('pointerdown', tunjuk).on('pointerleave', () => { tip.hidden = true; garis.style('visibility', 'hidden'); });
+}
+dash.draw('tren', (node) => {
+  const d = dash.data('bulanan');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok') return pesan(node, d);
+  const rows = d.data.map((r) => ({periode: r.periode, label: r.label, v: +r.pelapor, baru: +r.pelapor_baru, lengkap: +r.lengkap === 1}));
+  deret(node, rows, {jenis: 'batang', aria: 'Jumlah perusahaan yang melapor tiap periode', tick: (t) => fmt(t), nilai: (v) => fmt(v),
+    baris: (r) => [fmt(r.v) + ' perusahaan melapor', fmt(r.baru) + ' pelapor baru'].concat(r.lengkap ? [] : ['Periode belum lengkap'])});
+});
+dash.draw('berhenti', (node) => {
+  const d = dash.data('bulanan');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok') return pesan(node, d);
+  const rows = d.data.filter((r) => r.persen_berhenti !== null && r.persen_berhenti !== '' && +r.lengkap === 1)
+    .map((r) => ({periode: r.periode, label: r.label, v: +r.persen_berhenti, hilang: +r.berhenti_lapor, lengkap: true}));
+  deret(node, rows, {jenis: 'garis', aria: 'Persentase pelapor periode sebelumnya yang tidak melapor lagi', tick: (t) => fmt(t) + '%', nilai: (v) => pct(v),
+    baris: (r) => [pct(r.v) + ' berhenti melapor', fmt(r.hilang) + ' perusahaan dari periode sebelumnya']});
+});
+
+/* ---------- peta petak dan tabel daerah ---------- */
+dash.draw('peta', (node) => {
+  const d = dash.data('daerah');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok' || !d.data) return pesan(node, d);
+  const rows = d.data, kini = dash.params().provinsi;
+  const kol = d3.max(rows, (r) => r.kolom) + 1, bar = d3.max(rows, (r) => r.baris) + 1;
+  const W = node.clientWidth || 600, sela = W < 520 ? 2 : 4;
+  const sisi = Math.max(14, Math.min(52, Math.floor((W - sela * (kol - 1)) / kol)));
+  node.style.height = bar * sisi + (bar - 1) * sela + 'px';
+  node.style.minHeight = '0';
+  const tip = el('div', 'pd-tip'); tip.hidden = true;
+  const tunjuk = (r, b) => {
+    tip.replaceChildren(el('div', 'pd-tip-t', r.provinsi), el('div', 'pd-tip-l', fmt(r.pelapor_aktif) + ' pelapor aktif, ' + fmt(r.pernah_lapor) + ' pernah lapor'), el('div', 'pd-tip-l', r.tindak_lanjut));
+    tip.hidden = false;
+    const lebar = tip.offsetWidth || 180;
+    tip.style.left = Math.max(0, Math.min(W - lebar, b.offsetLeft + sisi / 2 - lebar / 2)) + 'px';
+    tip.style.top = (b.offsetTop > 70 ? b.offsetTop - tip.offsetHeight - 6 : b.offsetTop + sisi + 6) + 'px';
+  };
+  node.replaceChildren(...rows.map((r) => {
+    const b = el('button', 'pd-tile ' + (KELAS[r.kategori] || 'pd-k2') + (kini === r.provinsi ? ' pd-tile-on' : ''));
+    b.type = 'button';
+    b.style.left = r.kolom * (sisi + sela) + 'px'; b.style.top = r.baris * (sisi + sela) + 'px'; b.style.width = sisi + 'px'; b.style.height = sisi + 'px';
+    b.setAttribute('aria-label', r.provinsi + ': ' + r.pelapor_aktif + ' pelapor aktif, ' + r.kategori);
+    b.setAttribute('aria-pressed', kini === r.provinsi ? 'true' : 'false');
+    const kode = el('span', 'pd-tile-code', r.kode_provinsi);
+    if (sisi < 22) kode.style.fontSize = '8px';
+    b.append(kode);
+    if (sisi >= 34) b.append(el('span', 'pd-tile-n', fmt(r.pelapor_aktif)));
+    b.addEventListener('pointerenter', () => tunjuk(r, b)); b.addEventListener('focus', () => tunjuk(r, b));
+    b.addEventListener('pointerleave', () => { tip.hidden = true; }); b.addEventListener('blur', () => { tip.hidden = true; });
+    b.addEventListener('click', () => pilih('provinsi', r.provinsi));
+    return b;
+  }), tip);
+});
+const sel = (text, cls) => el('td', cls, text);
+dash.draw('tabel_daerah', (tbody) => {
+  const d = dash.data('daerah');
+  if (d.status !== 'ok' || !d.data) return pesanTabel(tbody, d, 7);
+  tbody.replaceChildren(...d.data.map((r) => {
+    const tr = el('tr'); tr.dataset.key = encodeURIComponent(r.provinsi);
+    const nama = el('td'); const b = el('button', 'pd-link', r.provinsi); b.type = 'button'; b.addEventListener('click', () => pilih('provinsi', r.provinsi)); nama.append(b);
+    const kat = el('td'); kat.append(el('span', 'pd-pill ' + (KELAS[r.kategori] || 'pd-k2'), r.kategori));
+    tr.append(nama, kat, sel(r.tindak_lanjut, 'pd-wrap'), sel(fmt(r.pelapor_aktif), 'pd-num'), sel(fmt(r.perlu_follow_up), 'pd-num'), sel(fmt(r.tidak_aktif), 'pd-num'), sel(fmt(r.pernah_lapor), 'pd-num'));
+    return tr;
+  }));
+});
+dash.draw('tabel_kabkota', (tbody) => {
+  const d = dash.data('kabkota');
+  if (d.status !== 'ok') return pesanTabel(tbody, d, 5);
+  const prov = dash.params().provinsi;
+  const rows = d.data.filter((r) => r.provinsi === prov).sort((a, b) => +b.pelapor_aktif - +a.pelapor_aktif || +b.pernah_lapor - +a.pernah_lapor);
+  if (!rows.length) return pesanTabel(tbody, d, 5, 'Belum pernah ada pelapor di provinsi ini.');
+  tbody.replaceChildren(...rows.map((r) => {
+    const tr = el('tr'); tr.dataset.key = encodeURIComponent(r.kab_kota);
+    tr.append(sel(r.kab_kota), sel(fmt(r.pelapor_aktif), 'pd-num'), sel(fmt(r.perlu_follow_up), 'pd-num'), sel(fmt(r.tidak_aktif), 'pd-num'), sel(fmt(r.pernah_lapor), 'pd-num'));
+    return tr;
+  }));
+});
+
+/* ---------- tabel follow-up dan dominasi ---------- */
+dash.draw('tabel_follow_up', (tbody) => {
+  const d = dash.data('daftar_follow_up');
+  if (d.status !== 'ok' || !d.data) return pesanTabel(tbody, d, 8);
+  if (!d.data.length) return pesanTabel(tbody, d, 8, 'Tidak ada perusahaan yang cocok dengan filter ini.');
+  tbody.replaceChildren(...d.data.map((r) => {
+    const tr = el('tr'); tr.dataset.key = encodeURIComponent(r.kode);
+    const strip = el('span', 'pd-strip'); strip.setAttribute('role', 'img');
+    const bit = String(r.riwayat_12_bulan || '').padStart(12, '0');
+    strip.setAttribute('aria-label', 'Melapor ' + r.lapor_12_bulan + ' dari 12 periode terakhir');
+    for (const c of bit) { const k = el('span', 'pd-dot'); if (c === '1') { k.style.background = dash.colors[0]; k.style.borderColor = dash.colors[0]; } strip.append(k); }
+    const riw = el('td'); riw.append(strip);
+    tr.append(sel(r.kode), sel(r.provinsi), sel(r.kab_kota), sel(r.komoditas, 'pd-wrap'), sel(periode(r.periode_terakhir)), sel(fmt(r.bulan_tanpa_laporan), 'pd-num'), riw, sel(fmt(r.lapor_12_bulan), 'pd-num'));
+    return tr;
+  }));
+});
+dash.draw('tabel_dominasi', (tbody) => {
+  const d = dash.data('daftar_dominasi');
+  if (d.status !== 'ok' || !d.data) return pesanTabel(tbody, d, 8);
+  if (!d.data.length) return pesanTabel(tbody, d, 8, 'Tidak ada pasangan yang cocok dengan filter ini.');
+  tbody.replaceChildren(...d.data.map((r) => {
+    const tr = el('tr'); tr.dataset.key = encodeURIComponent(r.kunci);
+    const pangsa = el('td'); const w = el('span', 'pd-share'), tr2 = el('span', 'pd-share-track'), f = el('span', 'pd-share-fill');
+    f.style.width = Math.max(0, Math.min(100, r.pangsa_terbesar)) + '%';
+    f.style.background = r.jumlah_pelapor === 1 ? 'var(--cds-chart-muted)' : dash.colors[0];
+    tr2.append(f); w.append(tr2, el('span', 'pd-share-v', pct(r.pangsa_terbesar))); pangsa.append(w);
+    tr.append(sel(r.provinsi), sel(r.komoditas), sel(r.perusahaan_terbesar), pangsa, sel(r.jumlah_pelapor === 1 ? '—' : pct(r.pangsa_kedua), 'pd-num'),
+      sel(fmt(r.jumlah_pelapor), 'pd-num'), sel(fmt(r.total_penyaluran, r.total_penyaluran < 10 ? 2 : 0), 'pd-num'), sel(r.satuan));
+    return tr;
+  }));
+});
+
+/* ---------- kohort ---------- */
+dash.draw('kohort', (node) => {
+  const d = dash.data('kohort');
+  if (!siap(node, d)) return;
+  if (d.status !== 'ok') return pesan(node, d);
+  const rows = d.data.map((r) => ({awal: +r.tahun_pertama_lapor, tahun: +r.tahun_laporan, n: +r.perusahaan_kohort, v: +r.persen_masih_lapor}));
+  const tahun = [...new Set(rows.map((r) => r.tahun))].sort(), awal = [...new Set(rows.map((r) => r.awal))].sort();
+  node.style.gridTemplateColumns = 'minmax(64px,auto) repeat(' + tahun.length + ',minmax(0,1fr))';
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', 'Persentase perusahaan yang masih melapor menurut tahun pertama lapor dan tahun laporan');
+  const cells = [el('span', 'pd-heat-h', 'Pertama lapor'), ...tahun.map((t) => el('span', 'pd-heat-h pd-heat-c', String(t)))];
+  awal.forEach((a) => {
+    const grup = rows.filter((r) => r.awal === a);
+    cells.push(el('span', 'pd-heat-h', a + ' (' + fmt(grup[0].n) + ')'));
+    tahun.forEach((t) => {
+      const r = grup.find((g) => g.tahun === t);
+      const c = el('span', 'pd-heat-c', r ? fmt(r.v) + '%' : '');
+      if (r) c.style.background = 'color-mix(in srgb, ' + dash.colors[0] + ' ' + Math.round(8 + r.v * 0.37) + '%, transparent)';
+      cells.push(c);
+    });
+  });
+  node.replaceChildren(...cells);
+});
+</script>
