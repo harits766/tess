@@ -22,7 +22,7 @@ bagian 9–14.
 Okt 2026–Mar 2027, ±April 2027). Jangan ubah `resep.json`.
 
 **Notebook tunggal (sesi 8, 16 Nov 2026): SELESAI** — `binpas/colab/05_inatrade_tujuh_komoditas.ipynb` (dengan
-output dari awal sampai akhir; dibangun dan dijalankan oleh `binpas/colab/buat_notebook.py`). Sudah dikirim ke
+output dari awal sampai akhir, termasuk log proses resmi dan enam grafik; dibangun dan dijalankan oleh `binpas/colab/buat_notebook.py`). Sudah dikirim ke
 pengguna. Replikasi di dalamnya: daging sapi, kedelai, daging kerbau, telur, dan U2 beras SAMA PERSIS dengan hasil
 resmi; beras berbeda tipis seperti diperkirakan (status gerbang sama). **Jalur Colab belum pernah dicoba** (hanya
 dijalankan lokal); bila pengguna melaporkan galat di Colab, lihat bagian 14.0.
@@ -339,10 +339,17 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - Pengguna meminta "lanjutkan notebook tunggal di bagian 14", lalu mengizinkan run penuh ("Jalankan penuh": termasuk
   replikasi U1 lima komoditas dan U2 beras). File INATRADE sesi 8 ber-hash sama dengan sesi 7 (`c667dddb…`): bukan
   data baru.
-- Berkas: `binpas/colab/buat_notebook.py` (pembangun) dan `binpas/colab/05_inatrade_tujuh_komoditas.ipynb` (42 sel,
-  DENGAN output, ±420 kB). `python binpas/colab/buat_notebook.py` saja akan MENIMPA notebook dengan versi tanpa output;
+- Berkas: `binpas/colab/buat_notebook.py` (pembangun) dan `binpas/colab/05_inatrade_tujuh_komoditas.ipynb` (55 sel,
+  DENGAN output, ±1,1 MB: ±2.400 baris output teks + 6 grafik). `python binpas/colab/buat_notebook.py` saja akan MENIMPA notebook dengan versi tanpa output;
   untuk output pakai `--jalankan <folder berisi xlsm>` (±2,5 menit, 4 CPU; butuh `pip install nbclient nbformat
-  ipykernel`).
+  ipykernel matplotlib`).
+- **Versi pertama dinilai pengguna "pendek banget isinya"**; pengguna memilih tambahan "output proses lengkap" dan
+  "grafik" (bukan "kode tampil di sel" dan bukan "penyetelan dijalankan ulang"). Versi sekarang: log proses RESMI apa
+  adanya per komoditas (`log_penyetelan.txt`, `log_turun_peringkat.txt`, untuk beras juga log kalibrasi dan ujian;
+  resep versi 2 juga), output mentah replikasi kalibrasi/ujian/U2, dan enam grafik matplotlib (pelapor per bulan,
+  cakupan volume, CRPS resep vs P\*, gerbang bias + cakupan, CRPS per bulan dari replikasi, AP U2). Kode skrip tetap
+  di sel paket (base64). Notebook dijalankan tiga kali di sesi 8 (dua kali versi pertama, sekali versi ini); angka
+  replikasi sama di ketiganya.
 - Isi mengikuti rancangan 14.2, dengan penyesuaian:
   1. pandas 3.0.5 di Colab dipasang ke folder terpisah (`pip install --target /content/pustaka_inatrade`) dan dipakai
      skrip lewat `PYTHONPATH`, bukan menimpa pandas kernel; bila gagal dipasang, skrip memakai pandas bawaan dengan

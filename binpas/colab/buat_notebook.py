@@ -84,12 +84,12 @@ Dit. Bina Pasar Dalam Negeri (Binpas), Kemendag. Notebook ini merangkum seluruh 
 
 | Bagian | Isi | Jenis |
 | --- | --- | --- |
-| 1 | Tahap 0: profil data INATRADE | dihitung ulang dari file INATRADE |
+| 1 | Tahap 0: profil data INATRADE | dihitung ulang dari file INATRADE + grafik pelapor |
 | 2 | Validasi satuan daging sapi dan pupuk | dihitung ulang |
 | 3 | Cakupan volume terhadap sumber BPS | tabel resmi ditampilkan (ambil ulang dari BPS opsional) |
-| 4 | Lima komoditas yang diuji: resep, gerbang penyetelan, gerbang U1 resmi | tabel resmi + **replikasi** kalibrasi dan U1 |
-| 5 | Keterwakilan beras (U2) terhadap Pola Distribusi BPS | tabel resmi + **replikasi** |
-| 6 | Resep versi 2 (kedelai, daging kerbau, telur ayam ras) | ditampilkan saja; **belum boleh diuji** |
+| 4 | Lima komoditas yang diuji: resep, gerbang penyetelan, gerbang U1 resmi | tabel + log proses resmi + **replikasi** kalibrasi dan U1 + grafik |
+| 5 | Keterwakilan beras (U2) terhadap Pola Distribusi BPS | tabel resmi + grafik + **replikasi** |
+| 6 | Resep versi 2 (kedelai, daging kerbau, telur ayam ras) | tabel + log penyetelan resmi; **belum boleh diuji** |
 | 7 | Ringkasan status tujuh komoditas | dari tabel resmi |
 | 8 | (Opsional, mati) penyetelan ulang penuh | tidak dijalankan |
 
@@ -343,6 +343,18 @@ def uraian_resep(r):
             f"rekonsiliasi {'dengan' if r['rekon'] else 'tanpa'}; koreksi akhir {r['koreksi']}; pembanding P* = {r['pstar']}")
 
 
+def tampil_log(folder, nama, judul):
+    """Cetak log RESMI apa adanya (skor agregat per versi; tidak ada data per perusahaan)."""
+    p = R(folder, nama)
+    if not os.path.exists(p):
+        return
+    print('=' * 110)
+    print(f'{judul}  [paket/binpas/{folder}/{nama}]')
+    print('=' * 110)
+    print(open(p).read().rstrip())
+    print()
+
+
 def tampil_resmi(label, folder):
     """Resep, gerbang penyetelan, dan gerbang U1 RESMI sebuah komoditas (dari paket tertanam; tidak ada yang dijalankan)."""
     resep = json.load(open(R(folder, 'resep.json')))
@@ -419,8 +431,7 @@ def replikasi(kom, folder):
     ekor = [] if kom == 'BERAS' else [kom]
     print(f'REPLIKASI (bukan ujian baru) -> {out}')
     for mode in ('kalibrasi', 'ujian'):
-        if jalan('binpas/adu_versi.py', mode, XLSM, out, '-', *ekor, tampil=False,
-                 log=os.path.join(out, f'layar_{mode}.txt')) != 0:
+        if jalan('binpas/adu_versi.py', mode, XLSM, out, '-', *ekor, log=os.path.join(out, f'layar_{mode}.txt')) != 0:
             print('replikasi berhenti: langkah', mode, 'gagal')
             return None
     return baca_gerbang(os.path.join(out, 'gerbang_U1.csv'))
@@ -439,6 +450,231 @@ UJI = [('Beras', 'BERAS', 'hasil_adu_beras'),
        ('Daging kerbau', 'DAGING KERBAU', 'hasil_adu_daging_kerbau'),
        ('Telur ayam ras', 'TELUR AYAM RAS', 'hasil_adu_telur_ayam')]
 print('fungsi bantu siap; berkas hasil resmi di', os.path.relpath(R(), BASE) + '/')
+''')
+
+kode(r'''
+# --- fungsi grafik (di kernel; matplotlib). Warna: satu palet untuk semua grafik; teks selalu warna tinta ---
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+PERMUKAAN, TINTA, TINTA2, REDUP, GARIS, SUMBU, NETRAL = '#fcfcfb', '#0b0b0b', '#52514e', '#898781', '#e1e0d9', '#c3c2b7', '#f0efec'
+BIRU, BIRU_MUDA, ORANYE, AQUA = '#2a78d6', '#9ec5f4', '#eb6834', '#1baf7a'
+WARNA_TK = {'prov': BIRU, 'wil': ORANYE, 'nas': AQUA}      # identitas tingkat: warna + bentuk penanda
+BENTUK_TK = {'prov': 'o', 'wil': 's', 'nas': '^'}
+plt.rcParams.update({
+    'figure.facecolor': PERMUKAAN, 'axes.facecolor': PERMUKAAN, 'savefig.facecolor': PERMUKAAN, 'figure.dpi': 110,
+    'font.size': 9, 'text.color': TINTA, 'axes.labelcolor': TINTA2, 'xtick.color': TINTA2, 'ytick.color': TINTA2,
+    'axes.edgecolor': SUMBU, 'axes.linewidth': 1, 'axes.spines.top': False, 'axes.spines.right': False,
+    'axes.titlesize': 10, 'axes.titleweight': 'bold', 'axes.titlelocation': 'left', 'xtick.major.size': 0,
+    'ytick.major.size': 0, 'legend.frameon': False, 'lines.solid_capstyle': 'round', 'lines.solid_joinstyle': 'round'})
+KOM7 = [('BERAS', 'Beras'), ('DAGING SAPI', 'Daging sapi'), ('KEDELAI BAHAN BAKU TEMPE DAN TAHU', 'Kedelai'),
+        ('DAGING KERBAU', 'Daging kerbau'), ('TELUR AYAM RAS', 'Telur ayam ras'), ('DAGING AYAM RAS', 'Daging ayam ras'),
+        ('PUPUK', 'Pupuk')]
+
+
+def _judul(fig, judul, anak=None, y=0.98):
+    fig.text(0.01, y, judul, fontsize=12, fontweight='bold', va='top', ha='left')
+    if anak:
+        fig.text(0.01, y - 0.065 * 4.6 / fig.get_figheight(), anak, fontsize=9, color=TINTA2, va='top', ha='left')
+
+
+def _koma(sumbu):
+    sumbu.set_major_formatter(lambda v, p: idn(f'{v:g}'))
+
+
+def _titik(ax, x, y, warna, bentuk='o', ukuran=8):
+    ax.plot(x, y, bentuk, ms=ukuran, color=warna, mec=PERMUKAAN, mew=2, zorder=3, ls='none')
+
+
+def grafik_pelapor(path):
+    """Jumlah perusahaan yang melapor per bulan, tujuh komoditas (panel kecil; sumbu tegak tiap panel sendiri)."""
+    N = pd.read_csv(path, index_col=0)
+    x = list(range(len(N)))
+    fig, axs = plt.subplots(2, 4, figsize=(12, 4.9), sharex=True)
+    for ax, (kom, label) in zip(axs.flat, KOM7):
+        y = N[kom].values
+        ax.yaxis.grid(True, color=GARIS, lw=1)
+        ax.set_axisbelow(True)
+        for b in (17.5, 23.5):                       # batas blok penyetelan | kalibrasi | ujian
+            ax.axvline(b, color=SUMBU, lw=1)
+        ax.plot(x, y, color=BIRU, lw=2)
+        _titik(ax, x[-1], y[-1], BIRU)
+        ax.annotate(f'{int(y[-1])}', (x[-1], y[-1]), xytext=(7, 0), textcoords='offset points', va='center')
+        ax.set_title(label)
+        ax.set_ylim(0, max(y.max(), 1) * 1.18)
+        ax.set_xlim(-1, len(N) + 3.5)
+        ax.set_xticks([0, 12, 24])
+        ax.set_xticklabels(['Jan 2024', 'Jan 2025', 'Jan 2026'])
+        ax.yaxis.get_major_locator().set_params(integer=True, nbins=4)
+    ket = axs.flat[-1]
+    ket.axis('off')
+    ket.text(0, 0.95, 'Garis tegak = batas blok waktu:\npenyetelan (Jan 2024–Jun 2025),\nkalibrasi (Jul–Des 2025),\n'
+             'ujian (Jan–Sep 2026).\n\nAngka di ujung garis = pelapor\nSep 2026. Beras termasuk BULOG.',
+             va='top', color=TINTA2, transform=ket.transAxes)
+    _judul(fig, 'Pelapor INATRADE per bulan, tujuh komoditas', 'Jumlah perusahaan yang melapor (nasional); skala tegak berbeda tiap panel')
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
+    plt.show()
+
+
+def grafik_cakupan_volume(path):
+    """Penyaluran INATRADE dibagi pasokan (produksi + impor), 2025: batang berperingkat, satu warna."""
+    c = pd.read_csv(path)
+    c = c[c.tahun == 2025].set_index('komoditas').penyaluran_per_pasokan
+    catatan = {'DAGING KERBAU': '¹', 'PUPUK': '²'}
+    d = [(NAMA_KOM.get(k, k) + catatan.get(k, ''), v) for k, v in c.items()] + [('Beras³', 0.019)]
+    d.sort(key=lambda t: t[1])
+    fig, ax = plt.subplots(figsize=(8.2, 3.9))
+    ax.xaxis.grid(True, color=GARIS, lw=1)
+    ax.set_axisbelow(True)
+    ax.barh([n for n, _ in d], [v * 100 for _, v in d], height=0.5, color=BIRU)
+    for i, (n, v) in enumerate(d):
+        ax.annotate(persen(v), (v * 100, i), xytext=(6, 0), textcoords='offset points', va='center')
+    ax.set_xlim(0, 72)
+    ax.set_xticks([0, 20, 40, 60])
+    ax.set_xticklabels(['0%', '20%', '40%', '60%'])
+    ax.spines['left'].set_color(SUMBU)
+    ax.spines['bottom'].set_visible(False)
+    ax.tick_params(axis='y', colors=TINTA)
+    _judul(fig, 'Cakupan volume INATRADE terhadap pasokan, 2025', 'Penyaluran pelapor ÷ (produksi + impor)')
+    fig.text(0.01, 0.02, '¹ penyebut hanya produksi dalam negeri   ² penyebut hanya impor empat kode HS   '
+             '³ beras: pengadaan pedagang ÷ pasokan (Tahap 0)\nCakupan sebenarnya daging kerbau dan pupuk lebih kecil daripada yang tergambar.',
+             fontsize=8, color=TINTA2, va='bottom')
+    fig.tight_layout(rect=(0, 0.1, 1, 0.86))
+    plt.show()
+
+
+def grafik_crps_u1():
+    """U1 resmi, tingkat wilayah: CRPS pembanding P* -> resep (dumbbell; satu warna, dua tingkat terang)."""
+    fig, ax = plt.subplots(figsize=(8.2, 3.5))
+    ax.xaxis.grid(True, color=GARIS, lw=1)
+    ax.set_axisbelow(True)
+    nama = []
+    for i, (label, kom, folder) in enumerate(reversed(UJI)):
+        r = baca_gerbang(R(folder, 'gerbang_U1.csv')).loc['wil']
+        a, b = float(r['crps_pembanding']), float(r['crps'])
+        ax.plot([b, a], [i, i], color=BIRU_MUDA, lw=2, zorder=2)
+        _titik(ax, a, i, BIRU_MUDA)
+        _titik(ax, b, i, BIRU)
+        ax.annotate(f"−{r['perbaikan']:.0%}", (a, i), xytext=(9, 0), textcoords='offset points', va='center')
+        nama.append(label.replace(' (satuan terkoreksi)', ''))
+    ax.set_yticks(range(len(nama)))
+    ax.set_yticklabels(nama)
+    ax.tick_params(axis='y', colors=TINTA)
+    ax.set_ylim(-0.6, len(nama) - 0.4)
+    ax.set_xlim(0, 0.48)
+    ax.set_xlabel('CRPS skala log (makin kecil makin baik)')
+    _koma(ax.xaxis)
+    ax.spines['left'].set_visible(False)
+    fig.legend(handles=[Line2D([], [], marker='o', ls='none', ms=8, color=BIRU, label='resep'),
+                        Line2D([], [], marker='o', ls='none', ms=8, color=BIRU_MUDA, label='pembanding P*')],
+               loc='upper right', ncol=2, bbox_to_anchor=(0.99, 0.9))
+    _judul(fig, 'Ujian akhir U1, tingkat wilayah: galat resep dibanding pembanding', 'Angka di kanan = perbaikan CRPS')
+    fig.tight_layout(rect=(0, 0, 1, 0.84))
+    plt.show()
+
+
+def grafik_gerbang_u1():
+    """U1 resmi: bias (batas ±3%) dan cakupan rentang 90% (selang Wilson) per komoditas x tingkat."""
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 4.4), sharey=True)
+    geser = {'prov': 0.24, 'wil': 0.0, 'nas': -0.24}
+    nama = []
+    a1.axvspan(-3, 3, color=NETRAL, zorder=0)
+    for v in (-3, 3):
+        a1.axvline(v, color=SUMBU, lw=1, zorder=1)
+    a1.axvline(0, color=SUMBU, lw=1, zorder=1)
+    for v, t in ((90, 'sasaran 90%'), (80, 'lantai 80%')):
+        a2.axvline(v, color=SUMBU, lw=1, zorder=1)
+        a2.text(v, len(UJI) - 0.42, t, ha='right' if v == 80 else 'left', va='bottom', color=TINTA2, fontsize=8)
+    for i, (label, kom, folder) in enumerate(reversed(UJI)):
+        g = baca_gerbang(R(folder, 'gerbang_U1.csv'))
+        nama.append(label.replace(' (satuan terkoreksi)', ''))
+        for tk in TK:
+            r = g.loc[tk]
+            if not ada(r):
+                continue
+            y = i + geser[tk]
+            _titik(a1, float(r['bias']) * 100, y, WARNA_TK[tk], BENTUK_TK[tk], 7)
+            a2.plot([float(r['wilson_lo']) * 100, float(r['wilson_hi']) * 100], [y, y], color=WARNA_TK[tk], lw=2, zorder=2)
+            _titik(a2, float(r['cakupan']) * 100, y, WARNA_TK[tk], BENTUK_TK[tk], 7)
+    for ax in (a1, a2):
+        ax.set_axisbelow(True)
+        ax.spines['left'].set_visible(False)
+        for i in range(len(nama) - 1):
+            ax.axhline(i + 0.5, color=GARIS, lw=1)
+    a1.set_yticks(range(len(nama)))
+    a1.set_yticklabels(nama)
+    a1.tick_params(axis='y', colors=TINTA)
+    a1.set_ylim(-0.6, len(nama) - 0.25)
+    a1.set_xlim(-19, 9)
+    a1.set_xticks([-15, -10, -5, -3, 0, 3, 5])
+    a1.set_xticklabels(['−15%', '−10%', '−5%', '−3%', '0', '+3%', '+5%'])
+    a1.set_title('Bias (rata-rata galat log); pita abu-abu = batas ±3%')
+    a2.set_xlim(20, 101)
+    a2.set_xticks([20, 40, 60, 80, 90, 100])
+    a2.set_xticklabels(['20%', '40%', '60%', '80%', '90%', '100%'])
+    a2.set_title('Cakupan rentang 90%; garis = selang Wilson 90% (n efektif)')
+    fig.legend(handles=[Line2D([], [], marker=BENTUK_TK[tk], ls='none', ms=7, color=WARNA_TK[tk], label=NAMA_TK[tk]) for tk in TK],
+               loc='upper right', ncol=3, bbox_to_anchor=(0.99, 0.985))
+    _judul(fig, 'Ujian akhir U1: gerbang bias dan cakupan per komoditas dan tingkat')
+    fig.tight_layout(rect=(0, 0, 1, 0.9))
+    plt.show()
+
+
+def grafik_u1_bulanan():
+    """CRPS per bulan di blok ujian, tingkat wilayah, dari keluaran REPLIKASI (hasil_ulang/replikasi_u1_*/U1_sel.csv)."""
+    data = []
+    for label, kom, folder in UJI:
+        p = os.path.join(HASIL, folder.replace('hasil_adu_', 'replikasi_u1_'), 'U1_sel.csv')
+        if not os.path.exists(p):
+            continue
+        ps = json.load(open(R(folder, 'resep.json')))['pstar']
+        u = pd.read_csv(p, usecols=['cfg', 'jenis', 'tingkat', 'w', 't', 'crps'])
+        u = u[(u.tingkat == 'wil') & u.cfg.isin(['resep', ps])]
+        u = u.groupby(['cfg', 'jenis', 'w', 't'], as_index=False).crps.mean().groupby(['cfg', 't']).crps.mean().unstack(0)
+        data.append((label.replace(' (satuan terkoreksi)', ''), u['resep'], u[ps]))
+    if not data:
+        print('grafik dilewati: keluaran replikasi tidak ada.')
+        return
+    fig, axs = plt.subplots(1, len(data), figsize=(12, 3.3), sharex=True)
+    for ax, (label, a, b) in zip(axs.flat, data):
+        ax.yaxis.grid(True, color=GARIS, lw=1)
+        ax.set_axisbelow(True)
+        ax.plot(b.index, b.values, color=REDUP, lw=2)
+        ax.plot(a.index, a.values, color=BIRU, lw=2)
+        ax.set_title(label)
+        ax.set_ylim(0, max(b.max(), a.max()) * 1.15)
+        ax.set_xlim(23.5, 32.5)
+        ax.set_xticks([24, 28, 32])
+        ax.set_xticklabels(['Jan', 'Mei', 'Sep'])
+        ax.yaxis.get_major_locator().set_params(nbins=4)
+        _koma(ax.yaxis)
+    fig.legend(handles=[Line2D([], [], color=BIRU, lw=2, label='resep'), Line2D([], [], color=REDUP, lw=2, label='pembanding P*')],
+               loc='upper right', ncol=2, bbox_to_anchor=(0.99, 0.99))
+    _judul(fig, 'CRPS per bulan di blok ujian (Jan–Sep 2026), tingkat wilayah',
+           'Dari keluaran replikasi; rata-rata antarsel dan antarulangan; skala tegak berbeda tiap panel', y=0.985)
+    fig.tight_layout(rect=(0, 0, 1, 0.8))
+    plt.show()
+
+
+def grafik_u2(h):
+    """U2 beras: average precision tiap versi; gabungan ditonjolkan, lainnya abu-abu."""
+    urut = ['acak (kepadatan)', 'INATRADE mentah', 'BPS 2024 apa adanya', 'gabungan (BPS 2024 + INATRADE)']
+    v = [h['versi'][u]['ap'] for u in urut]
+    fig, ax = plt.subplots(figsize=(8.2, 2.9))
+    ax.xaxis.grid(True, color=GARIS, lw=1)
+    ax.set_axisbelow(True)
+    ax.barh(urut, v, height=0.5, color=[SUMBU, SUMBU, SUMBU, BIRU])
+    for i, x in enumerate(v):
+        ax.annotate(idn(f'{x:.3f}'), (x, i), xytext=(6, 0), textcoords='offset points', va='center')
+    ax.set_xlim(0, 0.66)
+    ax.set_xticks([0, 0.2, 0.4, 0.6])
+    ax.set_xticklabels(['0', '0,2', '0,4', '0,6'])
+    ax.spines['bottom'].set_visible(False)
+    ax.tick_params(axis='y', colors=TINTA)
+    _judul(fig, 'U2 beras: ketepatan menebak jalur antarprovinsi BPS 2025', 'Average precision atas 1.122 pasangan provinsi (makin besar makin tepat)')
+    fig.tight_layout(rect=(0, 0, 1, 0.8))
+    plt.show()
+print('fungsi grafik siap (matplotlib', plt.matplotlib.__version__ + ')')
 ''')
 
 md(r'''
@@ -485,6 +721,10 @@ Berkas `hasil_ulang/tahap0/laporan.csv` dan `perusahaan.csv` berisi data per per
 kode(r'''
 _bps = [BPS_OUT] if os.path.exists(os.path.join(BPS_OUT, 'konsumsi_provinsi.csv')) else []
 _ = jalan('binpas/tahap0.py', XLSM, os.path.join(HASIL, 'tahap0'), *_bps)
+''')
+
+kode(r'''
+grafik_pelapor(os.path.join(HASIL, 'tahap0', 'pelapor_per_bulan.csv'))
 ''')
 
 md(r'''
@@ -551,6 +791,10 @@ if AMBIL_ULANG_BPS:
         display(tabel_cakupan(os.path.join(HASIL, 'cakupan', 'cakupan_komoditas.csv')))
 ''')
 
+kode(r'''
+grafik_cakupan_volume(R('hasil_cakupan', 'cakupan_komoditas.csv'))
+''')
+
 md(r'''
 ## 4. Lima komoditas yang diuji: resep, gerbang penyetelan, dan ujian akhir U1
 
@@ -573,9 +817,18 @@ yang ada di sel; **ini bukan ukuran keterwakilan pasar** (lihat bagian 3 dan 5).
 Target utama = tingkat **wilayah** (Jawa / Sumatera / Pulau lain) bulanan. Sel dinilai bila berisi ≥ 3 perusahaan.
 Gagal di ujian akhir → data apa adanya berlabel "tercatat" (tidak boleh turun peringkat memakai data ujian).
 
-Tiap komoditas di bawah punya dua sel: **(a)** tabel resmi dari paket tertanam, **(b)** REPLIKASI kalibrasi + ujian
-dengan resep resmi ke `hasil_ulang/replikasi_u1_<komoditas>/`, lalu dibandingkan dengan `gerbang_U1.csv` resmi.
-Replikasi tidak mengulang penyetelan (resep resmi dipakai apa adanya).
+Tiap komoditas di bawah punya tiga sel: **(a)** tabel resmi dari paket tertanam; **(b)** log proses resmi apa adanya
+(penyetelan tahap 1a–5, dan turun peringkat bila ada); **(c)** REPLIKASI kalibrasi + ujian dengan resep resmi ke
+`hasil_ulang/replikasi_u1_<komoditas>/`, dengan output mentah skrip, lalu dibandingkan dengan `gerbang_U1.csv` resmi.
+Replikasi tidak mengulang penyetelan (resep resmi dipakai apa adanya; log penyetelan yang tampil = log run resmi).
+
+**Cara membaca log penyetelan.** Nama versi = `identitas|isian|batas lubang|tambahan|bobot pelapor|ragam|rekonsiliasi`
+(mis. `I0|B|99|tdist|None|0.5|0`); `A`, `A3`, `A5` = pembanding (data apa adanya, + bobot pelapor batas 3 / 5). Angka di
+kanan = CRPS skala log di tingkat wilayah (tahap 3 di tingkat nasional), makin kecil makin baik. Baris `->` = pilihan
+tahap itu (selisih tipis → versi yang lebih sederhana). Tahap: 1a identitas stok, 1b metode isian × batas lubang,
+1c tambahan, 2 bobot × ragam, 3 rekonsiliasi, 4 penggabung, 5 koreksi akhir + gerbang. Isian: B = interpolasi / laporan
+terakhir, C = pertumbuhan perusahaan sejenis, R1–R4 = regresi panel, R5 = QRF, R6 = CatBoost, R7 = MRP (R5–R7 hanya
+beras). Log turun peringkat: satu baris per kandidat (beda satu tahap dari pemenang) dengan status lolos gerbang wilayah.
 ''')
 
 md(r'''
@@ -588,6 +841,13 @@ blok penyetelan, lalu turun ke konformal (diputuskan sebelum kalibrasi dan ujian
 
 kode(r'''
 tampil_resmi('Beras', 'hasil_adu_beras')
+''')
+
+kode(r'''
+# Log proses RESMI beras: penyetelan (12 Nov 2026, 08.01-09.22 UTC), kalibrasi, dan ujian akhir U1 (13.09 UTC)
+tampil_log('hasil_adu_beras', 'log_penyetelan.txt', 'BERAS - log penyetelan resmi (adu versi tahap 1a-5)')
+tampil_log('hasil_adu_beras', 'log_kalibrasi.txt', 'BERAS - log kalibrasi resmi (Jul-Des 2025)')
+tampil_log('hasil_adu_beras', 'log_ujian.txt', 'BERAS - log ujian akhir U1 resmi (sekali jalan, sudah terpakai)')
 ''')
 
 md(r'''
@@ -625,6 +885,12 @@ tampil_resmi('Daging sapi (satuan terkoreksi)', 'hasil_adu_daging_sapi_v2')
 ''')
 
 kode(r'''
+# Log proses RESMI daging sapi (satuan terkoreksi): penyetelan, lalu turun peringkat karena pemenang gagal gerbang bias
+tampil_log('hasil_adu_daging_sapi_v2', 'log_penyetelan.txt', 'DAGING SAPI - log penyetelan resmi (satuan terkoreksi)')
+tampil_log('hasil_adu_daging_sapi_v2', 'log_turun_peringkat.txt', 'DAGING SAPI - log turun peringkat resmi (blok penyetelan saja)')
+''')
+
+kode(r'''
 _g = replikasi('DAGING SAPI', 'hasil_adu_daging_sapi_v2')
 if _g is not None:
     print(vonis(*tampil_banding(baca_gerbang(R('hasil_adu_daging_sapi_v2', 'gerbang_U1.csv')), _g)))
@@ -639,6 +905,11 @@ dari "Pulau lain" (4 sel-bulan; satu perusahaan memegang 91% volume wilayah itu)
 
 kode(r'''
 tampil_resmi('Kedelai', 'hasil_adu_kedelai')
+''')
+
+kode(r'''
+# Log proses RESMI kedelai: penyetelan
+tampil_log('hasil_adu_kedelai', 'log_penyetelan.txt', 'KEDELAI - log penyetelan resmi (adu versi tahap 1a-5)')
 ''')
 
 kode(r'''
@@ -660,6 +931,12 @@ tampil_resmi('Daging kerbau', 'hasil_adu_daging_kerbau')
 ''')
 
 kode(r'''
+# Log proses RESMI daging kerbau: penyetelan, lalu turun peringkat karena pemenang (R3) gagal gerbang bias
+tampil_log('hasil_adu_daging_kerbau', 'log_penyetelan.txt', 'DAGING KERBAU - log penyetelan resmi')
+tampil_log('hasil_adu_daging_kerbau', 'log_turun_peringkat.txt', 'DAGING KERBAU - log turun peringkat resmi (blok penyetelan saja)')
+''')
+
+kode(r'''
 _g = replikasi('DAGING KERBAU', 'hasil_adu_daging_kerbau')
 if _g is not None:
     print(vonis(*tampil_banding(baca_gerbang(R('hasil_adu_daging_kerbau', 'gerbang_U1.csv')), _g)))
@@ -673,6 +950,11 @@ lebih besar daripada di penyetelan (penyetelan hanya 6 sel-bulan), jadi gagal ge
 
 kode(r'''
 tampil_resmi('Telur ayam ras', 'hasil_adu_telur_ayam')
+''')
+
+kode(r'''
+# Log proses RESMI telur ayam ras: penyetelan
+tampil_log('hasil_adu_telur_ayam', 'log_penyetelan.txt', 'TELUR AYAM RAS - log penyetelan resmi (adu versi tahap 1a-5)')
 ''')
 
 kode(r'''
@@ -695,6 +977,31 @@ display(Markdown('**Pupuk — gerbang di blok PENYETELAN** (hasil penyetelan, bu
 display(tabel_gerbang(baca_gerbang(R('hasil_adu_pupuk', 'gerbang_penyetelan.csv'))))
 print('Daging ayam ras:', open(R('hasil_adu_daging_ayam', 'galat_tahap5.txt')).read().strip().splitlines()[-1],
       '(tahap 5 berhenti: tidak ada data 2024 untuk menyetel koreksi)')
+''')
+
+kode(r'''
+tampil_log('hasil_adu_pupuk', 'log_penyetelan.txt', 'PUPUK - log penyetelan resmi (sebelum koreksi satuan satu perusahaan)')
+tampil_log('hasil_adu_daging_ayam', 'log_penyetelan.txt', 'DAGING AYAM RAS - log penyetelan resmi (berhenti di tahap 5)')
+tampil_log('hasil_adu_daging_ayam', 'galat_tahap5.txt', 'DAGING AYAM RAS - galat tahap 5')
+''')
+
+md(r'''
+### 4.7 Gambaran ujian akhir U1 lima komoditas
+Tiga grafik dari angka yang sama dengan tabel di atas. (1) CRPS resep dibanding pembanding P\* di tingkat wilayah
+(`gerbang_U1.csv` resmi): semua resep jauh lebih kecil galatnya daripada data apa adanya, tetapi itu baru satu gerbang.
+(2) Gerbang bias dan cakupan per tingkat (resmi): titik di luar pita abu-abu = gagal gerbang bias; garis cakupan yang
+tidak memuat 90% atau titik di kiri 80% = gagal gerbang cakupan. Gerbang "memburuk ≤ 20%" (yang menggagalkan telur ayam
+ras) tidak tergambar di sini; lihat tabel. (3) CRPS per bulan di blok ujian, dari keluaran **replikasi** (untuk beras
+mendekati, bukan persis, angka resmi).
+''')
+
+kode(r'''
+grafik_crps_u1()
+grafik_gerbang_u1()
+''')
+
+kode(r'''
+grafik_u1_bulanan()
 ''')
 
 md(r'''
@@ -746,6 +1053,7 @@ display(Markdown('**Hasil U2 RESMI** (14 Nov 2026; sekali jalan, sudah terpakai)
 _t, _teks = tabel_u2(U2_RESMI)
 display(_t)
 print('\n'.join(_teks))
+grafik_u2(U2_RESMI)
 ''')
 
 kode(r'''
@@ -758,8 +1066,7 @@ else:
     os.makedirs(_out)
     print(f'REPLIKASI (bukan ujian baru) -> {_out}')
     if jalan('binpas/u2_beras.py', XLSM, R('data_publik', 'poldis_beras_2024_mitra.csv'),
-             R('data_publik', 'poldis_beras_2025_mitra.csv'), _out, tampil=False,
-             log=os.path.join(_out, 'layar_u2.txt')) == 0:
+             R('data_publik', 'poldis_beras_2025_mitra.csv'), _out, log=os.path.join(_out, 'layar_u2.txt')) == 0:
         _u = json.load(open(os.path.join(_out, 'hasil_U2.json')))
         _t, _teks = tabel_u2(_u)
         display(_t)
@@ -795,6 +1102,14 @@ for _label, _folder, _v1 in [('Kedelai', 'hasil_v2_kedelai', 'hasil_adu_kedelai'
     display(Markdown(f'**{_label}** — resep versi 1 (gagal U1): {uraian_resep(_r1)}<br>'
                      f'**resep versi 2 (dikunci, belum diuji):** {uraian_resep(_r2)}'))
     display(tabel_gerbang(baca_gerbang(R(_folder, 'gerbang_penyetelan.csv'))))
+''')
+
+kode(r'''
+# Log proses RESMI resep versi 2 (penyetelan Jan 2024-Sep 2026; BUKAN ujian). Judul "Jan-Jun 2025" di dalam log adalah
+# teks bawaan skrip; untuk versi 2 gerbang dinilai di Jan 2025-Sep 2026.
+for _label, _folder in [('KEDELAI', 'hasil_v2_kedelai'), ('DAGING KERBAU', 'hasil_v2_daging_kerbau'), ('TELUR AYAM RAS', 'hasil_v2_telur_ayam')]:
+    tampil_log(_folder, 'log_penyetelan.txt', f'{_label} versi 2 - log penyetelan resmi')
+    tampil_log(_folder, 'log_turun_peringkat.txt', f'{_label} versi 2 - log turun peringkat resmi')
 ''')
 
 md(r'''
