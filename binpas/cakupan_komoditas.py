@@ -10,8 +10,11 @@ Sumber BPS (WebAPI, domain 0000):
 Keluaran: cakupan_komoditas.csv (agregat nasional per tahun). INATRADE: pedagang tanpa BULOG, satuan sesudah koreksi
 tahap0 (termasuk KOREKSI_KG).
 """
+import json
 import os
 import sys
+import time
+import urllib.request
 
 import numpy as np
 import pandas as pd
@@ -19,9 +22,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'beras_stok'))
-sys.path.insert(0, os.path.join(HERE, '..', 'stok_komoditas'))
 import ambil_bps as A  # noqa: E402
-import siapkan_data as SD  # noqa: E402
 import tahap0 as T0  # noqa: E402
 
 # komoditas -> item Susenas {tahun: (var, {turvar: faktor setara komoditas})}, var produksi, kode HS impor
@@ -61,6 +62,29 @@ def produksi(var, tahun, cache):
     return d.groupby('tahun').nilai.sum().to_dict()
 
 
+EXIM = 'https://webapi.bps.go.id/v1/api/dataexim/sumber/2/kodehs/{hs}/jenishs/2/tahun/{y}/periode/1/key/{key}/'
+
+
+def ambil_exim(hs, y, cache):
+    """Impor per kode HS dan tahun dari dataexim BPS (sama dengan stok_komoditas/siapkan_data.py); disimpan di cache."""
+    f = os.path.join(cache, f'exim_{hs}_{y}.json')
+    if not os.path.exists(f):
+        url = EXIM.format(hs=hs, y=y, key=os.environ['BPS_API_KEY'])
+        for i in range(4):
+            try:
+                with urllib.request.urlopen(url, timeout=120) as r:
+                    data = r.read()
+                break
+            except OSError:
+                time.sleep(2 ** (i + 1))
+        else:
+            raise RuntimeError(f'gagal ambil exim {hs} {y}')
+        with open(f, 'wb') as h:
+            h.write(data)
+    with open(f) as h:
+        return json.load(h).get('data') or []
+
+
 def impor(hs, tahun, cache, bulan_maks):
     """Impor (ton) per tahun; untuk tahun berjalan hanya sampai bulan terakhir INATRADE."""
     out = {}
@@ -68,7 +92,7 @@ def impor(hs, tahun, cache, bulan_maks):
         tot = 0.0
         for h in hs:
             try:
-                tot += sum(r['netweight'] for r in SD.ambil_exim(h, y, cache) if int(r['bulan'][1:3]) <= bulan_maks.get(y, 12)) / 1000
+                tot += sum(r['netweight'] for r in ambil_exim(h, y, cache) if int(r['bulan'][1:3]) <= bulan_maks.get(y, 12)) / 1000
             except Exception:
                 tot = np.nan
                 break

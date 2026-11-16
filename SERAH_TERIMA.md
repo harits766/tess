@@ -3,6 +3,31 @@
 Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CATATAN_SESI.md`,
 `beras_stok/README.md`, `stok_komoditas/README.md`, `binpas/RANCANGAN_INATRADE.md`, `binpas/ambang_ujian.md`.
 
+## STATUS TERKINI (per 16 Nov 2026, akhir sesi 7) — BACA INI DULU
+Bagian 5–8 di bawah adalah riwayat; sebagian kalimat "belum" di sana sudah usang. Yang berlaku adalah blok ini dan
+bagian 9–14.
+
+**Hasil yang sudah final (semua ujian SEKALI JALAN dan SUDAH TERPAKAI; jangan dijalankan lagi):**
+| Komoditas | Status | Rincian |
+| --- | --- | --- |
+| Beras | LOLOS U1 di wilayah; provinsi lolos dengan catatan; nasional cakupan belum bisa diputuskan | `binpas/HASIL_ADU_BERAS.md` |
+| Daging sapi | LOLOS U1 di wilayah (sesudah koreksi satuan, resep hasil turun peringkat); provinsi dan nasional gagal bias | `binpas/HASIL_ADU_KOMODITAS.md` |
+| Kedelai | lolos U1 di provinsi saja; wilayah gagal bias -> "tercatat" | idem |
+| Daging kerbau, telur ayam ras | gagal U1 -> "tercatat" | idem |
+| Daging ayam ras, pupuk | "tercatat" (tidak bisa diuji / gagal bias di penyetelan; data terlalu tipis) | idem |
+| Keterwakilan beras (U2) | gerbang "lebih dekat" LOLOS; gerbang korelasi asal GAGAL -> INATRADE = penguat peta jalur BPS, bukan gambaran pola asal | `binpas/RANCANGAN_U2.md` |
+
+**Yang dikunci dan menunggu data baru:** resep versi 2 kedelai, daging kerbau, telur ayam ras
+(`binpas/RANCANGAN_V2.md`, `binpas/hasil_v2_*/`). Hanya boleh diuji di bulan sesudah Sep 2026 (perkiraan butuh
+Okt 2026–Mar 2027, ±April 2027). Jangan ubah `resep.json`.
+
+**Pekerjaan yang TERPUTUS di tengah (lanjutkan bila diminta):** satu notebook `.ipynb` mandiri yang sudah berisi
+output dari awal sampai akhir dan bisa dijalankan ulang di Colab/Drive. Belum ada berkas notebook-nya; rancangan
+lengkap di bagian 14.
+
+**Tawaran yang belum dijawab pengguna:** ujian keterwakilan daging sapi dengan Pola Distribusi BPS; peubah luar
+(impor bulanan) di adu versi kedelai/daging sapi.
+
 ## Pengguna dan cara kerja
 - Harits, Dit. Bina Pasar Dalam Negeri (Binpas) Kemendag; atasan yang sering dibalas lewat WA: Bu Fitria.
 - Bahasa Indonesia santai; jawaban ringkas; kalau diminta "chat WA", tulis teks siap tempel.
@@ -16,11 +41,32 @@ Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CA
   langsung kirim; jangan diselingi run. Pengguna sempat menghentikan run dan pengiriman file di sesi 6.
 - Pengguna ingin bisa menjalankan sendiri di Google Colab (unggah folder ke Drive).
 - Bahasa: Indonesia (pengguna kadang menulis Inggris; tetap jawab Indonesia kecuali diminta lain).
+- **Pola kerja sesi 7 (ikuti):** tiap ada hasil atau keputusan, pengguna meminta "bikinin chat WA buat Bu Fitria soal
+  ini (dan rekom lu)". Tulis teks siap tempel dalam blok kode, format WA (*tebal* satu bintang), sapaan "Selamat siang
+  Bu Fitria, izin lapor ...", penutup "Terima kasih, Bu.", butir rekomendasi diberi huruf/angka (a–c, 1–3) supaya
+  jawaban beliau bisa "di iyain a–c". Jawaban beliau diteruskan pengguna sebagai "di iyain ...", "gas", atau
+  "jawabannya b" -> itu persetujuan untuk butir yang disebut SAJA.
+- **Selalu TANYA DULU sebelum ujian sekali jalan** (U1 per komoditas, U2). Urutan wajib: kunci resep/definisi ->
+  commit + push -> baru jalankan. Turun peringkat di blok penyetelan boleh langsung (aturan `ambang_ujian.md`).
+- Laporkan hasil apa adanya, termasuk yang gagal dan perkiraan saya yang meleset; sebut kalau suatu angka adalah hasil
+  penyetelan (bukan ujian) atau temuan sesudah hasil dilihat.
+- Daftar komoditas dari pengguna: **daging sapi, daging kerbau, daging ayam ras, telur ayam ras, beras, kedelai,
+  pupuk SAJA** (minyak goreng, gula, tepung terigu dibatalkan).
+- **Jangan usulkan lagi konfirmasi satuan ke perusahaan/pengelola INATRADE** (ditolak 14 Nov 2026); perkiraan dari
+  data dipakai.
+- Kode perusahaan (mis. `00267`) boleh disebut ke pengguna dan di WA untuk Bu Fitria, tetapi tidak dimasukkan ke
+  dokumen/laporan yang dibagikan. Berkas per perusahaan tidak di-commit.
+- Dokumen untuk Bu Fitria dibuat sebagai Claude Doc (artefak), bukan file.
 
 ## File yang harus diunggah ulang di sesi baru
 - `Non_PAW_dari_nol.xlsm` (INATRADE, sheet "2024-2026", semua komoditas, PAW + Non PAW) — wajib.
 - `Non_PAW_Gabungan_2024-2026_sd_Sep2026_2.xlsx`, `PAW_September_1.xlsx` (subset, opsional).
 - Data BPS/USDA bisa diambil ulang otomatis (perintah di README masing-masing folder).
+- **Semua isi folder scratchpad sesi 7 hilang saat sesi berakhir** (xlsm, cache BPS, PDF BPS, keluaran penuh per tahap,
+  CSV per perusahaan). Yang dibutuhkan untuk melanjutkan sudah ada di repo (lihat "Menyiapkan lingkungan" di bagian 14).
+- Hash file INATRADE yang dipakai semua hasil sesi 7: sha256 `c667dddba86bdfb624b441f7a10b5b29cd548cc9bd98fcbecd2c687faf5adac2`.
+  Bila pengguna mengunggah file baru (hash beda), itu DATA BARU: catat hash dan tanggalnya, jangan dipakai untuk
+  mengulang ujian yang sudah terpakai.
 
 ## Artefak (claude.ai)
 | Artefak | Link | Isi |
@@ -285,23 +331,121 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - Belum (tawaran ke pengguna, belum diminta): peubah luar di adu versi untuk kedelai/daging sapi; ujian keterwakilan
   daging sapi/telur/ayam dengan Pola Distribusi BPS (sekali jalan, definisi dikunci dulu).
 
+## 14. Notebook tunggal (TERPUTUS, belum ada berkasnya) + cara melanjutkan apa pun di sesi baru
+
+### 14.1 Permintaan pengguna (16 Nov 2026)
+"kirimin 1 ipynb yg udah kluarin output dari awal sampai akhir yg bisa di re run pas di up ke drive". Pengerjaan
+dihentikan pengguna sebelum notebook ditulis, lalu pengguna meminta catatan serah terima ini. **Tanyakan dulu apakah
+notebook masih diinginkan sebelum mengerjakannya.**
+
+Yang sudah dikerjakan untuk itu (sudah di-commit): `binpas/cakupan_komoditas.py` dibuat mandiri (fungsi impor dataexim
+disalin ke dalamnya, tidak lagi mengimpor `stok_komoditas/siapkan_data.py`; keluaran dicek identik);
+`binpas/hasil_cakupan/cakupan_komoditas.csv` (tabel cakupan agregat). `pip install nbclient nbformat ipykernel` perlu
+diulang di sesi baru.
+
+### 14.2 Rancangan notebook (belum ditulis)
+- Nama: `binpas/colab/05_inatrade_tujuh_komoditas.ipynb`, dibuat oleh skrip `binpas/colab/buat_notebook.py` supaya bisa
+  dibangun ulang. Notebook lama `03_tahap0.ipynb` dan `04_adu_versi_beras.ipynb` hanya beras dan tanpa output.
+- **Mandiri:** kode (`binpas/*.py`, `beras_stok/util.py`, `beras_stok/ambil_bps.py`) dan hasil resmi berukuran kecil
+  (`resep.json`, `gerbang_*.csv`, log, `hasil_U2.json`, `data_publik/*.csv`, `hasil_cakupan/*.csv`, resep versi 2)
+  ditanam di satu sel sebagai arsip base64, diekstrak ke `BASE/paket/`. Pengguna cukup mengunggah notebook + xlsm ke
+  `MyDrive/inatrade_colab/`. Berkas `.xz` besar tidak ditanam.
+- **Sel konfigurasi** meniru notebook lama: `DI_COLAB = 'google.colab' in sys.modules`, `drive.mount`, `BASE`, cari
+  `Non_PAW_dari_nol.xlsm` di `BASE/` atau `BASE/data/inatrade/`.
+- **Versi pustaka:** kode ditulis dan diuji dengan pandas 3.0.5 (Python 3.13); Colab bawaan pandas 2.x dan BELUM pernah
+  dicoba. Rencana: di Colab `pip install "pandas==3.0.5" openpyxl`, dan semua skrip dijalankan lewat `subprocess`
+  (bukan di kernel) supaya memakai pandas baru tanpa restart. catboost/quantile-forest/statsmodels hanya perlu bila
+  penyetelan beras diulang penuh. Jangan impor pandas di kernel sebelum sel pip.
+- **Isi sel, berurutan:** (1) Tahap 0 (`tahap0.py`); (2) validasi satuan (`validasi_satuan.py "DAGING SAPI" "PUPUK"`);
+  (3) cakupan volume: tampilkan tabel resmi, ambil ulang dari BPS hanya bila `BPS_API_KEY` ada (env atau Colab
+  Secrets), nilai kunci disamarkan dari output; (4) per komoditas yang diuji (beras, daging sapi, kedelai, daging
+  kerbau, telur): tampilkan resep + gerbang penyetelan resmi, lalu REPLIKASI kalibrasi + ujian ke
+  `BASE/hasil_ulang/<komoditas>/` dan bandingkan dengan `gerbang_U1.csv` resmi; (5) replikasi U2 beras (`u2_beras.py`
+  dengan `data_publik/*.csv`); (6) resep versi 2 (tampilkan saja; belum boleh diuji); (7) tabel ringkasan status.
+- **Cara replikasi tanpa penyetelan ulang:** salin `resep.json` (+ `komoditas.txt`) resmi ke folder baru, buat
+  `tahap4_penuh.pkl` pengganti berisi DataFrame kosong (berkas itu hanya dibaca bila resep memakai penggabung `G:`;
+  semua resep sekarang versi tunggal), lalu `adu_versi.py kalibrasi` dan `ujian`. Hapus folder replikasi di awal sel
+  supaya penjaga `U1_SUDAH_JALAN.json` tidak menolak. **Beri label "REPLIKASI, bukan ujian baru; hasil resmi = yang
+  tercatat di repo".**
+- **Yang diharapkan:** daging sapi (satuan terkoreksi), kedelai, daging kerbau, telur -> angka replikasi sama persis
+  dengan resmi (seed crc32, kode sama). **Beras TIDAK akan sama persis**: U1 resmi beras dijalankan sebelum commit
+  `fc81529` (seed masih `hash()` teks, dan sel Nov–Des 2025 ikut dinilai); replikasi akan mendekati tabel kepekaan
+  `gerbang_U1_peka_2026saja.csv`. Tulis penjelasan ini di notebook.
+- Penyetelan penuh disediakan sebagai sel opsional yang dimatikan secara baku (beras ±1,3 jam; komoditas lain ±3
+  menit + turun peringkat ±3–7 menit).
+- Sesudah ditulis: jalankan sekali dari awal sampai akhir dengan `nbclient` di folder tiruan Drive yang berisi xlsm
+  (perkiraan 3–5 menit; tiap skrip membaca xlsm ±10 detik), periksa output tidak memuat data per perusahaan, commit,
+  lalu kirim ke pengguna dengan `SendUserFile` (berkas harus di dalam repo atau scratchpad).
+
+### 14.3 Menyiapkan lingkungan di sesi baru
+```bash
+git fetch origin claude/bayesian-rice-stock-model-qmunfn && git checkout claude/bayesian-rice-stock-model-qmunfn
+pip install catboost quantile-forest statsmodels pdfplumber        # pdfplumber hanya untuk ekstraksi PDF BPS
+# xlsm unggahan pengguna: salin ke folder kosong sendiri di scratchpad; jalankan Python dengan -I
+BPS_API_KEY=... python -I beras_stok/ambil_bps.py <cache json> <bps_out>      # ±1 menit; kunci hanya dari env var
+```
+Melanjutkan suatu komoditas dari hasil resmi: salin `binpas/hasil_adu_<kom>/` (atau `hasil_v2_<kom>/`) ke folder
+keluaran di scratchpad, `xz -dk tahap4_penuh.pkl.xz`; `data_komoditas.pkl` / `data_beras.pkl` dibuat ulang otomatis
+dari xlsm.
+
+### 14.4 Perintah yang dipakai (semua dengan `python -I`)
+```bash
+python -I binpas/tahap0.py <xlsm> <keluaran> [bps_out]
+python -I binpas/adu_versi.py penyetelan|kalibrasi|ujian <xlsm> <keluaran> <bps_out atau -> ["<KOMODITAS>"] [v2]
+python -I binpas/turun_peringkat.py <keluaran penyetelan>          # bila pemenang gagal gerbang wilayah
+python -I binpas/gerbang_opsi5.py binpas <keluaran>                # beras saja (kode lama); komoditas lain otomatis
+python -I binpas/validasi_satuan.py <xlsm> <keluaran> "DAGING SAPI" "PUPUK"
+BPS_API_KEY=... python -I binpas/cakupan_komoditas.py <xlsm> <cache json> <keluaran>
+python -I binpas/poldis_mitra.py <pdf edisi 2024> <csv>            # daftar mitra dari diagram
+python -I binpas/poldis_mitra_narasi.py <pdf edisi 2025> <csv>     # daftar mitra dari kalimat
+python -I binpas/u2_beras.py <xlsm> <mitra_2024.csv> <mitra_2025.csv> <keluaran>   # SUDAH TERPAKAI
+```
+Nama komoditas persis: `BERAS`, `DAGING SAPI`, `DAGING KERBAU`, `DAGING AYAM RAS`, `TELUR AYAM RAS`,
+`KEDELAI BAHAN BAKU TEMPE DAN TAHU`, `PUPUK`. Indeks bulan: 0 = Jan 2024, 24 = Jan 2026, 32 = Sep 2026.
+
+### 14.5 Hal teknis yang mudah terlupa
+- `adu_versi.py`: komoditas selain beras memakai 58 kombinasi (tanpa R5, R6, R7, juri RF) sehingga tidak ada
+  penggabung; tambahan "luar" tidak berpengaruh di luar beras (kalau ikut terpilih itu derau).
+- Turun peringkat otomatis hanya antaropsi koreksi (tahap 5); antarversi lewat `turun_peringkat.py` (kandidat beda
+  satu tahap dari pemenang; aturan tertulis di docstring-nya).
+- Gerbang "memburuk ≤ 20%" TIDAK dihitung kode: bandingkan `crps` di `gerbang_U1.csv` dengan `gerbang_penyetelan.csv`
+  secara manual (acuan = resep yang sama; diputuskan Bu Fitria).
+- `L_cakupan` False = gagal; `cakupan_belum_bisa` True dengan `L_cakupan` True = "belum bisa diputuskan".
+- `tahap0.KOREKSI_KG`: tiga perusahaan dikoreksi ke kg (daging sapi 2, pupuk 1 sejak Jun 2025). Data beras, kedelai,
+  daging kerbau dicek tidak berubah.
+- Blok versi 2 (`v2`) disimpan di `<keluaran>/blok.json`; `tahap0.PER` masih berhenti di 2026-09 dan harus
+  diperpanjang saat data baru datang.
+- PDF BPS diambil lewat WebAPI: `.../v1/api/view/domain/0000/model/publication/lang/ind/id/<pub_id>/key/<KEY>/` ->
+  kolom `pdf`. Beras 2024 `a688dbac2f627b8b2f5b3b87`, beras 2025 `f7bd40cb4779162e89bf2eda`, daging sapi 2025
+  `3bbe93c02d8533def35a8b41`, telur ayam ras 2023 `3585f0898795b4189a71666e`, Perdagangan Antar Wilayah 2023
+  `49016c4556ea47b96d62e9bf` (tidak memuat rincian komoditas). Pencarian: `.../list/model/publication/.../keyword/<kata>/`
+  dan `.../list/model/var/.../keyword/<kata>/`.
+- Variabel BPS yang dipakai: Susenas daging 2097 (2024) / 2552 (2025), telur 2099 / 2554, kacang-kacangan 2101,
+  penduduk 2790; produksi daging sapi 480, kerbau 481, ayam ras pedaging 488, telur ayam petelur 491; impor lewat
+  dataexim (`.../dataexim/sumber/2/kodehs/<hs>/jenishs/2/tahun/<y>/periode/1/key/<KEY>/`).
+- Dokumen laporan untuk Bu Fitria (Claude Doc `GTjBbAhSw52RP2Kszwqm6o`) dibuat sebelum resep versi 2 dan cakupan
+  volume komoditas lain; belum diperbarui dengan dua hal itu.
+
 ## Langkah berikut yang masih terbuka
-0. (SELESAI, lihat bagian 7) Tahap 0 profil kehadiran pelapor INATRADE (Jan 2024–Sep 2026, per komoditas × pulau; panjang lubang;
-   bulan hampir lengkap) + ukur selisih Stok Awal vs Stok Akhir bulan lalu. Ringan (menit). Lalu adu versi beras
-   (±2–4 jam; tanya dulu).
-1. Ganti nama "susut" -> "selisih tak tercatat" di kode, dokumen, dashboard.
-2. Validasi satuan semua komoditas INATRADE (bandingkan dengan konsumsi provinsi) sebelum tonase ditampilkan.
-3. Ekstrak tabel provinsi Poldis 2024/2025; bandingkan arah PAW INATRADE dengan BPS.
-4. Backtest bergulir model beras + pemeriksaan prediktif posterior (±3–4 jam komputasi; tanya dulu).
-5. Kedelai: prakiraan, perbaiki varian PAW, holdout USDA.
+Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
+1. **Notebook tunggal** (bagian 14) — tanyakan dulu apakah masih diinginkan.
+2. Ujian versi 2 kedelai, daging kerbau, telur ayam ras — menunggu data sesudah Sep 2026 (`RANCANGAN_V2.md` bagian 4).
+3. Tawaran yang belum dijawab: ujian keterwakilan daging sapi (Pola Distribusi BPS 2025; sekali jalan, definisi
+   dikunci dulu, edisi pembanding sebelumnya 2018); peubah luar (impor bulanan BPS) di adu versi kedelai/daging sapi.
+4. Perbarui Claude Doc laporan ringkas dengan resep versi 2 dan cakupan volume (bila diminta).
+5. Belum dikerjakan dari rancangan: model gabungan stok–arus–harga (U3), skor tingkat perusahaan, agregasi
+   triwulanan, CRPS dalam ton, korelasi Harga Jual vs PIHPS.
+6. Pekerjaan lama yang masih terbuka: ganti nama "susut" -> "selisih tak tercatat"; `beras_stok/inatrade_panel.py`
+   masih mengambil nilai terbesar untuk laporan berkepala ganda (keputusan: dijumlah); backtest bergulir model beras
+   (±3–4 jam, tanya dulu); kedelai: prakiraan, varian PAW, holdout USDA.
 
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md (terutama "Pengguna dan cara kerja" dan bagian 6–13), lalu binpas/RANCANGAN_INATRADE.md
-(bagian 7), binpas/ambang_ujian.md, binpas/HASIL_TAHAP0.md.
-File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di bagian "Pengguna dan cara kerja".
-Baca juga bagian 9–11, binpas/HASIL_ADU_BERAS.md (beras selesai sampai U1; U1 tidak boleh dijalankan lagi), dan
-binpas/HASIL_ADU_KOMODITAS.md (enam komoditas lain baru sampai penyetelan). Jangan menjalankan apa pun tanpa diminta;
-tanya dulu tugas berikutnya.
+Baca dulu SERAH_TERIMA.md dari atas: "STATUS TERKINI", "Pengguna dan cara kerja", lalu bagian 9–14.
+Baca juga binpas/ambang_ujian.md, binpas/HASIL_ADU_BERAS.md, binpas/HASIL_ADU_KOMODITAS.md, binpas/RANCANGAN_U2.md,
+binpas/RANCANGAN_V2.md, binpas/HASIL_CAKUPAN_KOMODITAS.md, binpas/HASIL_VALIDASI_SATUAN.md.
+File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di "Pengguna dan cara kerja".
+Semua ujian akhir (U1) dan U2 beras sudah terpakai: jangan dijalankan lagi. Jangan menjalankan apa pun tanpa diminta.
+Tugas sekarang: <isi tugas, mis. "lanjutkan notebook tunggal di bagian 14">.
 ```
