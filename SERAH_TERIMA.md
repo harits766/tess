@@ -3,7 +3,7 @@
 Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CATATAN_SESI.md`,
 `beras_stok/README.md`, `stok_komoditas/README.md`, `binpas/RANCANGAN_INATRADE.md`, `binpas/ambang_ujian.md`.
 
-## STATUS TERKINI (per 16 Nov 2026, akhir sesi 7) — BACA INI DULU
+## STATUS TERKINI (per 16 Nov 2026, sesi 8) — BACA INI DULU
 Bagian 5–8 di bawah adalah riwayat; sebagian kalimat "belum" di sana sudah usang. Yang berlaku adalah blok ini dan
 bagian 9–14.
 
@@ -21,9 +21,11 @@ bagian 9–14.
 (`binpas/RANCANGAN_V2.md`, `binpas/hasil_v2_*/`). Hanya boleh diuji di bulan sesudah Sep 2026 (perkiraan butuh
 Okt 2026–Mar 2027, ±April 2027). Jangan ubah `resep.json`.
 
-**Pekerjaan yang TERPUTUS di tengah (lanjutkan bila diminta):** satu notebook `.ipynb` mandiri yang sudah berisi
-output dari awal sampai akhir dan bisa dijalankan ulang di Colab/Drive. Belum ada berkas notebook-nya; rancangan
-lengkap di bagian 14.
+**Notebook tunggal (sesi 8, 16 Nov 2026): SUDAH DITULIS, BELUM DIJALANKAN** —
+`binpas/colab/05_inatrade_tujuh_komoditas.ipynb` (dibangun oleh `binpas/colab/buat_notebook.py`). Berkas yang ada di
+repo masih TANPA output. Yang tersisa: satu kali jalan dari awal sampai akhir (±5 menit; termasuk REPLIKASI kalibrasi +
+U1 lima komoditas dan U2 beras di folder terpisah) supaya output tertanam, lalu kirim ke pengguna. **Menunggu izin
+pengguna untuk run itu** (aturan "jangan menjalankan apa pun tanpa diminta"). Rincian di bagian 14.0.
 
 **Tawaran yang belum dijawab pengguna:** ujian keterwakilan daging sapi dengan Pola Distribusi BPS; peubah luar
 (impor bulanan) di adu versi kedelai/daging sapi.
@@ -331,7 +333,30 @@ Pengguna ingin menjalankannya ulang di sesi baru (atau sendiri di Colab).
 - Belum (tawaran ke pengguna, belum diminta): peubah luar di adu versi untuk kedelai/daging sapi; ujian keterwakilan
   daging sapi/telur/ayam dengan Pola Distribusi BPS (sekali jalan, definisi dikunci dulu).
 
-## 14. Notebook tunggal (TERPUTUS, belum ada berkasnya) + cara melanjutkan apa pun di sesi baru
+## 14. Notebook tunggal (ditulis di sesi 8, belum dijalankan) + cara melanjutkan apa pun di sesi baru
+
+### 14.0 Status sesi 8 (16 Nov 2026) — notebook sudah ditulis, belum dijalankan
+- Pengguna meminta "lanjutkan notebook tunggal di bagian 14" (jadi notebook masih diinginkan). File INATRADE yang
+  diunggah di sesi 8 ber-hash sama dengan sesi 7 (`c667dddb…`): bukan data baru.
+- Sudah di repo: `binpas/colab/buat_notebook.py` (pembangun) dan `binpas/colab/05_inatrade_tujuh_komoditas.ipynb`
+  (42 sel, TANPA output). Isi mengikuti rancangan 14.2, dengan tiga penyesuaian:
+  1. pandas 3.0.5 di Colab dipasang ke folder terpisah (`pip install --target /content/pustaka_inatrade`) dan dipakai
+     skrip lewat `PYTHONPATH`, bukan menimpa pandas kernel; bila gagal dipasang, skrip memakai pandas bawaan dengan
+     peringatan. Di luar Colab skrip dijalankan dengan `-I`.
+  2. Skrip dijalankan lewat peluncur kecil (`runpy` + `multiprocessing.set_start_method('fork')`) supaya tetap jalan
+     bila Python Colab memakai cara mulai proses selain fork; isi skrip tidak diubah.
+  3. Bila sha256 xlsm berbeda dari hash resmi, sel replikasi U1/U2 dilewati otomatis (data baru).
+  Data BPS: sel opsional (mati); tabel cakupan resmi ditampilkan dari paket. Penyetelan ulang: sel opsional (mati).
+  Gerbang "memburuk ≤ 20%" dihitung di notebook (acuan = resep yang sama di penyetelan; beras = baris `konformal` di
+  `gerbang_opsi5.csv`).
+- Yang sudah dicek TANPA menyentuh xlsm: notebook terbangun, sintaks semua sel kode, dan tabel resmi (resep, gerbang
+  penyetelan, gerbang U1, U2, cakupan, resep versi 2, ringkasan status) cocok dengan `HASIL_*.md`.
+- **Belum dicek (butuh run):** Tahap 0, validasi satuan, replikasi U1/U2, peluncur `fork`, dan seluruh jalur Colab
+  (mount Drive, `pip --target`). Jalur Colab tidak bisa dicoba dari sesi ini.
+- Langkah sisa sesudah pengguna mengizinkan run: `pip install nbclient nbformat ipykernel`; salin xlsm ke folder kosong
+  di scratchpad; `python binpas/colab/buat_notebook.py --jalankan <folder itu>`; periksa output (tidak ada data per
+  perusahaan, kunci BPS tidak tercetak, daging sapi/kedelai/kerbau/telur "SAMA PERSIS", beras mendekati tabel kepekaan);
+  commit notebook ber-output; kirim dengan `SendUserFile`.
 
 ### 14.1 Permintaan pengguna (16 Nov 2026)
 "kirimin 1 ipynb yg udah kluarin output dari awal sampai akhir yg bisa di re run pas di up ke drive". Pengerjaan
@@ -428,7 +453,7 @@ Nama komoditas persis: `BERAS`, `DAGING SAPI`, `DAGING KERBAU`, `DAGING AYAM RAS
 
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
-1. **Notebook tunggal** (bagian 14) — tanyakan dulu apakah masih diinginkan.
+1. **Notebook tunggal** (bagian 14.0) — sudah ditulis; tinggal dijalankan sekali (minta izin pengguna dulu) dan dikirim.
 2. Ujian versi 2 kedelai, daging kerbau, telur ayam ras — menunggu data sesudah Sep 2026 (`RANCANGAN_V2.md` bagian 4).
 3. Tawaran yang belum dijawab: ujian keterwakilan daging sapi (Pola Distribusi BPS 2025; sekali jalan, definisi
    dikunci dulu, edisi pembanding sebelumnya 2018); peubah luar (impor bulanan BPS) di adu versi kedelai/daging sapi.

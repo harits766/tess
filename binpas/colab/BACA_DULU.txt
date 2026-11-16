@@ -28,3 +28,10 @@ ATURAN
   - Ujian akhir U1 hanya sekali jalan. Jangan ubah kode/resep/ambang setelah melihat hasil kalibrasi atau ujian.
   - Data INATRADE internal: jangan bagikan folder ini di luar tim.
   - Kunci API BPS (bila ingin ambil ulang data) disimpan di Colab Secrets, jangan ditulis di notebook.
+
+TAMBAHAN 16 NOV 2026: NOTEBOOK TUNGGAL
+  05_inatrade_tujuh_komoditas.ipynb merangkum semuanya (Tahap 0, validasi satuan, cakupan volume, resep + gerbang +
+  replikasi U1 lima komoditas, replikasi U2 beras, resep versi 2, ringkasan status). Mandiri: cukup unggah notebook itu
+  dan Non_PAW_dari_nol.xlsm ke MyDrive/inatrade_colab/ (kode dan hasil resmi sudah tertanam). Dibangun ulang dengan
+  python binpas/colab/buat_notebook.py. Keterangan "STATUS SAAT PAKET DIBUAT" di atas sudah usang: semua ujian akhir
+  (U1) dan U2 beras sudah dijalankan dan sudah terpakai; lihat SERAH_TERIMA.md.
