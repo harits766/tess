@@ -165,7 +165,7 @@ with tarfile.open(fileobj=io.BytesIO(_arsip), mode='r:gz') as _tar:
         _tar.extractall(PAKET, filter='data')
     except TypeError:                # Python lama tanpa argumen filter
         _tar.extractall(PAKET)
-print(f'paket diekstrak ke {PAKET}: {_n} berkas | sha256 arsip {hashlib.sha256(_arsip).hexdigest()[:16]}... '
+print(f'paket diekstrak ke {os.path.relpath(PAKET, BASE)}/: {_n} berkas | sha256 arsip {hashlib.sha256(_arsip).hexdigest()[:16]}... '
       f'| kode pada commit @@COMMIT@@')
 ''', form=True)
 
@@ -356,13 +356,13 @@ def tampil_resmi(label, folder):
 
 def banding_gerbang(resmi, ulang, nama_a='resmi', nama_b='replikasi'):
     """Tabel berdampingan + selisih relatif terbesar atas semua kolom angka + apakah status gerbang sama."""
-    baris, maks, sama = {}, 0.0, True
+    baris, maks, sama, kol, crps = {}, 0.0, True, '', 0.0
     for tk in TK:
         a, b = resmi.loc[tk], ulang.loc[tk]
         if not ada(a) and not ada(b):
             continue
         if ada(a) != ada(b):
-            maks, sama = float('inf'), False
+            maks, sama, kol = float('inf'), False, 'sel_bulan'
             continue
         for c in resmi.columns:
             if c not in ulang.columns:
@@ -375,7 +375,11 @@ def banding_gerbang(resmi, ulang, nama_a='resmi', nama_b='replikasi'):
             except (TypeError, ValueError):
                 continue
             if pd.notna(x) and pd.notna(y):
-                maks = max(maks, abs(y - x) / max(abs(x), 1e-12))
+                d = abs(y - x) / max(abs(x), 1e-12)
+                if d > maks:
+                    maks, kol = d, f'{c} ({NAMA_TK[tk].split()[0].lower()})'
+                if c == 'crps':
+                    crps = max(crps, d)
         baris[NAMA_TK[tk]] = {
             f'Sel-bulan ({nama_a} / {nama_b})': f"{int(a['sel_bulan'])} / {int(b['sel_bulan'])}",
             'CRPS log': idn(f"{a['crps']:.4f} / {b['crps']:.4f}"),
@@ -383,16 +387,17 @@ def banding_gerbang(resmi, ulang, nama_a='resmi', nama_b='replikasi'):
             'Bias': f"{pct(a['bias'], 2)} / {pct(b['bias'], 2)}",
             'Cakupan 90%': idn(f"{a['cakupan']:.1%} / {b['cakupan']:.1%}"),
             'Status gerbang (tanpa "memburuk")': f'{status(a)} / {status(b)}'}
-    return pd.DataFrame(baris), maks, sama
+    return pd.DataFrame(baris), (maks, sama, kol, crps)
 
 
-def vonis(maks, sama):
+def vonis(maks, sama, kol='', crps=None, acuan='hasil resmi'):
     if maks == 0 and sama:
-        return 'SAMA PERSIS dengan hasil resmi (semua kolom angka identik)'
+        return f'SAMA PERSIS dengan {acuan} (semua kolom angka identik)'
     if maks < 1e-9 and sama:
-        return idn(f'SAMA dengan hasil resmi sampai pembulatan mesin (selisih relatif terbesar {maks:.1e})')
-    return idn(f'BERBEDA dari hasil resmi: selisih relatif terbesar {maks:.2%}; status gerbang '
-               f'{"sama" if sama else "ADA YANG BERBEDA"}')
+        return idn(f'SAMA dengan {acuan} sampai pembulatan mesin (selisih relatif terbesar {maks:.1e})')
+    rinci = idn(f'CRPS berselisih paling besar {crps:.1%}; ') if crps is not None else ''
+    return (f'BERBEDA dari {acuan}: {rinci}status gerbang {"SAMA" if sama else "ADA YANG BERBEDA"}; '
+            + idn(f'selisih relatif terbesar {maks:.0%} ada di kolom {kol or "?"}'))
 
 
 def replikasi(kom, folder):
@@ -422,9 +427,9 @@ def replikasi(kom, folder):
 
 
 def tampil_banding(resmi, ulang, nama_a='resmi', nama_b='replikasi'):
-    t, maks, sama = banding_gerbang(resmi, ulang, nama_a, nama_b)
+    t, info = banding_gerbang(resmi, ulang, nama_a, nama_b)
     display(t)
-    return maks, sama
+    return info
 
 
 # lima komoditas yang sampai ujian akhir: (label, nama persis di INATRADE, folder hasil resmi)
@@ -433,7 +438,7 @@ UJI = [('Beras', 'BERAS', 'hasil_adu_beras'),
        ('Kedelai', 'KEDELAI BAHAN BAKU TEMPE DAN TAHU', 'hasil_adu_kedelai'),
        ('Daging kerbau', 'DAGING KERBAU', 'hasil_adu_daging_kerbau'),
        ('Telur ayam ras', 'TELUR AYAM RAS', 'hasil_adu_telur_ayam')]
-print('fungsi bantu siap; berkas hasil resmi di', R())
+print('fungsi bantu siap; berkas hasil resmi di', os.path.relpath(R(), BASE) + '/')
 ''')
 
 md(r'''
@@ -479,7 +484,7 @@ Berkas `hasil_ulang/tahap0/laporan.csv` dan `perusahaan.csv` berisi data per per
 
 kode(r'''
 _bps = [BPS_OUT] if os.path.exists(os.path.join(BPS_OUT, 'konsumsi_provinsi.csv')) else []
-jalan('binpas/tahap0.py', XLSM, os.path.join(HASIL, 'tahap0'), *_bps)
+_ = jalan('binpas/tahap0.py', XLSM, os.path.join(HASIL, 'tahap0'), *_bps)
 ''')
 
 md(r'''
@@ -492,7 +497,7 @@ Pembahasan: `paket/binpas/HASIL_VALIDASI_SATUAN.md`. Daftar per perusahaan ada d
 ''')
 
 kode(r'''
-jalan('binpas/validasi_satuan.py', XLSM, os.path.join(HASIL, 'satuan'), 'DAGING SAPI', 'PUPUK')
+_ = jalan('binpas/validasi_satuan.py', XLSM, os.path.join(HASIL, 'satuan'), 'DAGING SAPI', 'PUPUK')
 ''')
 
 md(r'''
@@ -591,18 +596,19 @@ dijalankan dengan kode sebelum commit `fc81529`: (1) seed isian per metode masih
 Python di tiap proses, sehingga tarikan acaknya tidak bisa diulang persis; (2) sel Nov–Des 2025 (lubang akhir yang
 mundur ke blok kalibrasi) ikut dinilai, sedangkan kode sekarang hanya menilai sel di dalam blok ujian. Pola hapusnya
 sama. Karena itu replikasi dibandingkan juga dengan tabel kepekaan "hanya sel 2026" (`gerbang_U1_peka_2026saja.csv`;
-dibuat sesudah hasil U1 dilihat, bukan hasil resmi), yang himpunan selnya sama.
+dibuat sesudah hasil U1 dilihat, bukan hasil resmi), yang himpunan selnya sama. Yang perlu dilihat: CRPS pembanding
+P\* (tidak memakai tarikan acak isian) harus sama dengan tabel kepekaan, CRPS resep berselisih tipis, dan status
+gerbang sama. Selisih relatif yang besar wajar muncul di kolom yang nilainya mendekati nol (mis. bias wilayah ±0,05%).
 ''')
 
 kode(r'''
 _g = replikasi('BERAS', 'hasil_adu_beras')
 if _g is not None:
     display(Markdown('**Replikasi vs U1 resmi** (resmi ikut menilai sel Nov–Des 2025):'))
-    _m1, _s1 = tampil_banding(baca_gerbang(R('hasil_adu_beras', 'gerbang_U1.csv')), _g)
-    print(vonis(_m1, _s1))
+    print(vonis(*tampil_banding(baca_gerbang(R('hasil_adu_beras', 'gerbang_U1.csv')), _g)))
     display(Markdown('**Replikasi vs tabel kepekaan "hanya sel 2026"** (himpunan sel sama; seed isian berbeda):'))
-    _m2, _s2 = tampil_banding(baca_gerbang(R('hasil_adu_beras', 'gerbang_U1_peka_2026saja.csv')), _g, 'kepekaan 2026')
-    print(vonis(_m2, _s2).replace('hasil resmi', 'tabel kepekaan'))
+    print(vonis(*tampil_banding(baca_gerbang(R('hasil_adu_beras', 'gerbang_U1_peka_2026saja.csv')), _g, 'kepekaan 2026'),
+                acuan='tabel kepekaan'))
     display(Markdown('**Gerbang replikasi beras** (acuan "memburuk" = resep yang sama di blok penyetelan):'))
     display(tabel_gerbang(_g, acuan=acuan_penyetelan('hasil_adu_beras')))
 ''')
