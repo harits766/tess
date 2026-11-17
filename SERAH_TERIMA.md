@@ -33,6 +33,9 @@ dijalankan lokal); bila pengguna melaporkan galat di Colab, lihat bagian 14.0.
 ## Pengguna dan cara kerja
 - Harits, Dit. Bina Pasar Dalam Negeri (Binpas) Kemendag; atasan yang sering dibalas lewat WA: Bu Fitria.
 - Bahasa Indonesia santai; jawaban ringkas; kalau diminta "chat WA", tulis teks siap tempel.
+- **Konteks (disebut pengguna 17 Nov 2026): pekerjaan ini juga bahan LAPORAN MAGANG pengguna.** Tenggat, format, dan
+  kerangka bab belum diketahui (sudah ditanyakan). Saat memilah pekerjaan, bedakan: hasil final yang bisa dilaporkan,
+  keputusan yang masih terbuka, yang masih bisa dijalankan sebelum tenggat, dan yang masuk "saran lanjutan".
 - Hemat kredit: beri tahu dulu sebelum run panjang (> ±10 menit). Jangan bikin mockup kalau tidak diminta.
 - Kunci BPS hanya dari env var `BPS_API_KEY` (jangan ditulis ke file/chat). Pengguna menolak memberi kunci USDA:
   jangan diminta lagi (unduhan bulk CSV USDA tidak butuh kunci). Jangan akali bot-check (tidak boleh spoof
