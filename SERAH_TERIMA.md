@@ -3,9 +3,26 @@
 Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CATATAN_SESI.md`,
 `beras_stok/README.md`, `stok_komoditas/README.md`, `binpas/RANCANGAN_INATRADE.md`, `binpas/ambang_ujian.md`.
 
-## STATUS TERKINI (per 16 Nov 2026, sesi 8) — BACA INI DULU
-Bagian 5–8 di bawah adalah riwayat; sebagian kalimat "belum" di sana sudah usang. Yang berlaku adalah blok ini dan
-bagian 9–14.
+## STATUS TERKINI (per 17 Nov 2026, akhir sesi 8) — BACA INI DULU
+Bagian 5–8 di bawah adalah riwayat; sebagian kalimat "belum" di sana sudah usang. Yang berlaku adalah blok ini,
+bagian 9–14, dan **bagian 15 (percakapan terakhir sesi 8: arah U3, data harga, laporan magang)**.
+
+**Yang sedang dibahas saat sesi 8 berakhir (belum ada keputusan "gas", belum ada yang dijalankan):** pengguna ingin
+**U3 TETAP ADA** dan condong ke **semua komoditas dijalankan lalu dilaporkan apa adanya**. Usul saya: U3 versi ringkas
+(model harga per provinsi per bulan, tiga versi diadu). Sumber harga sudah dicari sendiri: **PIHPS BI bisa diambil**
+untuk beras, daging sapi, daging ayam ras, telur ayam ras; kedelai, daging kerbau, pupuk belum ada sumber harga per
+provinsi. Rincian, keputusan yang masih perlu, dan cara ambil data: bagian 15.
+
+**Peta ujian per komoditas (17 Nov 2026):**
+| Komoditas | U1 | U2 | U3 |
+| --- | --- | --- | --- |
+| Beras | sudah: wilayah lolos | sudah: "lebih dekat" lolos, korelasi asal gagal | belum; harga PIHPS ada |
+| Daging sapi | sudah: wilayah lolos | belum (publikasi BPS 2025, 2018 ada; ditawarkan, belum dijawab) | belum; harga PIHPS ada |
+| Kedelai | sudah: wilayah gagal bias, provinsi lolos | belum (publikasi BPS belum dicek) | belum; harga per provinsi belum ada |
+| Daging kerbau | sudah: gagal bias | tidak ada publikasi BPS | belum; harga belum ada |
+| Telur ayam ras | sudah: gagal | belum (publikasi BPS 2023, 2021, 2019 ada) | belum; harga PIHPS ada |
+| Daging ayam ras | tidak dijalankan (tidak bisa diuji: tidak ada data 2024) | belum (publikasi BPS 2019, 2018) | belum; harga PIHPS ada |
+| Pupuk | tidak dijalankan (gagal bias di penyetelan; pelapor tinggal 4) | tidak ada publikasi BPS | tidak bermakna (harga diatur/HET) |
 
 **Hasil yang sudah final (semua ujian SEKALI JALAN dan SUDAH TERPAKAI; jangan dijalankan lagi):**
 | Komoditas | Status | Rincian |
@@ -27,8 +44,9 @@ pengguna. Replikasi di dalamnya: daging sapi, kedelai, daging kerbau, telur, dan
 resmi; beras berbeda tipis seperti diperkirakan (status gerbang sama). **Jalur Colab belum pernah dicoba** (hanya
 dijalankan lokal); bila pengguna melaporkan galat di Colab, lihat bagian 14.0.
 
-**Tawaran yang belum dijawab pengguna:** ujian keterwakilan daging sapi dengan Pola Distribusi BPS; peubah luar
-(impor bulanan) di adu versi kedelai/daging sapi.
+**Tawaran yang belum dijawab pengguna:** ujian keterwakilan (U2) daging sapi dengan Pola Distribusi BPS (rekomendasi
+saya; ±30–60 menit, tebakan); 79 kombinasi + peubah luar impor bulanan untuk kedelai/daging sapi (hasilnya hanya calon
+resep); pembaruan Claude Doc laporan ringkas; tenggat dan kerangka laporan magang (ditanyakan, belum dijawab).
 
 ## Pengguna dan cara kerja
 - Harits, Dit. Bina Pasar Dalam Negeri (Binpas) Kemendag; atasan yang sering dibalas lewat WA: Bu Fitria.
@@ -37,6 +55,19 @@ dijalankan lokal); bila pengguna melaporkan galat di Colab, lihat bagian 14.0.
   kerangka bab belum diketahui (sudah ditanyakan). Saat memilah pekerjaan, bedakan: hasil final yang bisa dilaporkan,
   keputusan yang masih terbuka, yang masih bisa dijalankan sebelum tenggat, dan yang masuk "saran lanjutan".
 - Hemat kredit: beri tahu dulu sebelum run panjang (> ±10 menit). Jangan bikin mockup kalau tidak diminta.
+- **Pelajaran sesi 8 (ikuti):**
+  - **Jangan minta pengguna menyediakan/mengekspor data.** "pake data yg ada aja", "lu cari2 sendiri di internet":
+    cari dan coba sendiri sumber terbuka dulu; baru laporkan yang benar-benar tidak bisa diambil.
+  - **Jangan menutup tiap jawaban dengan pertanyaan balik**; pengguna kesal ditanya terus. Beri rekomendasi, lanjutkan
+    yang tidak bergantung pada jawabannya.
+  - **Jangan menawarkan/menjajarkan hal yang belum bisa dikerjakan seolah tinggal dijalankan** (kasus U3: pengguna
+    marah karena U3 ada di rancangan padahal modelnya belum ada). Sebut jelas dari awal: sudah ada / tinggal run /
+    harus dibangun dulu.
+  - Tetapi **jangan memangkas cakupan tanpa diminta**: saat ditawari U3 ditandai "di luar cakupan", jawabannya
+    "gak lah U3 ttep ada". Pengguna juga ingin semua komoditas diperlakukan setara dan hasilnya dilaporkan apa adanya.
+  - Keluaran yang terlalu ringkas ditolak ("ko pendek banget isinya"): notebook harus memuat log proses dan grafik.
+  - Izin run lewat kotak pilihan (AskUserQuestion) berjalan baik: sebut lama run dan apa yang ikut dijalankan.
+  - Pengguna menulis sangat singkat dan kasar saat kesal; jawab langsung ke isi, tanpa basa-basi, tanpa membela diri.
 - Kunci BPS hanya dari env var `BPS_API_KEY` (jangan ditulis ke file/chat). Pengguna menolak memberi kunci USDA:
   jangan diminta lagi (unduhan bulk CSV USDA tidak butuh kunci). Jangan akali bot-check (tidak boleh spoof
   User-Agent); bps.go.id dan satudata.pertanian.go.id memblokir akses otomatis -> pakai WebAPI BPS.
@@ -468,26 +499,155 @@ Nama komoditas persis: `BERAS`, `DAGING SAPI`, `DAGING KERBAU`, `DAGING AYAM RAS
 - Dokumen laporan untuk Bu Fitria (Claude Doc `GTjBbAhSw52RP2Kszwqm6o`) dibuat sebelum resep versi 2 dan cakupan
   volume komoditas lain; belum diperbarui dengan dua hal itu.
 
+## 15. Sesi 8 lanjutan (16–17 Nov 2026): cakupan "semua kayak beras", U3, data harga, laporan magang
+Semua di bagian ini DISKUSI dan PENCARIAN DATA; tidak ada ujian, penyetelan, atau model yang dijalankan.
+
+### 15.1 Urutan percakapan dan sikap pengguna
+1. "bisa ga treat semua komoditi kayak beras? jan run duls" -> saya jelaskan lima perlakuan beras yang belum dimiliki
+   komoditas lain: 79 kombinasi (lain 58), peubah luar, U2, model stok + prakiraan, (cakupan volume sudah setara).
+2. "kenapa sebelumnya ga di-treat sama?" -> dari `RANCANGAN_INATRADE.md` baris 96: "R5, R6, R7 dan juri RF dicoba di
+   beras dulu; kalau tidak menyumbang, komoditas lain cukup 58 kombinasi" (dikunci 12 Nov, terpicu karena di beras
+   tidak menyumbang); peubah luar hanya ada untuk beras; U2 yang disetujui Bu Fitria hanya beras; model stok = proyek
+   awal beras, lalu stok dibekukan (sesi 5). Catatan saya: "tidak menyumbang di beras" adalah asumsi untuk komoditas
+   lain, bukan temuan.
+3. "U1 U2 U3 ke semua komoditi udah running semua?" -> belum (tabel peta ujian di STATUS TERKINI).
+4. "Kalau gas jalanin semuanya amankah?" -> tidak semuanya bisa: U1 ulang tidak boleh; U1 versi 2 belum ada datanya;
+   U1 ayam/pupuk tidak ada resep lolos; U2 hanya untuk komoditas ber-publikasi BPS; U3 belum ada modelnya.
+5. Pengguna menyebut ini untuk **laporan magang** -> saya pilah: sudah final / belum diputuskan / masih bisa di-run /
+   masuk saran lanjutan (ringkasnya di 15.5).
+6. Pengguna marah U3 ditawarkan padahal modelnya belum ada. Penyebab yang saya akui: U3 masuk rancangan sesi 5 sebagai
+   tahap ketiga, lalu di sesi yang sama stok dibekukan tetapi U3 tidak ditandai di luar cakupan; rancangan ditulis
+   untuk kajian penuh, bukan skala magang. U1 dan U2 tidak bergantung pada U3.
+7. **Pengguna: "gak lah U3 ttep ada gimana kira2?"** -> usul U3 ringkas (15.2).
+8. Pengguna soal komoditas U3: "kalau semuanya di run kenapa? dan dilaporin sebegitu hasilnya" -> boleh (15.2).
+9. Saya meminta pengguna mengekspor harga dari SP2KP -> ditolak keras ("lu cari2 sendiri di internet... dah gua
+   bilang pake data yg ada aja") -> saya cari sendiri (15.3). Pengguna lalu memotong dan meminta serah terima ini.
+
+### 15.2 Usul U3 versi ringkas (BELUM disetujui, BELUM dikunci, BELUM ada kode)
+- Pertanyaan U3 dan gerbangnya TETAP seperti `ambang_ujian.md`: model harus mengalahkan "tanpa INATRADE" dan "INATRADE
+  asli" pada CRPS prakiraan harga 1–2 bulan. Simulasi waktu nyata: titik awal bergulir Des 2025–Agu 2026, hanya data
+  sampai titik awal, laporan INATRADE bulan terakhir dibuat tak lengkap (pola lubang akhir); CRPS log harga; pembanding
+  tambahan yang hanya dilaporkan: harga bulan lalu, musiman naif (`RANCANGAN_INATRADE.md` 7.6).
+- Yang diganti hanya MODEL: bukan model gabungan stok–arus–harga 38 provinsi (rancangan 7.6; butuh model stok, data
+  arus, konvergensi model beras diperbaiki dulu; perkiraan 27 kali fit model besar), melainkan **model harga per
+  provinsi per bulan**: musim, harga bulan lalu, produksi/impor bila ada, ditambah sinyal INATRADE (arus/stok pedagang
+  per wilayah). Tiga versi berbeda hanya di masukan INATRADE: tanpa / asli / diperkuat (resep U1). Tidak butuh model
+  stok, jadi tidak menabrak "stok dibekukan". Run perkiraan hitungan menit (tebakan).
+- **Keputusan yang masih perlu dari Bu Fitria (belum dikirim; pengguna belum minta teks WA):**
+  a. model diganti ke versi ringkas (perubahan rancangan; sah bila dikunci dan di-commit sebelum dijalankan, seperti
+     penggantian gerbang U2);
+  b. gerbang "ujian BPS 2025" di U3 dilepas, karena edisi beras 2025 sudah dibuka untuk U2 (tidak buta lagi);
+  c. komoditas: pengguna condong **semua komoditas yang punya data harga**, hasil dilaporkan apa adanya.
+- Konsekuensi butir c yang sudah saya sampaikan: versi "diperkuat" hanya ada untuk beras dan daging sapi (lolos U1);
+  kedelai, kerbau, telur, ayam, pupuk hanya dua versi (tanpa vs asli) karena aturan "gagal U1 -> data apa adanya";
+  daya uji kecil (9 titik awal; ayam/telur/pupuk 3–9 pelapor); makin banyak komoditas makin besar peluang satu lolos
+  kebetulan -> lolos tipis dilaporkan "belum bisa diputuskan". Tebakan saya: kebanyakan "tidak menyumbang".
+- Urutan kerja bila disetujui: (1) ambil harga PIHPS (15.3); (2) tulis definisi U3 ringkas sebagai berkas
+  `binpas/RANCANGAN_U3.md` (target, tiga versi, titik awal, gerbang, sekali jalan, penjaga `U3_SUDAH_JALAN.json`),
+  minta persetujuan, commit + push; (3) tulis kode, coba HANYA di titik awal sebelum Des 2025; (4) tanya dulu, lalu U3
+  sekali jalan; (5) laporkan apa adanya. Yang belum dirancang: bentuk persis sinyal INATRADE, pemetaan kualitas PIHPS
+  ke subkomoditas INATRADE, perlakuan provinsi tanpa pelapor.
+
+### 15.3 Sumber harga: hasil pencarian 17 Nov 2026 (dicoba dari lingkungan sesi; UA bawaan curl/urllib, tanpa akal-akalan)
+| Sumber | Hasil | Isi |
+| --- | --- | --- |
+| **PIHPS BI** (`www.bi.go.id/hargapangan`) | **BISA** | harga per provinsi, harian/mingguan/bulanan; 34 provinsi (Papua dan Papua Barat saja; empat provinsi baru tidak ada) |
+| SP2KP Kemendag (`sp2kp.kemendag.go.id`) | halaman terbuka; data lewat `api-sp2kp.kemendag.go.id` dengan auth + reCAPTCHA -> TIDAK dicoba lebih jauh (aturan: jangan akali bot-check) | belum tahu apakah memuat kedelai/kerbau |
+| Panel Harga Bapanas (`panelharga.badanpangan.go.id`, `api-panelhargav2...`) | sambungan direset; tidak tersambung | diduga memuat kedelai impor dan daging kerbau beku (belum terbukti) |
+| `data.go.id` (dataset "rata-rata harga pangan bulanan tingkat konsumen provinsi", Bapanas) | DITOLAK kebijakan jaringan lingkungan (proxy 403) | perlu host diizinkan di pengaturan lingkungan, atau diunduh pengguna |
+| WebAPI BPS | var 254 "Rata-rata Harga Eceran Nasional Beberapa Jenis Barang" hanya NASIONAL TAHUNAN (ayam, sapi, telur, dll.; tanpa kedelai/kerbau); var 79 harga eceran beras 33 kota; tidak ada harga kedelai/kerbau per provinsi | – |
+| Belum dicoba (ide) | nilai satuan impor kedelai (dataexim HS 12019000: nilai ÷ berat, bulanan, NASIONAL) sebagai harga pengganti kedelai | – |
+
+**Cara ambil PIHPS (sudah dicoba, berhasil):**
+```bash
+curl -sS -m 90 -G "https://www.bi.go.id/hargapangan/WebSite/TabelHarga/GetGridDataDaerah" \
+  --data-urlencode "price_type_id=1" --data-urlencode "comcat_id=com_3,com_4,com_7,com_8,com_9,com_10" \
+  --data-urlencode "province_id=13" --data-urlencode "regency_id=" --data-urlencode "market_id=" \
+  --data-urlencode "tipe_laporan=3" --data-urlencode "start_date=2024-01-01" --data-urlencode "end_date=2026-09-30"
+```
+- `price_type_id`: 1 pasar tradisional, 2 pasar modern, 3 pedagang besar, 4 produsen. `tipe_laporan`: 3 = bulanan.
+  `province_id` kosong = rata-rata semua provinsi; satu id = satu provinsi (panggil per provinsi; beri jeda).
+- Komoditas: `com_3` Beras Kualitas Medium I, `com_4` Medium II (`com_1`–`com_2` bawah, `com_5`–`com_6` super),
+  `com_7` Daging Ayam Ras Segar, `com_8` Daging Sapi Kualitas 1, `com_9` Daging Sapi Kualitas 2, `com_10` Telur Ayam
+  Ras Segar; kategori `cat_1` Beras, `cat_2` Daging Ayam, `cat_3` Daging Sapi, `cat_4` Telur Ayam. Lainnya: bawang,
+  cabai, minyak goreng, gula. **Tidak ada kedelai, daging kerbau, pupuk.**
+- Id provinsi: 1 Aceh, 2 Sumut, 3 Sumbar, 4 Riau, 5 Kepri, 6 Jambi, 7 Bengkulu, 8 Sumsel, 9 Babel, 10 Lampung,
+  11 Banten, 12 Jabar, 13 DKI, 14 Jateng, 15 DIY, 16 Jatim, 17 Bali, 18 NTB, 19 NTT, 20 Kalbar, 21 Kalsel, 22 Kalteng,
+  23 Kaltim, 24 Kaltara, 25 Gorontalo, 26 Sulsel, 27 Sultra, 28 Sulteng, 29 Sulut, 30 Sulbar, 31 Maluku, 32 Malut,
+  33 Papua, 34 Papua Barat. Rujukan: `.../WebSite/TabelHarga/GetRefProvince`, `GetRefCommodityAndCategory`,
+  `GetRefPriceType`.
+- Jawaban JSON `{"data": [...]}` berbentuk lebar: tiap baris = kategori (`level` 1) atau komoditas (`level` 2), kolom
+  `"Jan 2024"` … `"Sep 2026"` (33 bulan, nama bulan Inggris), nilai teks dengan koma ribuan (`"15,750"`).
+  Contoh DKI: beras medium I Jan 2024 15.600 -> Sep 2026 17.050; daging sapi kualitas 1 146.650 -> 154.300.
+- Panggilan pertama dengan `comcat_id=cat_1` sekali kena "connection reset"; panggilan berikutnya (pakai `com_...`)
+  lancar. Bila reset lagi, ulang dengan jeda.
+- Yang diambil di sesi 8 hanya uji coba (rata-rata nasional beras, dan DKI enam komoditas); panel 34 provinsi BELUM
+  diunduh. Berkas uji coba ada di scratchpad (hilang). Data mentah tidak di-commit.
+
+### 15.4 Akibat untuk U3 bila jadi dijalankan
+- Bisa dengan data yang ada: **beras, daging sapi, daging ayam ras, telur ayam ras** (harga PIHPS per provinsi).
+- Belum bisa: **kedelai, daging kerbau** (belum ada harga per provinsi; pilihan: Panel Harga Bapanas bila bisa
+  tersambung, `data.go.id` bila host diizinkan, atau untuk kedelai nilai satuan impor nasional). **Pupuk** tidak
+  bermakna diuji (harga diatur). Bila tetap tidak ada sumber: tulis "tidak bisa diuji" beserta alasannya; itu sesuai
+  keinginan pengguna "dilaporkan apa adanya".
+- Daging ayam ras: laporan INATRADE baru ada sejak Okt 2024, jadi data latih pendek.
+
+### 15.5 Pilahan untuk laporan magang (sudah disampaikan ke pengguna 17 Nov 2026)
+- **Sudah final, bisa dilaporkan:** Tahap 0; validasi satuan (tanpa kode perusahaan); cakupan volume tujuh komoditas;
+  adu versi + U1 (termasuk yang gagal); U2 beras; model stok beras + prakiraan (level 2024–2026 belum tervalidasi);
+  cara kerja (ambang dikunci dulu, ujian sekali jalan); notebook tunggal sebagai lampiran.
+- **Belum diputuskan:** U2 daging sapi; 79 kombinasi + peubah luar; pembaruan Claude Doc laporan ringkas; bentuk dan
+  cakupan U3 (15.2 butir a–c).
+- **Masih bisa di-run:** U2 daging sapi (±30–60 menit); 79 kombinasi + impor kedelai/daging sapi (±1–2 jam, calon
+  resep saja); lanjutan model stok kedelai; U3 ringkas bila disetujui. Semua perkiraan waktu = tebakan.
+- **Masuk keterbatasan/saran lanjutan bila tidak sempat:** ujian resep versi 2 (butuh data s.d. ±Mar 2027); U3 penuh;
+  U2 komoditas tanpa publikasi BPS.
+- **Harus ditulis apa adanya:** "lolos" = menutup laporan bolong secara konsisten, bukan bukti mewakili pasar; acuan
+  "memburuk ≤ 20%" provinsi beras diputuskan sesudah hasil dilihat (+13% dan +28% sama-sama dilaporkan); koreksi satuan
+  tiga perusahaan = perkiraan dari data; resep daging sapi dan kerbau hasil turun peringkat.
+- Belum diketahui: tenggat, format, kerangka bab laporan magang.
+
+### 15.6 Lingkungan sesi 8 (untuk sesi baru)
+- Terpasang di sesi 8 dan perlu diulang: `pip install nbclient nbformat ipykernel matplotlib`. Sudah ada: Python
+  3.13.18, numpy 2.5.3, pandas 3.0.5, openpyxl 3.1.5. Belum ada: scipy, scikit-learn, catboost, quantile-forest,
+  statsmodels, pdfplumber (hanya perlu untuk penyetelan beras penuh / ekstraksi PDF).
+- `BPS_API_KEY` ada sebagai env var. WebSearch dan WebFetch tersedia (muat lewat ToolSearch). Jaringan lewat proxy
+  berkebijakan: `data.go.id` ditolak; `bi.go.id`, `sp2kp.kemendag.go.id`, `webapi.bps.go.id` terbuka.
+- Branch kerja: `claude/bayesian-rice-stock-model-qmunfn` (sesi 8 mendorong langsung ke sana atas perintah pengguna,
+  walau lingkungan menunjuk branch lain sebagai bawaan). Tanpa PR.
+- Pedoman grafik yang dipakai notebook: palet biru `#2a78d6`, oranye `#eb6834`, aqua `#1baf7a`, permukaan `#fcfcfb`;
+  satu sumbu, batang tipis, label seperlunya (fungsi di sel "fungsi grafik" `buat_notebook.py`).
+
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
-1. **Notebook tunggal** (bagian 14.0) — selesai dan terkirim; tinggal menunggu laporan pengguna sesudah dicoba di Colab.
-2. Ujian versi 2 kedelai, daging kerbau, telur ayam ras — menunggu data sesudah Sep 2026 (`RANCANGAN_V2.md` bagian 4).
-3. Tawaran yang belum dijawab: ujian keterwakilan daging sapi (Pola Distribusi BPS 2025; sekali jalan, definisi
-   dikunci dulu, edisi pembanding sebelumnya 2018); peubah luar (impor bulanan BPS) di adu versi kedelai/daging sapi.
-4. Perbarui Claude Doc laporan ringkas dengan resep versi 2 dan cakupan volume (bila diminta).
-5. Belum dikerjakan dari rancangan: model gabungan stok–arus–harga (U3), skor tingkat perusahaan, agregasi
-   triwulanan, CRPS dalam ton, korelasi Harga Jual vs PIHPS.
-6. Pekerjaan lama yang masih terbuka: ganti nama "susut" -> "selisih tak tercatat"; `beras_stok/inatrade_panel.py`
+1. **U3 tetap ada** (bagian 15.2–15.4). Langkah berikut yang paling dekat: unduh panel harga PIHPS 34 provinsi untuk
+   beras, daging sapi, daging ayam ras, telur ayam ras (bagian 15.3; itu pengambilan data, tetap bilang dulu sebelum
+   jalan); tulis `binpas/RANCANGAN_U3.md` (definisi U3 ringkas) untuk disetujui dan dikunci; siapkan teks WA Bu Fitria
+   butir a–c bila diminta. Jangan menulis/menjalankan kode U3 sebelum definisinya dikunci.
+2. Cari lagi harga kedelai dan daging kerbau per provinsi (Panel Harga Bapanas, `data.go.id`) tanpa meminta pengguna
+   mengekspor data; bila tetap tidak ada, catat "tidak bisa diuji".
+3. Tawaran yang belum dijawab: U2 daging sapi (rekomendasi saya; definisi dikunci dulu, sekali jalan; edisi BPS 2025
+   dan 2018); 79 kombinasi + peubah luar impor untuk kedelai/daging sapi.
+4. Laporan magang: tenggat dan kerangka bab belum diketahui; pilahan isi di bagian 15.5.
+5. Notebook tunggal (bagian 14.0): selesai dan terkirim; menunggu laporan pengguna sesudah dicoba di Colab.
+6. Ujian versi 2 kedelai, daging kerbau, telur ayam ras — menunggu data sesudah Sep 2026 (`RANCANGAN_V2.md` bagian 4).
+7. Perbarui Claude Doc laporan ringkas dengan resep versi 2 dan cakupan volume (bila diminta).
+8. Belum dikerjakan dari rancangan: skor tingkat perusahaan, agregasi triwulanan, CRPS dalam ton, korelasi Harga Jual
+   vs PIHPS (sekarang bisa, karena PIHPS bisa diambil).
+9. Pekerjaan lama yang masih terbuka: ganti nama "susut" -> "selisih tak tercatat"; `beras_stok/inatrade_panel.py`
    masih mengambil nilai terbesar untuk laporan berkepala ganda (keputusan: dijumlah); backtest bergulir model beras
    (±3–4 jam, tanya dulu); kedelai: prakiraan, varian PAW, holdout USDA.
 
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md dari atas: "STATUS TERKINI", "Pengguna dan cara kerja", lalu bagian 9–14.
-Baca juga binpas/ambang_ujian.md, binpas/HASIL_ADU_BERAS.md, binpas/HASIL_ADU_KOMODITAS.md, binpas/RANCANGAN_U2.md,
-binpas/RANCANGAN_V2.md, binpas/HASIL_CAKUPAN_KOMODITAS.md, binpas/HASIL_VALIDASI_SATUAN.md.
+Baca dulu SERAH_TERIMA.md dari atas: "STATUS TERKINI", "Pengguna dan cara kerja" (termasuk "Pelajaran sesi 8"),
+lalu bagian 9–15. Bagian 15 = percakapan terakhir (U3 tetap ada, data harga PIHPS, laporan magang).
+Baca juga binpas/ambang_ujian.md, binpas/RANCANGAN_INATRADE.md bagian 7.6, binpas/HASIL_ADU_BERAS.md,
+binpas/HASIL_ADU_KOMODITAS.md, binpas/RANCANGAN_U2.md, binpas/RANCANGAN_V2.md, binpas/HASIL_CAKUPAN_KOMODITAS.md,
+binpas/HASIL_VALIDASI_SATUAN.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di "Pengguna dan cara kerja".
 Semua ujian akhir (U1) dan U2 beras sudah terpakai: jangan dijalankan lagi. Jangan menjalankan apa pun tanpa diminta.
-Tugas sekarang: <isi tugas, mis. "uji ulang resep versi 2 dengan data baru">.
+Jangan minta saya menyediakan data: cari sendiri sumber terbuka dulu.
+Tugas sekarang: <isi tugas, mis. "lanjutkan U3 versi ringkas: unduh harga PIHPS lalu tulis definisinya untuk dikunci">.
 ```
