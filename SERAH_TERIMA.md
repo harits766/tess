@@ -115,6 +115,7 @@ resep); pembaruan Claude Doc laporan ringkas; tenggat dan kerangka laporan magan
 | Tautan Data Stok dan Distribusi 7 Komoditas (doc, dibuat pengguna) | https://claude.ai/artifact/6WTegJt8gPHDsNwzLZBdUX | daftar sumber Bapanas, BPS, BULOG, Kementan |
 | Rancangan Metodologi Pelaporan Stok dan Distribusi Beras (doc) | https://claude.ai/artifact/WjvkAe8JC9xDFVG9EwDGvR | rancangan terbaru (lihat bagian 4) |
 | Laporan Ringkas: Penguatan Data INATRADE Tujuh Komoditas (doc) | https://claude.ai/artifact/GTjBbAhSw52RP2Kszwqm6o | hasil ujian tujuh komoditas + keterwakilan beras, untuk Bu Fitria (14 Nov 2026) |
+| Estimasi Stok dan Penguatan Data Distribusi Beras (Google Doc, bahan bimbingan dosen, 23 Nov 2026) | https://docs.google.com/document/d/17JMV-rw9R_suBzrOpngQ1x485XmDJL1LqJjlwJm942U/edit | beras saja: permasalahan, sumber data, diagram alir metodologi, evaluasi, hasil U1/stok/U2; 6 halaman (batas pengguna 7). Dibuat dari `binpas/bimbingan/buat_docx.py` + `diagram.py`, lalu dirapikan langsung di Google Docs (lebar tabel, 3.1–3.3 dipindah sebelum diagram) |
 
 ## 1. Model stok beras (`beras_stok/`) — selesai
 - State-space Bayesian per provinsi per bulan, Jul 2022–Sep 2026 (ditampilkan mulai Jan 2024), PyMC + nutpie.
