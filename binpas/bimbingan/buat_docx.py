@@ -220,9 +220,10 @@ d.add_heading('5.2 Stok beras total', level=2)
 butir('**Stok nasional akhir Sep 2026: 14,2 juta ton** (interval 90%: 11,3–18,6), setara Sep 2025 (14,4). Dari jumlah '
       'itu, BULOG 4,65 juta ton (4,29–5,04) dan swasta 9,6 juta ton (6,7–14,0). Stok terendah tiap Jan–Feb dan naik '
       'setelah panen Mar–Apr.')
-butir('**Validasi:** dengan survei SSBAT Des 2022 disembunyikan, model memprediksi 4,40 juta ton (3,43–5,59); angka '
-      'survei 4,06 juta ton, masih di dalam interval. Konsumsi total 2024 menurut model 29,79 juta ton, sama dengan '
-      'angka konsumsi total BPS 2024 (29,80 juta ton).')
+butir('**Validasi:** dengan survei SSBAT Des 2022 disembunyikan, model memprediksi bacaan survei 4,40 juta ton '
+      '(3,43–5,59), dan angka survei 4,06 juta ton masih di dalam interval. Uji ini memeriksa konsistensi perubahan stok '
+      'selama 2023, bukan level absolut, karena bias survei diestimasi model. Konsumsi total 2024 menurut model (29,79 '
+      'juta ton) sesuai dengan angka konsumsi total BPS 2024 (29,80 juta ton) yang tidak dipakai saat estimasi.')
 butir('**Kepekaan:** pilihan yang paling menentukan level adalah batas stok swasta tidak negatif. Per pulau '
       '(dasar) 14,2 juta ton, nasional 14,2, per provinsi 16,8. Tanpa data INATRADE hasilnya 15,1 juta ton.')
 butir('**Prakiraan:** Okt 2026 13,6 (10,7–18,1), Nov 12,5 (9,5–17,0), Des 11,1 juta ton (8,1–15,7), cukup untuk ±4,1 '
