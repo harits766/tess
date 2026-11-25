@@ -138,7 +138,7 @@ b('**Blok ujian akhir (Jan–Sep 2026):** metode yang sudah dipilih diuji satu k
 h2('Metode yang diadu')
 p('Ada 79 kombinasi, dari yang paling sederhana sampai machine learning: interpolasi (garis lurus), meniru pertumbuhan '
   'perusahaan sejenis, empat jenis regresi, quantile regression forest, CatBoost, dan MRP, ditambah pilihan seperti bobot, '
-  'penggabung, dan koreksi rentang. Semuanya harus mengalahkan **pembanding P\\***, yaitu cara paling sederhana yang biasa '
+  'penggabung, dan koreksi rentang. Semuanya harus mengalahkan **pembanding P***, yaitu cara paling sederhana yang biasa '
   'dipakai: total yang melapor dikali rasio jumlah perusahaan aktif terhadap jumlah yang melapor (Gambar 6, kanan).')
 gbr('g06_metode', 'Ilustrasi dua cara menebak (angka contoh). Kiri: metode yang akhirnya terpilih. Kanan: pembanding P*.')
 baca('di kiri, sebuah perusahaan tidak melapor di bulan 4 dan 5. Interpolasi mengisinya dengan garis lurus dari laporan '
@@ -154,7 +154,7 @@ gbr('g07_crps', 'Ilustrasi CRPS (angka contoh). Garis hitam = nilai asli; tiap k
 baca('tebakan A dekat dan yakin, jadi CRPS-nya paling kecil (paling bagus). Tebakan B yakin tapi meleset, jadi dihukum '
      'paling berat. Tebakan C tepat di tengah tapi ragu-ragu (kurvanya lebar), jadi juga dihukum. Makin kecil CRPS, makin bagus.')
 p('Supaya lolos, metode harus lulus semua syarat berikut. Syarat ini ditulis dan dikunci sebelum ujian dijalankan:')
-b('galatnya paling tidak 10% lebih kecil dari P\\*, dan menang di hampir semua bulan, bukan cuma rata-ratanya;')
+b('galatnya paling tidak 10% lebih kecil dari P*, dan menang di hampir semua bulan, bukan cuma rata-ratanya;')
 b('tidak cenderung kebanyakan atau kekurangan: rata-rata kemelesetannya (bias) paling banyak 3%;')
 b('kisaran 90%-nya memang memuat nilai asli sekitar 90% dari waktu (minimal 80%);')
 b('arah naik-turun bulanannya benar di paling tidak 80% bulan;')
@@ -164,13 +164,13 @@ h2('Hasilnya')
 p('Metode yang terpilih adalah **interpolasi** dengan kisaran yang dilebarkan memakai data blok kalibrasi (koreksi '
   'konformal). Hasil ujian akhirnya ada di Gambar 8 dan 9.')
 gbr('g08_u1', 'Hasil ujian akhir Jan–Sep 2026 per tingkat.')
-baca('grafik kiri: batang biru adalah kemelesetan metode terpilih, batang abu-abu kemelesetan pembanding P\\*. Di tingkat '
-     'wilayah, metode meleset sekitar 2,1%, sedangkan P\\* sekitar 14,5%. Grafik kanan: titik menunjukkan seberapa sering '
+baca('grafik kiri: batang biru adalah kemelesetan metode terpilih, batang abu-abu kemelesetan pembanding P*. Di tingkat '
+     'wilayah, metode meleset sekitar 2,1%, sedangkan P* sekitar 14,5%. Grafik kanan: titik menunjukkan seberapa sering '
      'kisaran 90% memuat nilai asli; garis di sekitarnya adalah ketidakpastian karena jumlah datanya terbatas. Syaratnya, '
      'garis itu harus memotong garis 90% dan titiknya di kanan 80%.')
 gbr('g09_galat', 'Sebaran kemelesetan di tingkat wilayah untuk semua soal ujian.')
 baca('makin tinggi dan sempit puncak di sekitar 0, makin tepat. Tebakan metode terpilih (biru) menumpuk rapat di sekitar 0. '
-     'Tebakan P\\* (abu-abu) jauh lebih menyebar, dan ekor kirinya lebih panjang: P\\* lebih sering kekurangan banyak.')
+     'Tebakan P* (abu-abu) jauh lebih menyebar, dan ekor kirinya lebih panjang: P* lebih sering kekurangan banyak.')
 tabel([
     ['Tingkat', 'Status', 'Penjelasan singkat'],
     ['Wilayah (Jawa, Sumatera, pulau lain)', '**Lolos semua syarat**', 'Target utama. Galat 86% lebih kecil dari P*, bias hampir 0, arah benar 96%'],
@@ -192,9 +192,9 @@ b('Laporan satu perusahaan memang naik-turun cukup besar dari bulan ke bulan (se
 b('Tetapi dalam satu wilayah, hanya sedikit perusahaan yang bolong sekaligus. Sebagian besar total wilayah berasal dari '
   'laporan yang memang ada (nilainya pasti). Kemelesetan beberapa tebakan juga sebagian saling menutup: ada yang kelebihan, '
   'ada yang kekurangan. Hasilnya total wilayah hanya meleset sekitar 2%.')
-p('**Kenapa P\\* jauh lebih buruk.** P\\* menganggap perusahaan yang tidak melapor sama dengan rata-rata. Di beras, '
+p('**Kenapa P* jauh lebih buruk.** P* menganggap perusahaan yang tidak melapor sama dengan rata-rata. Di beras, '
   'ukuran perusahaan sangat timpang (di Jawa, 5 perusahaan memegang 92% penyaluran), jadi anggapan itu sering salah besar. '
-  'Begitu satu perusahaan besar bolong, P\\* kekurangan banyak; itulah ekor kiri yang panjang di Gambar 9.')
+  'Begitu satu perusahaan besar bolong, P* kekurangan banyak; itulah ekor kiri yang panjang di Gambar 9.')
 p('**Kenapa provinsi dan nasional lebih lemah.** Di tingkat provinsi, tiap sel hanya berisi sedikit perusahaan, jadi satu '
   'tebakan yang meleset langsung terasa; hanya 7 provinsi yang cukup pelapornya untuk dinilai. Di tingkat nasional, '
   'jumlah bulannya sedikit, jadi syarat kisaran belum bisa diputuskan, walaupun angkanya bagus.')
