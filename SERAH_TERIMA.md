@@ -786,6 +786,19 @@ Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026
 - Perubahan kode dibuat di Colab; agar masuk repo, simpan patch/berkas ke Drive dan commit dari sesi Claude Code
   (agen ekstensi Chrome tidak punya akses push).
 
+### 17.4 Varian "semua ulang dari nol" (ditanyakan pengguna 26 Nov 2026; pilihan belum dijawab)
+- Pengumpulan data dari nol di Colab bisa, kecuali INATRADE (sistem internal: satu-satunya file dari pengguna) dan kunci
+  BPS (Colab Secrets). BPS lewat WebAPI dari Colab (`ambil_bps.py`); angka publik `jangkar_publik.csv` (survei stok
+  2022/2023, stok BULOG, impor, konsumsi Bapanas) dibangun ulang dengan membuka tiap sumber di browser dan dicocokkan,
+  ditambah stok BULOG Okt/Nov 2026; Poldis BPS dan PIHPS tidak perlu untuk prakiraan stok.
+- Tingkat yang ditawarkan: **A (rekomendasi)** data dari nol + Tahap 0 + tambal dengan resep terkunci + model stok +
+  prakiraan (±1,5–2,5 jam termasuk mengetik live, tebakan); **B** = A + penyetelan adu versi beras dari nol (79
+  kombinasi; butuh catboost, quantile-forest, statsmodels, scikit-learn; resmi ±1 jam 21 menit di 4 CPU, di Colab 2 CPU
+  diperkirakan ±2,5–3 jam) sebagai PERAGAAN/REPLIKASI: blok penyetelan sama (Jan 2024–Jun 2025) sehingga resep
+  diharapkan sama; bila berbeda, dilaporkan, resep resmi tidak diganti; **U1/U2 tidak dijalankan sebagai ujian**
+  (boleh ditampilkan sebagai replikasi berlabel, seperti notebook 05). Ujian baru hanya sah di bulan sesudah data yang
+  dipakai menyetel.
+
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
 0. **Bimbingan dosen / tugas akhir (sesi 9):** tunggu laporan pengguna soal hasil bimbingan (jawaban dosen atas
