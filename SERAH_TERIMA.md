@@ -120,6 +120,15 @@ resep); pembaruan Claude Doc laporan ringkas; tenggat dan kerangka laporan magan
 - Hash file INATRADE yang dipakai semua hasil sesi 7: sha256 `c667dddba86bdfb624b441f7a10b5b29cd548cc9bd98fcbecd2c687faf5adac2`.
   Bila pengguna mengunggah file baru (hash beda), itu DATA BARU: catat hash dan tanggalnya, jangan dipakai untuk
   mengulang ujian yang sudah terpakai.
+- **DATA BARU (sesi 10, 26 Nov 2026): `Cleaning_Lengkap.xlsm`**, sha256
+  `335c7e6e804c758a4fc70cb21cf089b813ebe43444b37dfe1c8c17b6f46b401e`, Jan 2024–**Okt 2026**, sheet "2024-2026" berkolom
+  sama (28.945 baris; Okt 2026 = 1.280 baris; sheet lain: PAW/Non PAW Gabungan, Data Mentah Okt, cek anomali harga).
+  Dicek baca-saja dengan fungsi `tahap0.baca/laporan/identitas/konsentrasi/harga` (tanpa model): **Jan 2024–Sep 2026
+  identik dengan Tahap 0 resmi** (27.665 baris, 9.479 laporan, 315 kode, 441 multi-kepala, 58 koreksi kg beras,
+  pelapor beras per tahun 65/69/76 dan per bulan sama, tabel identitas stok dan konsentrasi sama persis, BULOG sama).
+  Okt 2026 beras: 57 pelapor non-BULOG (Sep 55; Jawa 19, Sumatera 30), 52 dari 74 pelapor aktif Apr–Sep lapor, 5 baru,
+  0 koreksi kg, satuan semua ton; BULOG Okt stok awal 4,49 / akhir 4,43 juta ton (Sep stok akhir 2,18 tetap janggal,
+  perlakuan khusus Sep di `model_stok.py` tetap perlu). Belum ada yang dijalankan dengan file ini.
 
 ## Artefak (claude.ai)
 | Artefak | Link | Isi |
