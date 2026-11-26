@@ -800,7 +800,8 @@ Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026
   dipakai menyetel.
 
 ### 17.5 Pertanyaan pengguna: U1+U2 cukup atau lanjut U3? (26 Nov 2026) — pengguna: "lanjut U3"; draf
-`binpas/RANCANGAN_U3.md` (USULAN, belum dikunci) + teks WA Bu Fitria butir a–c dibuat; tunggu jawaban beliau
+`binpas/RANCANGAN_U3.md` (USULAN, belum dikunci) + teks WA Bu Fitria butir a–c dibuat; pengguna memilih a = versi ringkas (model gabungan:
+bagian 8 RANCANGAN_U3 = saran lanjutan); tunggu jawaban beliau, lalu kunci + push sebelum ada kode U3
 - Jawaban: U1+U2 menjawab "datanya bisa dipercaya sampai mana" (cukup untuk laporan magang dan bingkai TA A);
   U3 menjawab "datanya berguna untuk meramal harga atau tidak" (nilai guna; tambahan). Prakiraan stok Nov–Des (sesi
   live A) BUKAN U3.

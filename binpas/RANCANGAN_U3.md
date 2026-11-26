@@ -1,6 +1,7 @@
 # Rancangan U3 versi ringkas: apakah INATRADE membantu meramal harga beras? — USULAN, BELUM DISETUJUI, BELUM DIKUNCI
 
-Status: draf 26 Nov 2026 (sesi 10), dikirim ke Bu Fitria lewat WA (butir a–c). Belum ada kode U3, belum ada data harga
+Status: draf 26 Nov 2026 (sesi 10). Pengguna memilih versi ringkas ("a ringkas dulu"); teks WA butir a–c disiapkan,
+menunggu jawaban Bu Fitria. Belum ada kode U3, belum ada data harga
 yang diunduh, belum ada yang dijalankan. Sesudah disetujui: berkas ini diberi status DIKUNCI, di-commit + push, baru
 kode ditulis. Dasar: `ambang_ujian.md` baris "Model gabungan", `RANCANGAN_INATRADE.md` 7.6, `SERAH_TERIMA.md` 15.2–15.4.
 
