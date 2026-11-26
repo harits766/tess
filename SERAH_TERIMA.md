@@ -739,6 +739,53 @@ xlsm untuk angka agregat, dan pengambilan ulang data BPS (`ambil_bps.py`) untuk 
 - Folder scratchpad sesi 9 (data BPS, render PDF, keluaran Tahap 0) hilang saat sesi berakhir; semua yang perlu sudah
   di repo atau bisa dibuat ulang.
 
+## 17. Sesi 10 (26 Nov 2026): rencana prakiraan stok beras Nov–Des 2026, dijalankan LIVE di Google Colab
+Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026 (hash dan hasil cek di bagian
+"File yang harus diunggah ulang").
+
+### 17.1 Permintaan pengguna
+- Tugas: **beras saja**, "semua dimulai dari awal" dengan data INATRADE s.d. Okt 2026, **meramal stok sampai Nov dan
+  Des 2026**. Yang diramal = stok beras total (model stok Bayesian + `prakiraan.py`). Ramalan angka laporan INATRADE
+  dan harga (U3) BELUM punya model; jangan disajikan seolah tinggal run.
+- Cara kerja yang diminta: agen menjalankan semuanya **langsung di Google Colab** (lewat ekstensi Claude in Chrome) supaya
+  pengguna melihat kode yang dijalankan secara real time. Pola tiap langkah: **teks rencana singkat → tulis kode →
+  jalankan → tampilkan output → interpretasi bahasa sederhana (kenapa hasilnya begitu) → alasan langkah berikut**. Di
+  titik keputusan, berhenti, beri pertanyaan + rekomendasi, tunggu jawaban, baru lanjut.
+- Notebook itu sendiri = catatan kerja: interpretasi dan keputusan ditulis di sel teks (markdown) di notebook, bukan
+  hanya di panel chat.
+
+### 17.2 Susunan di Drive dan Colab
+- Drive: `MyDrive/beras_live/` berisi `data/Cleaning_Lengkap.xlsm` (diunggah pengguna) dan notebook baru
+  `prakiraan_beras_live.ipynb` (dibuat agen). Keluaran ke `MyDrive/beras_live/keluaran/`.
+- Kode: repo publik, jadi di Colab `!git clone -b claude/bayesian-rice-stock-model-qmunfn https://github.com/harits766/tess`
+  (tanpa token). Data publik (`jangkar_publik.csv`, `binpas/data_publik/`) ikut dari repo.
+- Pustaka: kode diuji dengan pandas 3.0.5; model stok butuh `pymc>=5.20` dan `nutpie`, ditambah `openpyxl`. Lihat cara
+  notebook 05 (`pip --target` + subprocess) atau pasang lalu restart runtime sekali di awal.
+- Kunci BPS: **Colab Secrets** bernama `BPS_API_KEY` (diisi pengguna sendiri, akses notebook dinyalakan);
+  `os.environ['BPS_API_KEY'] = userdata.get('BPS_API_KEY')`; jangan pernah dicetak.
+- Cek sha256 xlsm di awal (harus `335c7e6e…`).
+
+### 17.3 Langkah dan titik berhenti (usulan)
+1. Persiapan: mount Drive, clone, pasang pustaka, cek hash. **Berhenti:** konfirmasi lingkungan siap.
+2. Perpanjang periode ke Okt 2026 (sel kode yang memperlihatkan perubahan): `binpas/tahap0.py` `PER`,
+   `beras_stok/model_stok.py` `AKHIR`, `beras_stok/ambil_bps.py` (bulan potensi), `beras_stok/prakiraan.py` `BULAN`
+   = Nov–Des dan sumber produksi Des. Perlakuan khusus BULOG Sep 2026 tetap; cek Okt (stok awal 4,49 / akhir 4,43).
+3. Tahap 0 dengan data baru → interpretasi (pelapor Okt, lubang akhir). Laporan bolong Okt ditambal dengan resep beras
+   yang DIKUNCI (`hasil_adu_beras/resep.json`, tidak disetel ulang); hasil di Okt hanya "cek bulan baru", bukan ujian.
+4. Panel INATRADE (`inatrade_panel.py`) + data BPS (`ambil_bps.py`): cek apakah KSA Okt–Des 2026 (angka potensi) sudah
+   ada. **Berhenti:** bila Des belum ada, pakai Des 2025 × faktor acak (cara lama) atau tunggu.
+5. Stok BULOG publik Okt/Nov 2026 dicari di web (berita BULOG/Bapanas) → baris baru `jangkar_publik.csv` dengan sumber.
+   **Berhenti:** tunjukkan angka + sumber.
+6. Model stok dipasang ulang Jun 2022 → Okt 2026 (±20–40 menit di Colab 2 CPU). Cek konvergensi (r-hat, divergensi).
+   **Berhenti sebelum run** (sebut lama), lalu interpretasi sesudahnya; bandingkan dengan hasil lama (Sep 14,2;
+   prakiraan lama Okt 13,6 / Nov 12,5 / Des 11,1).
+7. Prakiraan Nov–Des + provinsi rawan → interpretasi + grafik. **Berhenti:** tawarkan kepekaan (swasta ≥ 0 per
+   provinsi/nasional, tanpa INATRADE; ±13 menit per skenario) dan holdout.
+8. Ringkasan akhir di notebook (angka, rentang, batas: level belum tervalidasi, prakiraan belum di-backtest). Ramalan
+   Nov–Des bisa dicek nanti dengan BULOG/INATRADE Nov–Des (ujian ramalan sungguhan; catat tanggal dibuat).
+- Perubahan kode dibuat di Colab; agar masuk repo, simpan patch/berkas ke Drive dan commit dari sesi Claude Code
+  (agen ekstensi Chrome tidak punya akses push).
+
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
 0. **Bimbingan dosen / tugas akhir (sesi 9):** tunggu laporan pengguna soal hasil bimbingan (jawaban dosen atas
