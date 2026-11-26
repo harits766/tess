@@ -3,9 +3,16 @@
 Baca file ini dulu di setiap sesi baru. Rincian per bagian ada di `beras_stok/CATATAN_SESI.md`,
 `beras_stok/README.md`, `stok_komoditas/README.md`, `binpas/RANCANGAN_INATRADE.md`, `binpas/ambang_ujian.md`.
 
-## STATUS TERKINI (per 17 Nov 2026, akhir sesi 8) — BACA INI DULU
+## STATUS TERKINI (per 26 Nov 2026, akhir sesi 9) — BACA INI DULU
 Bagian 5–8 di bawah adalah riwayat; sebagian kalimat "belum" di sana sudah usang. Yang berlaku adalah blok ini,
-bagian 9–14, dan **bagian 15 (percakapan terakhir sesi 8: arah U3, data harga, laporan magang)**.
+bagian 9–14, bagian 15 (sesi 8: arah U3, data harga, laporan magang), dan **bagian 16 (sesi 9: bahan bimbingan dosen,
+penjelasan bergambar beras, kemungkinan tugas akhir)**.
+
+**Sesi 9 (23–26 Nov 2026) singkatnya:** tidak ada ujian/penyetelan/model yang dijalankan. Yang dibuat: (1) Google Doc
+bahan bimbingan dosen khusus beras (6 halaman, diagram alir metodologi); (2) teks presentasi + daftar pertanyaan untuk
+dosen (di chat, tidak disimpan sebagai file; ringkasannya di 16.3); (3) Google Doc penjelasan bergambar beras untuk
+pengguna sendiri (15 halaman, 19 grafik). Pengguna mengatakan pekerjaan ini juga bahan **bimbingan dengan dosen** dan
+bertanya apakah bisa jadi **tugas akhir** (jawaban di 16.4). U3 belum disentuh lagi sejak sesi 8.
 
 **Yang sedang dibahas saat sesi 8 berakhir (belum ada keputusan "gas", belum ada yang dijalankan):** pengguna ingin
 **U3 TETAP ADA** dan condong ke **semua komoditas dijalankan lalu dilaporkan apa adanya**. Usul saya: U3 versi ringkas
@@ -55,6 +62,16 @@ resep); pembaruan Claude Doc laporan ringkas; tenggat dan kerangka laporan magan
   kerangka bab belum diketahui (sudah ditanyakan). Saat memilah pekerjaan, bedakan: hasil final yang bisa dilaporkan,
   keputusan yang masih terbuka, yang masih bisa dijalankan sebelum tenggat, dan yang masuk "saran lanjutan".
 - Hemat kredit: beri tahu dulu sebelum run panjang (> ±10 menit). Jangan bikin mockup kalau tidak diminta.
+- **Pelajaran sesi 9 (ikuti):**
+  - Pengguna **tidak paham teknis** pekerjaan beras ("gua bener2 gak paham lu ngapain sama beras itu dan hasilnya kenapa
+    begitu"). Saat menjelaskan: bahasa sederhana, analogi (soal latihan/try out/ujian, saldo rekening untuk neraca),
+    gambar, dan paragraf "cara membaca" untuk tiap grafik; selalu jelaskan KENAPA hasilnya begitu, bukan hanya angkanya.
+  - Pengguna sering meminta "jelasin detail bagian X" dari dokumen yang sudah dibuat: jelaskan per butir/per baris tabel,
+    apa artinya, dari mana angkanya, dan batasnya.
+  - Dokumen untuk dosen/pengguna dibuat sebagai **Google Doc** (Drive `create_file` dari .docx berisi gambar, lalu
+    dirapikan dengan Docs `update_doc`: lebar tabel dan letak gambar tidak terbawa dari .docx; perlu
+    `updateTableColumnProperties`). Batas halaman yang disebut pengguna = batas keras.
+  - Jangan menulis "P\\*" di python-docx (tercetak dengan garis miring); tulis "P*".
 - **Pelajaran sesi 8 (ikuti):**
   - **Jangan minta pengguna menyediakan/mengekspor data.** "pake data yg ada aja", "lu cari2 sendiri di internet":
     cari dan coba sendiri sumber terbuka dulu; baru laporkan yang benar-benar tidak bisa diambil.
@@ -620,8 +637,105 @@ curl -sS -m 90 -G "https://www.bi.go.id/hargapangan/WebSite/TabelHarga/GetGridDa
 - Pedoman grafik yang dipakai notebook: palet biru `#2a78d6`, oranye `#eb6834`, aqua `#1baf7a`, permukaan `#fcfcfb`;
   satu sumbu, batang tipis, label seperlunya (fungsi di sel "fungsi grafik" `buat_notebook.py`).
 
+## 16. Sesi 9 (23–26 Nov 2026): bahan bimbingan dosen, penjelasan beras, kemungkinan tugas akhir
+Tidak ada ujian, penyetelan, atau model yang dijalankan. Yang dijalankan hanya: pembuatan gambar/dokumen, pembacaan ulang
+xlsm untuk angka agregat, dan pengambilan ulang data BPS (`ambil_bps.py`) untuk grafik produksi vs konsumsi.
+
+### 16.1 Google Doc bahan bimbingan dosen (23 Nov 2026)
+- [Estimasi Stok dan Penguatan Data Distribusi Beras (bahan bimbingan)](https://docs.google.com/document/d/17JMV-rw9R_suBzrOpngQ1x485XmDJL1LqJjlwJm942U/edit),
+  6 halaman (batas pengguna 7), beras saja. Isi: permasalahan (5 masalah INATRADE + 3 rumusan masalah), tabel sumber
+  data, diagram alir metodologi (gaya contoh pengguna: Mulai → Pengumpulan → Eksplorasi → Preprocessing → Blok waktu →
+  Pengembangan Model → 3 cabang → Evaluasi → Gerbang → Interpretasi → Selesai), evaluasi (tabel gerbang), hasil (U1
+  tabel per tingkat, stok, U2 tabel), keterbatasan + U3 sebagai langkah berikut.
+- Dibuat dari `binpas/bimbingan/buat_docx.py` + `diagram.py` (`diagram_alir.png`), lalu diedit langsung di Google Docs
+  (lebar tabel; 3.1–3.3 dipindah sebelum diagram supaya tidak ada halaman setengah kosong).
+- Atas permintaan pengguna, kalimat "Validasi" di 5.2 diganti (24 Nov) menjadi: "...model memprediksi bacaan survei 4,40
+  juta ton (3,43–5,59), dan angka survei 4,06 juta ton masih di dalam interval. Uji ini memeriksa konsistensi perubahan
+  stok selama 2023, bukan level absolut, karena bias survei diestimasi model. Konsumsi total 2024 menurut model (29,79
+  juta ton) sesuai dengan angka konsumsi total BPS 2024 (29,80 juta ton) yang tidak dipakai saat estimasi." Skrip di repo
+  sudah disamakan.
+- Nama Bu Fitria dan kode perusahaan tidak dicantumkan; nama pengguna (Harits) dan instansi ada di baris pembuka.
+
+### 16.2 Penjelasan yang sudah diberikan ke pengguna (di chat; ringkas di sini supaya konsisten bila ditanya lagi)
+- **Validasi model stok (holdout SSBAT Des 2022):** model dijalankan dua kali; run holdout membuang SSBAT Des 2022;
+  survei dimodelkan `log(survei) = log(stok model) + bias_sumber + galat 5%`, bias SSBAT dipakai bersama oleh dua SSBAT.
+  Tanpa Des 2022, bias SSBAT disetel dari Des 2023 saja, sehingga uji ini menguji perubahan stok selama 2023 (neraca),
+  bukan level. Prediksi 4,40 = prediksi BACAAN survei, bukan stok sebenarnya. Konsumsi 29,79 vs 29,80: angka BPS tidak
+  dipakai saat estimasi, tetapi prior porsi non-RT dari neraca Bapanas (2,591 juta ton/bulan, ±10%) sudah mengarahkan.
+- **Temuan penting (baru dijelaskan di sesi 9):** SCBN BPS Jun 2022 (9,71) dan SSBAT Des 2022 (4,06) saling bertentangan
+  (stok tidak mungkin turun separuh dalam 6 bulan menurut neraca). Posterior: bias SCBN −0,06 (≈ tanpa bias), bias SSBAT
+  −0,68 (survei ≈ 0,51 × stok model). Model memilih level yang cocok dengan SCBN + neraca; mana yang benar belum bisa
+  dipastikan. Ini alasan utama level 14,2 juta ton belum tervalidasi.
+- **U2 fundamental:** U1 menguji INATRADE terhadap dirinya sendiri; U2 terhadap patokan luar (Pola Distribusi BPS).
+  Gerbang diganti ke perbandingan jalur karena BPS tidak menerbitkan pangsa; dikunci sebelum edisi 2025 dibuka.
+  Pertanyaan yang adil: apakah INATRADE menambah informasi di atas BPS tahun lalu (jalur cenderung tetap: 85 dari 104).
+  AP dipakai karena jalur jarang (9%). Bootstrap per provinsi tujuan.
+- **Rincian U2 (dihitung sesi 9 dari data yang sama, `binpas/penjelasan_beras/angka.py`):** pasangan yang ada di BPS 2024
+  DAN INATRADE: 31/42 = 74% muncul di BPS 2025; hanya BPS 2024: 54/108 = 50%; hanya INATRADE: 8/35 = 23%; tidak di
+  keduanya: 11/937 = 1%. Ini yang membuat AP gabungan naik. Volume asal INATRADE: Jawa Timur 67%, DKI 18%, Jawa Tengah
+  13%; BPS 2025 asal terbanyak: Jawa Timur 19, Jawa Tengah 16, Sulawesi Selatan 13 (tidak ada di INATRADE). Spearman 0,20.
+- **5.1 (U1 beras):** dijelaskan per baris tabel: sel-bulan, CRPS (≈ galat persen skala log), perbaikan, bias (P\*
+  kekurangan karena yang hilang tidak diisi), arah, cakupan + Wilson n efektif, "memburuk ≤ 20%" (+13% vs +28% menurut
+  acuan), gerbang konsisten (bootstrap per bulan, wilayah −0,134…−0,075). Pola hapus: lubang tengah ±7–8% per
+  perusahaan-bulan; lubang akhir 20% kecil / 9% besar.
+- **Bagian 3 (metodologi):** dijelaskan tiap langkah: Tahap 0, preprocessing, blok waktu (= train/validation/test),
+  7 tahap adu 79 kombinasi dengan daftar 11 metode isian (B, C, R1–R4, R5 QRF, R6 CatBoost 3 varian, R7 MRP), tambahan
+  1c (kalender Lebaran+panen, ragam per kelompok, tdist, pola, ciri perusahaan, peubah luar), model stok (persamaan,
+  prior, pengukuran, kenapa Bayesian, kenapa mulai Jun 2022, r-hat 1,06).
+- **Kenapa interpolasi menang (angka baru sesi 9):** laporan satu perusahaan berubah median ±27% per bulan; tebakan
+  interpolasi per perusahaan meleset median ±20% (laporan terakhir ±25%); tetapi total wilayah hanya ±2,1% (P\* ±14,5%)
+  karena hanya sedikit perusahaan bolong sekaligus, sebagian besar total adalah laporan yang ada, dan galat saling
+  menutup. P\* buruk karena ukuran perusahaan timpang (Jawa: 5 terbesar 92%).
+
+### 16.3 Teks presentasi dan pertanyaan untuk dosen (diberikan di chat 24 Nov 2026, tidak disimpan sebagai file)
+- Teks presentasi ±8–10 menit mengikuti doc bimbingan: pembuka → permasalahan → data → metodologi (sambil menunjuk
+  diagram) → evaluasi → hasil → keterbatasan dan U3.
+- Pertanyaan untuk dosen (10, saran prioritas 1, 3, 6, 9, 5): (1) beras saja cukup atau semua komoditas setara;
+  (2) tiga cabang jadi satu kajian atau satu fokus; (3) apakah simulasi hapus-tebak cukup kuat; (4) CRPS cukup atau
+  perlu MAPE/RMSE; (5) cara menulis acuan "memburuk" yang diputuskan sesudah hasil; (6) level stok tak tervalidasi:
+  cukup keterbatasan atau fokus ke tren; (7) skenario kepekaan cukup; (8) penggantian gerbang U2 diterima;
+  (9) U3 realistis dalam waktu magang atau saran lanjutan; (10) temuan "interpolasi menang atas ML" ditonjolkan.
+- Hasil bimbingan belum diketahui (pengguna belum melapor).
+
+### 16.4 Kemungkinan tugas akhir (dijawab 24 Nov 2026)
+- Jawaban: layak untuk S1. Rekomendasi bingkai: **A = perbandingan metode imputasi laporan distribusi yang tidak lengkap
+  (studi kasus INATRADE beras) sebagai inti**, C = keterwakilan terhadap survei BPS sebagai bab pendukung, B = model stok
+  Bayesian sebagai bab tambahan/saran (levelnya sulit dipertahankan di sidang). Komoditas lain = satu bab penerapan.
+- Tiga syarat yang disampaikan: (1) izin tertulis Kemendag memakai data INATRADE (hanya agregat, tanpa kode/nama
+  perusahaan; tanya soal publikasi di repositori kampus); (2) cek aturan kampus soal bantuan AI dan pastikan pengguna bisa
+  menjelaskan setiap pilihan metode tanpa catatan; (3) yang kurang untuk standar TA: tinjauan pustaka (imputasi data
+  survei usaha, proper scoring rule/CRPS, prediksi konformal, state-space Bayesian), bab metodologi formal dengan notasi,
+  pembahasan kebijakan. Jurusan pengguna belum diketahui.
+
+### 16.5 Google Doc penjelasan bergambar beras untuk pengguna (25 Nov 2026)
+- [Beras: apa yang dikerjakan, datanya, caranya, dan hasilnya (penjelasan bergambar)](https://docs.google.com/document/d/1z9B4ncCgNmemr3s6w3kCf2nW--09F2iZ_y6ho7wGBzU/edit),
+  15 halaman, 19 gambar, tiap gambar ada "Cara membaca". Bagian: ringkasan + peta besar; data (tabel, pelapor per bulan,
+  panjang lubang, identitas stok, cakupan 2–3%); menambal laporan (ilustrasi simulasi, interpolasi vs P\*, ilustrasi
+  CRPS, hasil U1, sebaran galat, kenapa); stok (diagram neraca, produksi vs konsumsi + musim, stok + prakiraan,
+  komposisi + per pulau, uji survei, kepekaan); jalur (AP, 74/50/23%, provinsi asal); rangkuman; kamus istilah.
+- Gambar 5, 6, 7 = ilustrasi dengan angka contoh (diberi label), lainnya data/hasil asli.
+- Skrip: `binpas/penjelasan_beras/angka.py` (baca `laporan.csv` Tahap 0 + xlsm → angka agregat `angka.json`,
+  `u2_asal.csv`), `grafik.py` (19 PNG; butuh data BPS dari `ambil_bps.py` dan `beras_stok/stok_beras_satu_file.py` untuk
+  posterior stok), `dok.py` (docx). PNG ada di `binpas/penjelasan_beras/grafik/`. Sesudah upload, lebar tabel diperbaiki
+  dengan `updateTableColumnProperties`.
+- Hasil posterior stok bisa dibaca tanpa menjalankan model: `muat_hasil()` di `beras_stok/stok_beras_satu_file.py`
+  (11.088 baris: skenario dasar / swasta>=0 nasional / per provinsi / validasi; tingkat provinsi/pulau/nasional;
+  komponen total/bulog/swasta/rumah_tangga/penggilingan/pedagang/horeka; Jan 2024–Sep 2026; median, p05, p95). Daftar
+  `VALIDASI` dan `PARAMETER` (bias survei, susut, dll.) ada di file yang sama.
+
+### 16.6 Lingkungan sesi 9
+- Perlu dipasang ulang bila diperlukan: `pip install matplotlib nbclient nbformat ipykernel` (python-docx sudah ada).
+  `BPS_API_KEY` ada di env. Google Drive dan Google Docs connector aktif (create_file dengan file reference
+  `sha256:<hash>:<path>`; read_doc besar tersimpan ke file → pakai `docs_index.py` dari skill google-workspace).
+- Folder scratchpad sesi 9 (data BPS, render PDF, keluaran Tahap 0) hilang saat sesi berakhir; semua yang perlu sudah
+  di repo atau bisa dibuat ulang.
+
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
+0. **Bimbingan dosen / tugas akhir (sesi 9):** tunggu laporan pengguna soal hasil bimbingan (jawaban dosen atas
+   pertanyaan 16.3, apakah bingkai TA 16.4 diterima). Bila diminta: perbarui doc bimbingan atau doc penjelasan (keduanya
+   bisa diedit di tempat; link tetap), siapkan bab TA (tinjauan pustaka, metodologi formal), atau jelaskan bagian lain
+   dengan gaya sesi 9 (bahasa sederhana + gambar).
 1. **U3 tetap ada** (bagian 15.2–15.4). Langkah berikut yang paling dekat: unduh panel harga PIHPS 34 provinsi untuk
    beras, daging sapi, daging ayam ras, telur ayam ras (bagian 15.3; itu pengambilan data, tetap bilang dulu sebelum
    jalan); tulis `binpas/RANCANGAN_U3.md` (definisi U3 ringkas) untuk disetujui dan dikunci; siapkan teks WA Bu Fitria
@@ -643,13 +757,14 @@ Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
 ## Pesan pembuka sesi baru (unggah juga file INATRADE)
 ```
 Lanjutkan pekerjaan di repo harits766/tess, branch claude/bayesian-rice-stock-model-qmunfn.
-Baca dulu SERAH_TERIMA.md dari atas: "STATUS TERKINI", "Pengguna dan cara kerja" (termasuk "Pelajaran sesi 8"),
-lalu bagian 9–15. Bagian 15 = percakapan terakhir (U3 tetap ada, data harga PIHPS, laporan magang).
-Baca juga binpas/ambang_ujian.md, binpas/RANCANGAN_INATRADE.md bagian 7.6, binpas/HASIL_ADU_BERAS.md,
-binpas/HASIL_ADU_KOMODITAS.md, binpas/RANCANGAN_U2.md, binpas/RANCANGAN_V2.md, binpas/HASIL_CAKUPAN_KOMODITAS.md,
-binpas/HASIL_VALIDASI_SATUAN.md.
+Baca dulu SERAH_TERIMA.md dari atas: "STATUS TERKINI", "Pengguna dan cara kerja" (termasuk "Pelajaran sesi 9" dan
+"Pelajaran sesi 8"), lalu bagian 9–16. Bagian 16 = sesi terakhir (doc bimbingan dosen, penjelasan bergambar beras,
+kemungkinan tugas akhir); bagian 15 = U3 dan data harga PIHPS.
+Baca juga binpas/ambang_ujian.md, binpas/HASIL_ADU_BERAS.md, binpas/RANCANGAN_U2.md, binpas/HASIL_ADU_KOMODITAS.md,
+binpas/RANCANGAN_V2.md, binpas/HASIL_CAKUPAN_KOMODITAS.md, binpas/HASIL_VALIDASI_SATUAN.md,
+binpas/RANCANGAN_INATRADE.md bagian 7.6, beras_stok/CATATAN_SESI.md.
 File INATRADE terlampir (Non_PAW_dari_nol.xlsm). Ikuti aturan di "Pengguna dan cara kerja".
 Semua ujian akhir (U1) dan U2 beras sudah terpakai: jangan dijalankan lagi. Jangan menjalankan apa pun tanpa diminta.
-Jangan minta saya menyediakan data: cari sendiri sumber terbuka dulu.
-Tugas sekarang: <isi tugas, mis. "lanjutkan U3 versi ringkas: unduh harga PIHPS lalu tulis definisinya untuk dikunci">.
+Jangan minta saya menyediakan data: cari sendiri sumber terbuka dulu. Jelaskan dengan bahasa sederhana dan gambar.
+Tugas sekarang: <isi tugas, mis. "hasil bimbingan dosen: ...">.
 ```
