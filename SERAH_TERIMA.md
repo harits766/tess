@@ -786,7 +786,7 @@ Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026
 - Perubahan kode dibuat di Colab; agar masuk repo, simpan patch/berkas ke Drive dan commit dari sesi Claude Code
   (agen ekstensi Chrome tidak punya akses push).
 
-### 17.4 Varian "semua ulang dari nol" (ditanyakan pengguna 26 Nov 2026; pilihan belum dijawab)
+### 17.4 Varian "semua ulang dari nol" (ditanyakan pengguna 26 Nov 2026) — **PENGGUNA MEMILIH A** ("A aja")
 - Pengumpulan data dari nol di Colab bisa, kecuali INATRADE (sistem internal: satu-satunya file dari pengguna) dan kunci
   BPS (Colab Secrets). BPS lewat WebAPI dari Colab (`ambil_bps.py`); angka publik `jangkar_publik.csv` (survei stok
   2022/2023, stok BULOG, impor, konsumsi Bapanas) dibangun ulang dengan membuka tiap sumber di browser dan dicocokkan,
