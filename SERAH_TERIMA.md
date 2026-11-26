@@ -801,7 +801,10 @@ Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026
 
 ### 17.5 Pertanyaan pengguna: U1+U2 cukup atau lanjut U3? (26 Nov 2026) — pengguna: "lanjut U3"; draf
 `binpas/RANCANGAN_U3.md` (USULAN, belum dikunci) + teks WA Bu Fitria butir a–c dibuat; pengguna memilih a = versi ringkas (model gabungan:
-bagian 8 RANCANGAN_U3 = saran lanjutan); tunggu jawaban beliau, lalu kunci + push sebelum ada kode U3
+bagian 8 RANCANGAN_U3 = saran lanjutan). **Bu Fitria menyetujui a–c (26 Nov 2026: "a gas ringkas, b c disetujui");
+`RANCANGAN_U3.md` DIKUNCI** (rincian teknis dirapikan sebelum kunci: OLS per h, data latih mulai Jan 2025, sinyal =
+log stok akhir pedagang per wilayah vs rata-rata 3 bulan, V2 = isian B, 20 ulangan pola lubang akhir, gerbang bootstrap
+per titik awal). Berikutnya: sesi live ke-2 di Colab (ambil PIHPS, kode, coba Jun–Nov 2025, tanya, U3 sekali jalan)
 - Jawaban: U1+U2 menjawab "datanya bisa dipercaya sampai mana" (cukup untuk laporan magang dan bingkai TA A);
   U3 menjawab "datanya berguna untuk meramal harga atau tidak" (nilai guna; tambahan). Prakiraan stok Nov–Des (sesi
   live A) BUKAN U3.
