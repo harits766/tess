@@ -58,3 +58,20 @@ model yang sama tanpa INATRADE?
 - Dilarang: ubah model, sinyal, titik awal, atau gerbang sesudah melihat hasil titik awal ujian.
 - Daya uji kecil (9 titik awal, harga antarprovinsi bergerak bersama); hasil yang paling mungkin "tidak menyumbang"
   atau "belum bisa diputuskan" (cakupan volume INATRADE beras ±1,5–3%).
+
+## 8. Bila butir a ditolak (Bu Fitria ingin model gabungan 7.6) — penjelasan ke pengguna 26 Nov 2026
+- Bisa, tetapi model gabungan **harus dibangun dari awal**; yang sudah ada hanya model stok (bagian dari 7.6).
+- Yang dibutuhkan: (1) model stok diperbaiki sampai r-hat ≤ 1,01, ESS ≥ 400, tanpa divergensi (syarat 7.6; sekarang
+  r-hat 1,06) — belum tentu tercapai; (2) bagian arus koridor asal→tujuan (INATRADE + BPS Poldis 2024 sebagai jangkar,
+  prior gravitasi) dan persamaan harga level (bulan persediaan, AR(1), SPHP, HET) dalam satu model; (3) data: PIHPS
+  (ada), Poldis 2024/MPP (ada), realisasi SPHP per provinsi per bulan (belum dicari; mungkin hanya nasional dari berita),
+  SP2KP (tidak bisa diakses: auth + reCAPTCHA -> PIHPS saja sebagai jangkar).
+- Komputasi U3: 9 titik awal × 3 versi = 27 kali fit model besar. Model stok saja ±13 menit (4 CPU); model gabungan
+  diperkirakan beberapa kali lebih lama (tebakan ±1–3 jam per fit) -> ±1–3 hari komputasi. Tidak cocok di Colab gratis
+  (batas ±12 jam, putus); perlu sesi Claude Code (seperti sesi ini) atau mesin sendiri. Perkiraan membangun + menyetel:
+  ±1–3 minggu kerja (tebakan).
+- Risiko: bila konvergensi tidak tercapai, U3 gabungan "tidak bisa diuji" (dilaporkan apa adanya).
+- Jalan tengah yang ditawarkan: (i) U3 ringkas dulu (bagian 1–7), model gabungan jadi saran lanjutan / bahan TA;
+  (ii) "semi-gabungan": model stok yang ada dijalankan per titik awal × versi INATRADE (27 × ±13 menit ≈ ±6 jam di
+  4 CPU), lalu bulan persediaan dari posteriornya menjadi peubah di model harga bagian 4 (jalur stok -> harga ikut,
+  arus dan harga tidak dimodelkan bersama). Konvergensi model stok tetap catatan.
