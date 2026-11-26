@@ -799,6 +799,18 @@ Belum ada yang dijalankan. File data baru: `Cleaning_Lengkap.xlsm` s.d. Okt 2026
   (boleh ditampilkan sebagai replikasi berlabel, seperti notebook 05). Ujian baru hanya sah di bulan sesudah data yang
   dipakai menyetel.
 
+### 17.5 Pertanyaan pengguna: U1+U2 cukup atau lanjut U3? (26 Nov 2026; dijawab, belum ada keputusan)
+- Jawaban: U1+U2 menjawab "datanya bisa dipercaya sampai mana" (cukup untuk laporan magang dan bingkai TA A);
+  U3 menjawab "datanya berguna untuk meramal harga atau tidak" (nilai guna; tambahan). Prakiraan stok Nov–Des (sesi
+  live A) BUKAN U3.
+- U3 beras-saja bisa, tetapi HARUS DIBANGUN DULU. Usulan urutan: (1) selesaikan sesi live A; (2) di sesi Claude Code:
+  tulis `binpas/RANCANGAN_U3.md` versi ringkas beras saja (15.2; tiga versi tanpa/asli/diperkuat karena beras lolos
+  U1), teks WA Bu Fitria butir a–b (model ringkas; gerbang BPS 2025 dilepas), kunci + push; (3) sesi live Colab kedua:
+  ambil PIHPS beras 34 provinsi, bangun model, coba hanya di titik awal sebelum Des 2025, tanya dulu, U3 sekali jalan.
+- Dengan data s.d. Okt 2026 dan PIHPS s.d. Okt/Nov, titik awal bisa diperpanjang sampai ±Sep 2026 (putuskan SEBELUM
+  dikunci). Perkiraan yang disampaikan: hasil paling mungkin "tidak menyumbang" atau "belum bisa diputuskan"
+  (cakupan volume 1,5–3%, daya uji kecil); tetap layak dilaporkan apa adanya. Waktu: ±setengah hari kerja (tebakan).
+
 ## Langkah berikut yang masih terbuka
 Urutan menurut yang paling dekat dengan permintaan terakhir pengguna:
 0. **Bimbingan dosen / tugas akhir (sesi 9):** tunggu laporan pengguna soal hasil bimbingan (jawaban dosen atas
